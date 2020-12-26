@@ -23,12 +23,13 @@ public class HomeActivity extends AppCompatActivity {
     DrawerLayout drawer;
     Button buttonResendEmail;
     DBHelper dbHelper;
+    Button session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         dbHelper = new DBHelper();
-
+        session = (Button) findViewById(R.id.sessionsMenu);
         textViewLogout = (TextView) findViewById(R.id.logout);
         textViewEmail = (TextView) findViewById(R.id.emailNotVerified);
         buttonResendEmail = (Button) findViewById(R.id.resendEmail);
@@ -42,6 +43,14 @@ public class HomeActivity extends AppCompatActivity {
                 drawer.openDrawer(Gravity.LEFT);
             }
         });
+        session.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         if(dbHelper.emailVerified()){
             textViewEmail.setVisibility(View.VISIBLE);
