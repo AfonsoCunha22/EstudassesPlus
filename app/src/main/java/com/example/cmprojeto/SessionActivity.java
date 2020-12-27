@@ -21,9 +21,9 @@ public class SessionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_session);
 
         newSession = (Button) findViewById(R.id.newSession);
-
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawer.closeDrawer(Gravity.LEFT);
+
         newSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

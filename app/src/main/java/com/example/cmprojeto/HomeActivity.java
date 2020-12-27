@@ -21,7 +21,7 @@ public class HomeActivity extends AppCompatActivity {
     TextView textViewLogout, textViewEmail;
     ImageView openMenu;
     DrawerLayout drawer;
-    Button buttonResendEmail, session;
+    Button buttonResendEmail, session, settings;
     DBHelper dbHelper;
 
     @Override
@@ -30,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         dbHelper = new DBHelper();
         session = (Button) findViewById(R.id.sessionsMenu);
+        settings = (Button) findViewById(R.id.settingsMenu);
         textViewLogout = (TextView) findViewById(R.id.logout);
         textViewEmail = (TextView) findViewById(R.id.emailNotVerified);
         buttonResendEmail = (Button) findViewById(R.id.resendEmail);
@@ -37,47 +38,38 @@ public class HomeActivity extends AppCompatActivity {
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawer.closeDrawer(Gravity.LEFT);
 
-        openMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(Gravity.LEFT);
-            }
-        });
-        session.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Entrei no ONCLICK maninho");
-                drawer.closeDrawer(Gravity.LEFT);
-                Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
-                startActivity(intent);
-            }
+        openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
+
+        session.setOnClickListener(v -> {
+            drawer.closeDrawer(Gravity.LEFT);
+            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
+            startActivity(intent);
         });
 
+        settings.setOnClickListener(v -> {
+            drawer.closeDrawer(Gravity.LEFT);
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
+        });
 
         if(dbHelper.emailVerified()){
             textViewEmail.setVisibility(View.VISIBLE);
             buttonResendEmail.setVisibility(View.VISIBLE);
         }
-        buttonResendEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(dbHelper.emailVerified()){
-                    dbHelper.resendEmailVerification(HomeActivity.this, getApplicationContext());
-                }else {
-                    textViewEmail.setVisibility(View.GONE);
-                    buttonResendEmail.setVisibility(View.GONE);
-                }
+
+        buttonResendEmail.setOnClickListener(v -> {
+            if(dbHelper.emailVerified()){
+                dbHelper.resendEmailVerification(HomeActivity.this, getApplicationContext());
+            }else {
+                textViewEmail.setVisibility(View.GONE);
+                buttonResendEmail.setVisibility(View.GONE);
             }
         });
 
-
-        textViewLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dbHelper.logout();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-            }
+        textViewLogout.setOnClickListener(v -> {
+            dbHelper.logout();
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         });
     }
 }

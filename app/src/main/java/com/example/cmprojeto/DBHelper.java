@@ -125,21 +125,18 @@ public class DBHelper{
     }
 
     public void loginUser(String email, String password, Context context, Context appContext){
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(context, R.string.log_success, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(appContext, HomeActivity.class);
-                    context.startActivity(intent);
-                }else  {
-                    if(task.getException() instanceof FirebaseAuthInvalidCredentialsException){
-                        Toast.makeText(context, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
-                    }else if(task.getException() instanceof FirebaseAuthInvalidUserException){
-                        Toast.makeText(context, R.string.not_available_user, Toast.LENGTH_SHORT).show();
-                    }else
-                        Toast.makeText(context, R.string.log_error, Toast.LENGTH_SHORT).show();
-                }
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, task -> {
+            if(task.isSuccessful()){
+                Toast.makeText(context, R.string.log_success, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(appContext, HomeActivity.class);
+                context.startActivity(intent);
+            }else  {
+                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException){
+                    Toast.makeText(context, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+                }else if(task.getException() instanceof FirebaseAuthInvalidUserException){
+                    Toast.makeText(context, R.string.not_available_user, Toast.LENGTH_SHORT).show();
+                }else
+                    Toast.makeText(context, R.string.log_error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -152,8 +149,16 @@ public class DBHelper{
         FirebaseAuth.getInstance().signOut();
     }
 
-    public String getCurrentUsername(){
-        return Objects.requireNonNull(Objects.requireNonNull(fstore.collection("users").document(Objects.requireNonNull(mAuth.getUid())).get().getResult()).get("username")).toString();
+    public String getCurrentUsername() {
+        return Objects
+                .requireNonNull(
+                        Objects.requireNonNull(
+                                fstore.collection("users")
+                                .document(Objects.requireNonNull(mAuth.getUid()))
+                                .get()
+                                .getResult())
+                                .get("username"))
+                .toString();
     }
 
     public boolean emailVerified(){
