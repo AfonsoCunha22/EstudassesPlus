@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 public class SessionActivity extends AppCompatActivity {
     Button newSession;
     DrawerLayout drawer;
+    ImageView openMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,7 @@ public class SessionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_session);
 
         newSession = (Button) findViewById(R.id.newSession);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawer.closeDrawer(Gravity.LEFT);
         newSession.setOnClickListener(new View.OnClickListener() {

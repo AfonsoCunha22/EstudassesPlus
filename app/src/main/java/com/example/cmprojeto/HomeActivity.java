@@ -21,9 +21,9 @@ public class HomeActivity extends AppCompatActivity {
     TextView textViewLogout, textViewEmail;
     ImageView openMenu;
     DrawerLayout drawer;
-    Button buttonResendEmail;
+    Button buttonResendEmail, session;
     DBHelper dbHelper;
-    Button session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +46,8 @@ public class HomeActivity extends AppCompatActivity {
         session.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("Entrei no ONCLICK maninho");
+                drawer.closeDrawer(Gravity.LEFT);
                 Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
                 startActivity(intent);
             }
