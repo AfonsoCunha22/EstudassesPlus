@@ -13,6 +13,7 @@
         tools:context=".NewSessionActivity">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -40,141 +41,21 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <Button
-            android:id="@+id/confirm_button"
-            android:layout_width="164dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="637dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="122dp"
-            android:layout_marginTop="-56dp"
-            android:layout_marginEnd="123dp"
-            android:layout_marginBottom="43dp"
-            android:backgroundTint="#304D71"
-            android:text="@string/confirm" />
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                
+            </RelativeLayout>
 
-        <TextView
-            android:id="@+id/newSessionTitle"
-            android:layout_width="182dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="144dp"
-            android:layout_marginTop="68dp"
-            android:layout_marginEnd="139dp"
-            android:text="@string/new_session"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+        </ScrollView>
 
-        <TextView
-            android:id="@+id/timeLabel"
-            android:layout_width="61dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/newSessionTitle"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="354dp"
-            android:labelFor="@+id/editTime"
-            android:text="@string/time"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/selectedTime"
-            android:layout_width="61dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/newSessionTitle"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="112dp"
-            android:layout_marginTop="23dp"
-            android:layout_marginEnd="292dp"
-            android:labelFor="@+id/editTime"
-            android:text="@string/time"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/timeButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="361dp"
-            android:layout_marginTop="120dp"
-            android:src="@drawable/ic_time" />
-
-        <!-- <EditText
-            android:id="@+id/editTime"
-            android:layout_width="281dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/timeLabel"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="50dp"
-            android:ems="10"
-            android:inputType="time" /> -->
-
-        <TextView
-            android:id="@+id/subjectLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/timeButton"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="49dp"
-            android:layout_marginTop="20dp"
-            android:labelFor="@+id/editSubject"
-            android:text="@string/subject"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/editSubject"
-            android:layout_width="299dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/subjectLabel"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="50dp"
-            android:ems="10"
-            android:hint="@string/subject_hint"
-            android:inputType="textPersonName" />
-
-        <TextView
-            android:id="@+id/descriptionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editSubject"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="20dp"
-            android:labelFor="@+id/editDescription"
-            android:text="@string/description"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/editDescription"
-            android:layout_width="298dp"
-            android:layout_height="100dp"
-            android:layout_below="@+id/descriptionLabel"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="52dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="@string/description_hint"
-            android:inputType="textMultiLine" />
 
     </RelativeLayout>
 
