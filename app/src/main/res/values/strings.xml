@@ -41,8 +41,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="date">Date</string>
-
-
     <string name="confirm">Confirm</string>
     <string name="new_plan">New Plan</string>
     <string name="new_session">New Session</string>
@@ -57,4 +55,6 @@
     <string name="selected_time_label">Time: </string>
     <string name="selected_date_label">Date: </string>
     <string name="location">Location</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="pls_local">\"Please choose the location\"</string>
 </resources>
