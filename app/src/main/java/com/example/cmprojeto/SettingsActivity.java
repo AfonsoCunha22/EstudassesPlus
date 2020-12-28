@@ -51,7 +51,11 @@ public class SettingsActivity extends AppCompatActivity {
         btnAccount.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), AccountSettingsActivity.class);
             startActivity(intent);
-            System.out.println("Tamos ai");
+        });
+
+        btnSensors.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), SensorSettingsActivity.class);
+            startActivity(intent);
         });
 
         // Menu Buttons

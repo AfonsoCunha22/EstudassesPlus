@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".AccountSettingsActivity">
+        tools:context=".SensorSettingsActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
@@ -34,134 +34,40 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_set_key" />
+                    android:src="@drawable/ic_set_sensors" />
             </RelativeLayout>
-
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/userImageContainer"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="70dp"
-            app:cardCornerRadius="30dp">
-
-            <ImageView
-                android:id="@+id/userImage"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-                app:srcCompat="@drawable/avatar_default" />
-
-        </androidx.cardview.widget.CardView>
-
-        <ImageButton
-            android:id="@+id/btnImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="55dp"
-            android:layout_marginEnd="60dp"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_toEndOf="@id/userImageContainer"
-            app:srcCompat="@drawable/ic_acc_set_image" />
-
-        <ScrollView
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/sensorWarning"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="235dp">
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/lightSwitch"
+            android:layout_marginTop="30dp"
+            android:text="* Settings apply when creating a new study plan"
+            android:textSize="14sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/tempSwitch"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:text="Temperature Sensor"
+            android:textSize="20sp"
+            android:thumbTextPadding="100dp" />
 
-                <TextView
-                    android:id="@+id/nameLabel"
-                    android:layout_width="350dp"
-                    android:layout_height="40dp"
-                    android:labelFor="@id/nameField"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="24sp"
-                    android:text="Name" />
-
-                <EditText
-                    android:id="@+id/nameField"
-                    android:layout_width="350dp"
-                    android:layout_height="50dp"
-                    android:layout_below="@id/nameLabel"
-                    android:layout_centerHorizontal="true" />
-
-                <TextView
-                    android:id="@+id/phoneLabel"
-                    android:layout_width="350dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
-                    android:labelFor="@id/phoneField"
-                    android:layout_below="@id/nameField"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="24sp"
-                    android:text="Phone"/>
-
-                <EditText
-                    android:id="@+id/phoneField"
-                    android:layout_width="350dp"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="phone"
-                    android:layout_below="@id/phoneLabel"
-                    android:layout_centerHorizontal="true" />
-
-                <TextView
-                    android:id="@+id/passLabel"
-                    android:layout_width="350dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
-                    android:labelFor="@id/passField"
-                    android:layout_below="@id/phoneField"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="24sp"
-                    android:text="Password" />
-
-                <EditText
-                    android:id="@+id/passField"
-                    android:layout_width="350dp"
-                    android:layout_height="50dp"
-                    android:layout_below="@id/passLabel"
-                    android:inputType="textPassword"
-                    android:layout_centerHorizontal="true" />
-
-                <TextView
-                    android:id="@+id/emailLabel"
-                    android:layout_width="350dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
-                    android:labelFor="@id/emailLabel"
-                    android:layout_below="@id/passField"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="24sp"
-                    android:text="E-Mail" />
-
-                <EditText
-                    android:id="@+id/emailField"
-                    android:layout_width="350dp"
-                    android:layout_height="50dp"
-                    android:layout_below="@id/emailLabel"
-                    android:inputType="textEmailAddress"
-                    android:text="user@email.com"
-                    android:layout_centerHorizontal="true" />
-
-                <Button
-                    android:layout_width="200dp"
-                    android:layout_height="60dp"
-                    android:layout_below="@id/emailField"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp"
-                    android:text="Apply"/>
-            </RelativeLayout>
-        </ScrollView>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/lightSwitch"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/tempSwitch"
+            android:layout_centerHorizontal="true"
+            android:text="Light Sensor"
+            android:textSize="20sp"
+            android:thumbTextPadding="100dp" />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

@@ -23,8 +23,8 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         setContentView(R.layout.activity_new_session);
 
         confirm = (Button) findViewById(R.id.confirm_button);
-        timeP = (ImageView) findViewById(R.id.timeButton);
-        selectedTime = (TextView) findViewById(R.id.selectedTime);
+        //timeP = (ImageView) findViewById(R.id.timeButton);
+        //selectedTime = (TextView) findViewById(R.id.selectedTime);
         selectedTime.setText(R.string.pls_time);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
