@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,15 +28,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
+
+
 
 public class DBHelper{
 
@@ -43,6 +49,7 @@ public class DBHelper{
     FirebaseFirestore fstore;
     FirebaseAuth mAuth;
     String userID;
+    public final static User USER = new User();
 
 
     public DBHelper() {
@@ -128,6 +135,19 @@ public class DBHelper{
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, task -> {
             if(task.isSuccessful()){
                 Toast.makeText(context, R.string.log_success, Toast.LENGTH_LONG).show();
+                fstore.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isComplete()){
+                            USER.setUsername(task.getResult().get("username").toString());
+                            USER.setEmail(email);
+                            USER.setPassword(password);
+                            USER.setDescription(" ");
+                            USER.setuID(mAuth.getCurrentUser().getUid());
+                            System.out.println(USER.getUserInfo());
+                        }
+                    }
+                });
                 Intent intent = new Intent(appContext, HomeActivity.class);
                 context.startActivity(intent);
             }else  {
@@ -147,18 +167,7 @@ public class DBHelper{
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
-    }
-
-    public String getCurrentUsername() {
-        return Objects
-                .requireNonNull(
-                        Objects.requireNonNull(
-                                fstore.collection("users")
-                                .document(Objects.requireNonNull(mAuth.getUid()))
-                                .get()
-                                .getResult())
-                                .get("username"))
-                .toString();
+        USER.clearData();
     }
 
     public boolean emailVerified(){
@@ -195,5 +204,9 @@ public class DBHelper{
                 Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString());
             }
         });
+    }
+
+    public User getUSER(){
+        return USER;
     }
 }
