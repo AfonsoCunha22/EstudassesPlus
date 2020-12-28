@@ -40,6 +40,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="date">Date</string>
 
 
     <string name="confirm">Confirm</string>
@@ -52,5 +53,8 @@
     <string name="description_hint">Write the session description here</string>
     <string name="add_session">Add Session</string>
     <string name="pls_time">Please choose the time for the session</string>
+    <string name="pls_date">Please choose the date for the session</string>
     <string name="selected_time_label">Time: </string>
+    <string name="selected_date_label">Date: </string>
+    <string name="location">Location</string>
 </resources>
