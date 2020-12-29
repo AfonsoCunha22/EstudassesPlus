@@ -8,13 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.Task;
-
-import java.util.Objects;
-
-public class SignInActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     EditText username, password, rePassword, email;
 
@@ -65,7 +60,7 @@ public class SignInActivity extends AppCompatActivity {
                 else{
                     if(userPass.length() >= 6){
                         if(userPass.equals(userRePass)){
-                            dbHelper.checkUsernameExists(userName,userEmail,userPass, username, SignInActivity.this, getApplicationContext(), true);
+                            dbHelper.checkUsernameExists(userName,userEmail,userPass, username, RegisterActivity.this, getApplicationContext(), true);
                         }else{
                             //Toast.makeText(SignInActivity.this, "Password and password confirmation are different", Toast.LENGTH_SHORT).show();
                             rePassword.setError("Password and confirmation are different");

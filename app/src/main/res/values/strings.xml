@@ -3,11 +3,11 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="re_password">Confirm Password</string>
-    <string name="signIn">Sign in</string>
+    <string name="signUp">Sign Up</string>
     <string name="Login">Login</string>
     <string name="email">Email</string>
     <string name="existing_user">Existing User? Go to login page</string>
-    <string name="not_signedIn_yet">Not signed in yet? Sign in here</string>
+    <string name="not_signedUp_yet">Not signed in yet? Sign up here</string>
     <string name="reg_error">Registration Error</string>
     <string name="log_error">Something went wrong please check your credentials and internet connection</string>
     <string name="reg_success">Successfully registered</string>

@@ -55,7 +55,7 @@
         android:layout_below="@id/btnLogin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp"
-        android:text="@string/not_signedIn_yet" />
+        android:text="@string/not_signedUp_yet" />
     <TextView
         android:id="@+id/passwordReset"
         android:layout_width="wrap_content"
