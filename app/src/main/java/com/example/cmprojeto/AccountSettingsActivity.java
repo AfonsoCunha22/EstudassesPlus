@@ -1,18 +1,17 @@
 package com.example.cmprojeto;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import com.example.cmprojeto.database.DBHelper;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

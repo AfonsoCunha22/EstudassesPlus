@@ -1,4 +1,4 @@
-package com.example.cmprojeto;
+package com.example.cmprojeto.model;
 
 public class UserInfo {
     private final String username, password, email, description;

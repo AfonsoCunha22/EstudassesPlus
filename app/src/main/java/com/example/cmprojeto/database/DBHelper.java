@@ -1,11 +1,20 @@
-package com.example.cmprojeto;
+package com.example.cmprojeto.database;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.cmprojeto.HomeActivity;
+import com.example.cmprojeto.LoginActivity;
+import com.example.cmprojeto.R;
+import com.example.cmprojeto.callbacks.BooleanCallback;
+import com.example.cmprojeto.callbacks.PlanCallback;
+import com.example.cmprojeto.callbacks.UserCallback;
+import com.example.cmprojeto.model.Color;
+import com.example.cmprojeto.model.Plan;
+import com.example.cmprojeto.model.UserInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -15,7 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,26 +83,10 @@ public class DBHelper{
         });
     }
 
-    public void checkUsernameExists(String username, String email, String password, EditText editText, Context context, Context appContext, boolean login){
-        fStore.collection("users").get().addOnCompleteListener(task -> {
-            if(task.isComplete()){
-                boolean checkUsernameExists = false;
-                for (QueryDocumentSnapshot document: Objects.requireNonNull(task.getResult())){
-                    if (document.contains("username")){
-                        if (Objects.requireNonNull(document.get("username")).toString().equals(username)){
-                            editText.setError(context.getResources().getString(R.string.username_exists));
-                            checkUsernameExists = true;
-                            break;
-                        }
-                    }
-                }
-
-                if(login){
-                    if (!checkUsernameExists){
-                        createUser(username, email, password, context, appContext);
-                    }
-                }
-            }
+    public void checkUsernameExists(String username, BooleanCallback callback) {
+        fStore.collection("users").whereEqualTo("username", username).get().addOnCompleteListener(task -> {
+            if(task.isComplete())
+                callback.exists(task.getResult().getDocuments().size() != 0);
         });
     }
 

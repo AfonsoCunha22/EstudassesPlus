@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.cmprojeto.database.DBHelper;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText email, password;

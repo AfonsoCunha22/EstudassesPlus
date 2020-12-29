@@ -1,4 +1,6 @@
-package com.example.cmprojeto;
+package com.example.cmprojeto.callbacks;
+
+import com.example.cmprojeto.model.Plan;
 
 import java.util.List;
 

@@ -2,7 +2,6 @@ package com.example.cmprojeto;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
+import com.example.cmprojeto.model.Color;
+import com.example.cmprojeto.model.Plan;
 
 import java.util.Locale;
 

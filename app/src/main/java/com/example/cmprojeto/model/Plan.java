@@ -1,4 +1,4 @@
-package com.example.cmprojeto;
+package com.example.cmprojeto.model;
 
 public class Plan {
     private String id, curricularUnit, description;

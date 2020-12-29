@@ -1,4 +1,4 @@
-package com.example.cmprojeto;
+package com.example.cmprojeto.model;
 
 public enum Color {
     RED, BLUE, GREEN, YELLOW, BROWN, WHITE;

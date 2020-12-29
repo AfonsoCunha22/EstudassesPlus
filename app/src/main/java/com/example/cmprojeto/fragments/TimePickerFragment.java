@@ -1,4 +1,4 @@
-package com.example.cmprojeto;
+package com.example.cmprojeto.fragments;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
