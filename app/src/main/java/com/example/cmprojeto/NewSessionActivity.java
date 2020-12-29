@@ -36,7 +36,7 @@ import java.util.Locale;
 
 public class NewSessionActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener , DatePickerDialog.OnDateSetListener {
     Button confirm;
-    ImageView timeP, dateP, locationP;
+    ImageView timeP, dateP, locationP, goBack;
     TextView selectedTime,selectedDate, selectedLocation;
     Bundle bundle;
 
@@ -55,6 +55,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         selectedLocation=(TextView) findViewById(R.id.selectedLocal);
         selectedTime.setText(R.string.pls_time);
         selectedDate.setText(R.string.pls_date);
+        goBack = (ImageView) findViewById(R.id.goBack);
         
         //if(bundle.containsKey("latitude") && bundle.containsKey("longitude")){
         //    selectedLocation.setText(bundle.getDouble("latitude")+" : "+bundle.getDouble("longitude"));
@@ -89,6 +90,10 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                 startActivity(intent);
             }
+        });
+        goBack.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
+            startActivity(intent);
         });
 
     }

@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
     Button btnSensors;
     Button btnLanguage;
     Button btnHelp;
-    Button session, settings;
+    Button session, settings, home;
 
     DBHelper db;
 
@@ -36,6 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         session = (Button) findViewById(R.id.sessionsMenu);
         settings = (Button) findViewById(R.id.settingsMenu);
+        home = (Button) findViewById(R.id.homeMenu);
 
         btnAccount = (Button) findViewById(R.id.btnAccount);
         btnNotifications = (Button) findViewById(R.id.btnNotification);
@@ -72,6 +73,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         settings.setOnClickListener(v -> {
             drawer.closeDrawer(Gravity.LEFT);
+        });
+        home.setOnClickListener(v ->{
+            drawer.closeDrawer(Gravity.LEFT);
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(intent);
         });
     }
 }

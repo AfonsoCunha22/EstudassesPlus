@@ -11,41 +11,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class SensorSettingsActivity extends AppCompatActivity {
-    DrawerLayout drawer;
-    ImageView openMenu;
+    ImageView goBack;
 
     SwitchCompat tempSwitch, lightSwitch;
-
-    Button session, settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_settings);
 
-        openMenu = (ImageView) findViewById(R.id.openMenu);
-        session = (Button) findViewById(R.id.sessionsMenu);
-        settings = (Button) findViewById(R.id.settingsMenu);
+        goBack = (ImageView) findViewById(R.id.goBack);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawer.closeDrawer(Gravity.LEFT);
 
         tempSwitch = (SwitchCompat) findViewById(R.id.tempSwitch);
         lightSwitch = (SwitchCompat) findViewById(R.id.lightSwitch);
 
-        openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
-
-        // Menu Buttons
-        session.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
-            startActivity(intent);
-        });
-
-        settings.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
+        goBack.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
         });
+
     }
 }
