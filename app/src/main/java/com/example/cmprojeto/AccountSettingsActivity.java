@@ -24,7 +24,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
     ImageView userImage;
 
     EditText emailField;
+    EditText nameField;
 
+    DBHelper dbHelper = DBHelper.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +35,17 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         goBack = (ImageView) findViewById(R.id.goBack);
 
-
         btnImage = (ImageButton) findViewById(R.id.btnImage);
         userImage = (ImageView) findViewById(R.id.userImage);
 
+        nameField = (EditText) findViewById((R.id.nameField));
         emailField = (EditText) findViewById(R.id.emailField);
         emailField.setEnabled(false);
+
+        dbHelper.getUserInfo(user -> {
+            emailField.setText(user.getEmail());
+            nameField.setText(user.getUsername());
+        });
 
         btnImage.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);

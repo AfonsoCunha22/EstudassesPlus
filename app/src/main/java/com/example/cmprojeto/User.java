@@ -1,8 +1,12 @@
 package com.example.cmprojeto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private String email, username, description, uID, password, language;
-    private boolean sessionStartNotifications, studyStartNotifications, studyBreakNotifications, studyEndNotification, lightSensor, tempSensor, allowLocalization;
+    private boolean sessionStartNotifications, studyStartNotifications, studyBreakNotifications, studyEndNotification, lightSensor, tempSensor, allowLocalization, isPopulated;
+    private List<Plan> plans;
 
     public User(String username, String email, String description, String uID) {
         this.username = username;
@@ -11,10 +15,36 @@ public class User {
         this.uID = uID;
     }
 
-    public User() { }
+    public User() {
+        this.plans = new ArrayList<>();
+        this.isPopulated = false;
+    }
+
+    public void setPopulated(boolean populated) {
+        isPopulated = populated;
+    }
+
+    public boolean isPopulated() {
+        return isPopulated;
+    }
 
     public String getDescription() {
         return description;
+    }
+
+    public void addPlan(Plan plan) {
+        plans.add(plan);
+    }
+
+    public List<Plan> getPlans() {
+        return plans;
+    }
+
+    public Plan removePlan(int idx) {
+        if(idx < 0 || idx > plans.size()-1)
+            throw new IndexOutOfBoundsException();
+
+        return plans.remove(idx);
     }
 
     public String getuID() {

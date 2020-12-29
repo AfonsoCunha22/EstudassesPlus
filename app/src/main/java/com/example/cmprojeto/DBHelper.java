@@ -5,34 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,31 +26,22 @@ import java.util.Objects;
 import static android.content.ContentValues.TAG;
 
 public class DBHelper{
-
-    FirebaseFirestore fstore;
+    FirebaseFirestore fStore;
     FirebaseAuth mAuth;
     String userID;
-    public final static User USER = new User();
-    public final static List<Plan> plans = new ArrayList<>();
 
-    public final static Map<String, Object> USER_SETTINGS = new HashMap<>();
+    private static DBHelper instance;
 
-    public DBHelper() {
-        mAuth = FirebaseAuth.getInstance();
-        fstore = FirebaseFirestore.getInstance();
+    public static DBHelper getInstance() {
+        if(instance == null)
+            instance = new DBHelper();
 
-        populateDefaultSettings();
+        return instance;
     }
 
-    private static void populateDefaultSettings() {
-        USER_SETTINGS.put("language", "EN");
-        USER_SETTINGS.put("lightSensor", true);
-        USER_SETTINGS.put("tempSensor", true);
-        USER_SETTINGS.put("sessionStartNotification", true);
-        USER_SETTINGS.put("studyStartNotification", true);
-        USER_SETTINGS.put("studyBreakNotification", true);
-        USER_SETTINGS.put("studyEndNotification", true);
-        USER_SETTINGS.put("allowLocalization", true);
+    private DBHelper() {
+        mAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
     }
 
     public void createUser(String username, String email, String password, Context context, Context appContext){
@@ -76,8 +50,7 @@ public class DBHelper{
                 FirebaseUser fUser = mAuth.getCurrentUser();
                 assert fUser != null;
                 userID = fUser.getUid();
-                DocumentReference userReference = fstore.collection("users").document(userID);
-                DocumentReference settingsReference = fstore.collection("settings").document(userID);
+                DocumentReference userReference = fStore.collection("users").document(userID);
 
                 Map<String, Object> user = new HashMap<>();
                 user.put("username", username);
@@ -85,7 +58,6 @@ public class DBHelper{
                 user.put("description", " ");
 
                 userReference.set(user).addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess; user Profile is created for "+ userID));
-                settingsReference.set(USER_SETTINGS).addOnSuccessListener(l -> Log.d(TAG, "onSuccess; Settings profile is created for " + userID));
 
                 fUser.sendEmailVerification().addOnSuccessListener(aVoid -> {
                     Toast.makeText(context, R.string.verify_email, Toast.LENGTH_LONG).show();
@@ -104,27 +76,56 @@ public class DBHelper{
     }
 
     public void checkUsernameExists(String username, String email, String password, EditText editText, Context context, Context appContext, boolean login){
-        fstore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isComplete()){
-                    boolean checkUsernameExists = false;
-                    for (QueryDocumentSnapshot document: Objects.requireNonNull(task.getResult())){
-                        if (document.contains("username")){
-                            if (document.get("username").toString().equals(username)){
-                                editText.setError(context.getResources().getString(R.string.username_exists));
-                                checkUsernameExists = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if(login){
-                        if (!checkUsernameExists){
-                            createUser(username, email, password, context, appContext);
+        fStore.collection("users").get().addOnCompleteListener(task -> {
+            if(task.isComplete()){
+                boolean checkUsernameExists = false;
+                for (QueryDocumentSnapshot document: Objects.requireNonNull(task.getResult())){
+                    if (document.contains("username")){
+                        if (Objects.requireNonNull(document.get("username")).toString().equals(username)){
+                            editText.setError(context.getResources().getString(R.string.username_exists));
+                            checkUsernameExists = true;
+                            break;
                         }
                     }
                 }
+
+                if(login){
+                    if (!checkUsernameExists){
+                        createUser(username, email, password, context, appContext);
+                    }
+                }
+            }
+        });
+    }
+
+    public void getUserInfo(UserCallback callback) {
+        fStore.collection("users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).get().addOnCompleteListener(task -> {
+            if(task.isComplete()) {
+                callback.manageUserInformation(
+                        new UserInfo(Objects.requireNonNull(task.getResult().get("username")).toString(),
+                        "password", Objects.requireNonNull(task.getResult().get("email")).toString(),
+                        "description"));
+            }
+        });
+    }
+
+    public void getUserPlans(PlanCallback callback) {
+        fStore.collection("plans").whereEqualTo("userID", Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).get().addOnCompleteListener(task -> {
+            if (task.isComplete()) {
+                List<Plan> userPlans = new ArrayList<>();
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    Color color = Color.toColor(Objects.requireNonNull(doc.get("color")).toString());
+                    userPlans.add(
+                            new Plan(
+                                    Objects.requireNonNull(
+                                    doc.get("subjectName")).toString(),
+                                    Objects.requireNonNull(doc.get("description")).toString(),
+                                    doc.getLong("time"),
+                                    color,
+                                    doc.getBoolean("active")));
+                }
+
+                callback.manageUserPlans(userPlans);
             }
         });
     }
@@ -133,10 +134,10 @@ public class DBHelper{
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, task -> {
             if(task.isSuccessful()){
                 Toast.makeText(context, R.string.log_success, Toast.LENGTH_LONG).show();
-                loadUser();
+
                 Intent intent = new Intent(appContext, HomeActivity.class);
                 context.startActivity(intent);
-            } else  {
+            } else {
                 if(task.getException() instanceof FirebaseAuthInvalidCredentialsException){
                     Toast.makeText(context, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
                 }else if(task.getException() instanceof FirebaseAuthInvalidUserException){
@@ -147,51 +148,12 @@ public class DBHelper{
         });
     }
 
-    public void loadPlans(){
-        fstore.collection("plans").get().addOnCompleteListener(task -> {
-            if(task.isComplete()){
-                for (DocumentSnapshot doc: task.getResult().getDocuments()) {
-                    if(USER.getuID().equals(doc.getString("userID"))){
-                        Color color;
-                        switch (doc.get("color").toString()){
-                            case "#FF0000": color = Color.RED;
-                            case "#0000FF": color = Color.BLUE;
-                            case "#A52A2A": color = Color.BROWN;
-                            case "#00FF00": color = Color.GREEN;
-                            case "#FFFF00": color = Color.YELLOW;
-                            default: color = Color.RED;
-                        }
-
-                        plans.add(new Plan(doc.get("subjectName").toString(),doc.get("description").toString(), doc.getLong("time"),color,doc.getBoolean("active")));
-                    }
-                }
-            }
-        });
-    }
-
-    public boolean checkIfLogged(){
-        Log.i("LOG", "Dentro do checkIfLogged");
+    public boolean checkIfLogged() {
         return mAuth.getCurrentUser() != null;
     }
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
-        USER.clearData();
-    }
-
-    public void loadUser(){
-        fstore.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isComplete()){
-                    USER.setUsername(task.getResult().get("username").toString());
-                    USER.setEmail(task.getResult().get("email").toString());
-                    USER.setDescription(" ");
-                    USER.setuID(mAuth.getCurrentUser().getUid());
-                    loadPlans();
-                }
-            }
-        });
     }
 
     public boolean emailVerified(){
@@ -199,34 +161,21 @@ public class DBHelper{
     }
 
     public void resetPassword(String email, Context context){
-        mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(context, R.string.password_link_sent, Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, R.string.password_link_not_sent, Toast.LENGTH_SHORT).show();
-            }
+        mAuth.sendPasswordResetEmail(email).addOnSuccessListener(aVoid -> {
+            Toast.makeText(context, R.string.password_link_sent, Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(context, R.string.password_link_not_sent, Toast.LENGTH_SHORT).show();
         });
     }
 
     public void resendEmailVerification(Context context, Context appContext) {
         FirebaseUser fUser = mAuth.getCurrentUser();
         assert fUser != null;
-        fUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(context, R.string.verify_email, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(appContext, LoginActivity.class);
-                context.startActivity(intent);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString());
-            }
-        });
+
+        fUser.sendEmailVerification().addOnCompleteListener(task -> {
+            Toast.makeText(context, R.string.verify_email, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(appContext, LoginActivity.class);
+            context.startActivity(intent);
+        }).addOnFailureListener(e -> Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString()));
     }
 }

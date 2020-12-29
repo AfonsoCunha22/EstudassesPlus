@@ -21,13 +21,12 @@ public class SignInActivity extends AppCompatActivity {
     Button signIn;
     TextView login;
 
-    DBHelper dBhelper;
+    DBHelper dbHelper = DBHelper.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        dBhelper = new DBHelper();
 
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
@@ -38,7 +37,7 @@ public class SignInActivity extends AppCompatActivity {
         login = (TextView) findViewById(R.id.btnpreLogin);
 
 
-        if(dBhelper.checkIfLogged()){
+        if(dbHelper.checkIfLogged()){
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
         }
@@ -66,7 +65,7 @@ public class SignInActivity extends AppCompatActivity {
                 else{
                     if(userPass.length() >= 6){
                         if(userPass.equals(userRePass)){
-                            dBhelper.checkUsernameExists(userName,userEmail,userPass, username, SignInActivity.this, getApplicationContext(), true);
+                            dbHelper.checkUsernameExists(userName,userEmail,userPass, username, SignInActivity.this, getApplicationContext(), true);
                         }else{
                             //Toast.makeText(SignInActivity.this, "Password and password confirmation are different", Toast.LENGTH_SHORT).show();
                             rePassword.setError("Password and confirmation are different");

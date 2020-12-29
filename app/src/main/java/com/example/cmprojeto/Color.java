@@ -14,4 +14,21 @@ public enum Color {
             default: return "#FFFFFF";
         }
     }
+
+    public static Color toColor(String color) {
+        switch (color) {
+            case "#FF0000":
+                return RED;
+            case "#0000FF":
+                return BLUE;
+            case "#A52A2A":
+                return BROWN;
+            case "#00FF00":
+                return GREEN;
+            case "#FFFF00":
+                return YELLOW;
+            default:
+                return RED;
+        }
+    }
 }

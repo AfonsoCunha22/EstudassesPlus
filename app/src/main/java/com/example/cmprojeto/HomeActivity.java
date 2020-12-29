@@ -22,13 +22,12 @@ public class HomeActivity extends AppCompatActivity {
     ImageView openMenu;
     DrawerLayout drawer;
     Button buttonResendEmail, session, settings, home;
-    DBHelper dbHelper;
+    DBHelper dbHelper = DBHelper.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        dbHelper = new DBHelper();
         session = (Button) findViewById(R.id.sessionsMenu);
         settings = (Button) findViewById(R.id.settingsMenu);
         home = (Button) findViewById(R.id.homeMenu);
@@ -48,10 +47,10 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         settings.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
         });
+
         home.setOnClickListener(v -> {
             drawer.closeDrawer(Gravity.LEFT);
         });

@@ -12,31 +12,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
-    DrawerLayout drawer;
-    TextView userName;
-    ImageView openMenu;
-    Button btnAccount;
-    Button btnNotifications;
-    Button btnSensors;
-    Button btnLanguage;
-    Button btnHelp;
-    Button session, settings, home;
 
-    DBHelper db;
+    TextView userName;
+    ImageView goBack;
+    Button btnAccount;
+    Button btnNotifications, btnSensors, btnLanguage, btnHelp;
+
+    DBHelper dbHelper = DBHelper.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        DBHelper db = new DBHelper();
-
-        openMenu = (ImageView) findViewById(R.id.openMenu);
+        goBack = (ImageView) findViewById(R.id.goBack);
         userName = (TextView) findViewById(R.id.userName);
-
-        session = (Button) findViewById(R.id.sessionsMenu);
-        settings = (Button) findViewById(R.id.settingsMenu);
-        home = (Button) findViewById(R.id.homeMenu);
 
         btnAccount = (Button) findViewById(R.id.btnAccount);
         btnNotifications = (Button) findViewById(R.id.btnNotification);
@@ -44,10 +34,9 @@ public class SettingsActivity extends AppCompatActivity {
         btnLanguage = (Button) findViewById(R.id.btnLanguage);
         btnHelp = (Button) findViewById(R.id.btnHelp);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawer.closeDrawer(Gravity.LEFT);
-
-        openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
+        dbHelper.getUserInfo(user -> {
+            userName.setText(user.getUsername());
+        });
 
         btnAccount.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), AccountSettingsActivity.class);
@@ -64,18 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Menu Buttons
-        session.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
-            startActivity(intent);
-        });
-
-        settings.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-        });
-        home.setOnClickListener(v ->{
-            drawer.closeDrawer(Gravity.LEFT);
+        goBack.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
         });
