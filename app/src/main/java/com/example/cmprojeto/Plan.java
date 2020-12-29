@@ -32,4 +32,12 @@ public class Plan {
     public Color getColor() {
         return color;
     }
+
+    public String getPlanInfo(){
+        return "Dados de utilizador:\n\n"+
+                "CurricularUnit: "+ getCurricularUnit() +
+                "\nTime: "+ getTime()+
+                "\nColor: "+ getColor()+
+                "\nDescription: "+ getDescription();
+    }
 }
