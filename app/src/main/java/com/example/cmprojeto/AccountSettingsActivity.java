@@ -18,27 +18,21 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class AccountSettingsActivity extends AppCompatActivity {
-    DrawerLayout drawer;
-    ImageView openMenu;
+    ImageView goBack;
 
     ImageButton btnImage;
     ImageView userImage;
 
     EditText emailField;
 
-    Button session, settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
 
-        openMenu = (ImageView) findViewById(R.id.openMenu);
-        session = (Button) findViewById(R.id.sessionsMenu);
-        settings = (Button) findViewById(R.id.settingsMenu);
+        goBack = (ImageView) findViewById(R.id.goBack);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawer.closeDrawer(Gravity.LEFT);
 
         btnImage = (ImageButton) findViewById(R.id.btnImage);
         userImage = (ImageView) findViewById(R.id.userImage);
@@ -52,17 +46,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             startActivityForResult(intent, 1);
         });
 
-        openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
-
-        // Menu Buttons
-        session.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
-            startActivity(intent);
-        });
-
-        settings.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
+        goBack.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
         });

@@ -1,163 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".SensorSettingsActivity">
 
-    <RelativeLayout
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".SensorSettingsActivity">
-
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/openMenu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_menu" />
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_set_sensors" />
-            </RelativeLayout>
-        </androidx.appcompat.widget.Toolbar>
-
-        <TextView
-            android:id="@+id/sensorWarning"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/lightSwitch"
-            android:layout_marginTop="30dp"
-            android:text="* Settings apply when creating a new study plan"
-            android:textSize="14sp" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/tempSwitch"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp"
-            android:text="Temperature Sensor"
-            android:textSize="20sp"
-            android:thumbTextPadding="100dp" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/lightSwitch"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/tempSwitch"
-            android:layout_centerHorizontal="true"
-            android:text="Light Sensor"
-            android:textSize="20sp"
-            android:thumbTextPadding="100dp" />
-    </RelativeLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="250dp"
-        android:id="@+id/nav_menu"
-        android:layout_height="match_parent"
-        android:layout_gravity="start">
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp">
 
         <RelativeLayout
-            android:layout_width="250dp"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/sessionsMenu"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="266dp"
-                android:layout_marginEnd="0dp"
-                android:alpha="0.25"
-                android:text="@string/sessions" />
-
-            <Button
-                android:id="@+id/studyMenu"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="344dp"
-                android:layout_marginEnd="0dp"
-                android:alpha="0.25"
-                android:text="@string/study" />
-
-            <Button
-                android:id="@+id/settingsMenu"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="424dp"
-                android:layout_marginEnd="0dp"
-                android:alpha="0.25"
-                android:text="@string/settings" />
-
-            <TextView
-                android:id="@+id/usernameMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="198dp"
-                android:text="TextView"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="86dp"
-                android:layout_marginTop="591dp"
-                android:text="@string/logout"
-                android:textSize="24sp" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/icoMenu"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:id="@+id/goBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_arrow_back" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginEnd="191dp"
-                android:layout_marginBottom="11dp"
-                android:src="@drawable/icon" />
-
-            <ImageView
-                android:id="@+id/avatarMenu"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="57dp"
-                android:layout_marginEnd="56dp"
-                app:srcCompat="@drawable/avatar_default" />
+                android:src="@drawable/ic_set_sensors" />
         </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/sensorWarning"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/lightSwitch"
+        android:layout_marginTop="30dp"
+        android:text="* Settings apply when creating a new study plan"
+        android:textSize="14sp" />
 
-    </com.google.android.material.navigation.NavigationView>
-</androidx.drawerlayout.widget.DrawerLayout>
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/tempSwitch"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:text="Temperature Sensor"
+        android:textSize="20sp"
+        android:thumbTextPadding="100dp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/lightSwitch"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tempSwitch"
+        android:layout_centerHorizontal="true"
+        android:text="Light Sensor"
+        android:textSize="20sp"
+        android:thumbTextPadding="100dp" />
+</RelativeLayout>

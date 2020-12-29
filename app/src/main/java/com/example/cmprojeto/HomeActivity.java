@@ -21,7 +21,7 @@ public class HomeActivity extends AppCompatActivity {
     TextView textViewLogout, textViewEmail;
     ImageView openMenu;
     DrawerLayout drawer;
-    Button buttonResendEmail, session, settings;
+    Button buttonResendEmail, session, settings, home;
     DBHelper dbHelper;
 
     @Override
@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
         dbHelper = new DBHelper();
         session = (Button) findViewById(R.id.sessionsMenu);
         settings = (Button) findViewById(R.id.settingsMenu);
+        home = (Button) findViewById(R.id.homeMenu);
         textViewLogout = (TextView) findViewById(R.id.logout);
         textViewEmail = (TextView) findViewById(R.id.emailNotVerified);
         buttonResendEmail = (Button) findViewById(R.id.resendEmail);
@@ -50,6 +51,9 @@ public class HomeActivity extends AppCompatActivity {
             drawer.closeDrawer(Gravity.LEFT);
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
+        });
+        home.setOnClickListener(v -> {
+            drawer.closeDrawer(Gravity.LEFT);
         });
 
         if(dbHelper.emailVerified()){
