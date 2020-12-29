@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,8 +38,10 @@ public class LoginActivity extends AppCompatActivity {
         signIn = (TextView) findViewById(R.id.registerLabel);
         resetPassword = (TextView) findViewById(R.id.passwordReset);
 
-
+        Log.i("OOF", "Antes dO CHECKIFLOGGED Esquilo chupamisto");
         if(dbHelper.checkIfLogged()){
+            Log.i("OOF", "DPS dO CHECKIFLOGGED Esquilo chupamisto");
+            dbHelper.loadUser();
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
         }

@@ -4,26 +4,17 @@ public class User {
     private String email, username, description, uID, password, language;
     private boolean sessionStartNotifications, studyStartNotifications, studyBreakNotifications, studyEndNotification, lightSensor, tempSensor, allowLocalization;
 
-    public User(String username, String email, String description, String uID, String password) {
+    public User(String username, String email, String description, String uID) {
         this.username = username;
         this.email = email;
         this.description = description;
         this.uID = uID;
-        this.password = password;
     }
 
     public User() { }
 
     public String getDescription() {
         return description;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getuID() {
@@ -122,7 +113,6 @@ public class User {
         return "Dados de utilizador:\n\n"+
                 "Username: "+ getUsername() +
                 "\nEmail: "+ getEmail()+
-                "\nPassword: "+ getPassword()+
                 "\nuID: "+ getuID()+
                 "\nDescription: "+ getDescription();
     }
@@ -130,7 +120,6 @@ public class User {
     public void clearData(){
         username = "";
         email = "";
-        password = "";
         uID = "";
         description = "";
     }

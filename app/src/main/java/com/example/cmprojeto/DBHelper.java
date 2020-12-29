@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,8 +47,9 @@ public class DBHelper{
     FirebaseFirestore fstore;
     FirebaseAuth mAuth;
     String userID;
-
     public final static User USER = new User();
+    public final static List<Plan> plans = new ArrayList<>();
+
     public final static Map<String, Object> USER_SETTINGS = new HashMap<>();
 
     public DBHelper() {
@@ -131,20 +133,7 @@ public class DBHelper{
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, task -> {
             if(task.isSuccessful()){
                 Toast.makeText(context, R.string.log_success, Toast.LENGTH_LONG).show();
-                fstore.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isComplete()){
-                            USER.setUsername(task.getResult().get("username").toString());
-                            USER.setEmail(email);
-                            USER.setPassword(password);
-                            USER.setDescription(" ");
-                            USER.setuID(mAuth.getCurrentUser().getUid());
-                            System.out.println(USER.getUserInfo());
-                        }
-                    }
-                });
-
+                loadUser();
                 Intent intent = new Intent(appContext, HomeActivity.class);
                 context.startActivity(intent);
             } else  {
@@ -158,13 +147,51 @@ public class DBHelper{
         });
     }
 
+    public void loadPlans(){
+        fstore.collection("plans").get().addOnCompleteListener(task -> {
+            if(task.isComplete()){
+                for (DocumentSnapshot doc: task.getResult().getDocuments()) {
+                    if(USER.getuID().equals(doc.getString("userID"))){
+                        Color color;
+                        switch (doc.get("color").toString()){
+                            case "#FF0000": color = Color.RED;
+                            case "#0000FF": color = Color.BLUE;
+                            case "#A52A2A": color = Color.BROWN;
+                            case "#00FF00": color = Color.GREEN;
+                            case "#FFFF00": color = Color.YELLOW;
+                            default: color = Color.RED;
+                        }
+
+                        plans.add(new Plan(doc.get("subjectName").toString(),doc.get("description").toString(), doc.getLong("time"),color,doc.getBoolean("active")));
+                    }
+                }
+            }
+        });
+    }
+
     public boolean checkIfLogged(){
+        Log.i("LOG", "Dentro do checkIfLogged");
         return mAuth.getCurrentUser() != null;
     }
 
     public void logout(){
         FirebaseAuth.getInstance().signOut();
         USER.clearData();
+    }
+
+    public void loadUser(){
+        fstore.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isComplete()){
+                    USER.setUsername(task.getResult().get("username").toString());
+                    USER.setEmail(task.getResult().get("email").toString());
+                    USER.setDescription(" ");
+                    USER.setuID(mAuth.getCurrentUser().getUid());
+                    loadPlans();
+                }
+            }
+        });
     }
 
     public boolean emailVerified(){
