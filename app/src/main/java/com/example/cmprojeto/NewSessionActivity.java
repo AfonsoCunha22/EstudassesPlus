@@ -61,6 +61,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         //}else{
         //    selectedLocation.setText((R.string.pls_local));
         //}
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

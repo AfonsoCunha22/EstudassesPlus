@@ -53,6 +53,11 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        btnNotifications.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), NotificationSettingsActivity.class);
+            startActivity(intent);
+        });
+
         btnSensors.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), SensorSettingsActivity.class);
             startActivity(intent);

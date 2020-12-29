@@ -45,7 +45,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/lightSwitch"
             android:layout_marginTop="30dp"
-            android:text="* Settings apply when creating a new study plan"
+            android:text="@string/sensors_warning"
             android:textSize="14sp" />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -54,7 +54,7 @@
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="100dp"
-            android:text="Temperature Sensor"
+            android:text="@string/temperature_sensor"
             android:textSize="20sp"
             android:thumbTextPadding="100dp" />
 
@@ -65,7 +65,7 @@
             android:layout_marginTop="10dp"
             android:layout_below="@id/tempSwitch"
             android:layout_centerHorizontal="true"
-            android:text="Light Sensor"
+            android:text="@string/light_sensor"
             android:textSize="20sp"
             android:thumbTextPadding="100dp" />
     </RelativeLayout>

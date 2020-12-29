@@ -57,4 +57,18 @@
     <string name="location">Location</string>
     <string name="title_activity_maps">Map</string>
     <string name="pls_local">\"Please choose the location\"</string>
+    <string name="sensors_warning">* Settings apply when creating a new study plan</string>
+    <string name="temperature_sensor">Temperature Sensor</string>
+    <string name="light_sensor">Light Sensor</string>
+    <string name="account_settings">Account</string>
+    <string name="notification_settings">Notifications</string>
+    <string name="sensor_settings">Sensors</string>
+    <string name="language_settings">Language</string>
+    <string name="help_settings">Help</string>
+    <string name="session_start_notif">Session Start</string>
+    <string name="study_start_notif">Study Start</string>
+    <string name="study_break_notif">Study Break</string>
+    <string name="study_end_notif">Study End</string>
+    <string name="phone">Phone</string>
+    <string name="apply">Apply</string>
 </resources>

@@ -80,7 +80,7 @@
                     android:layout_height="55dp"
                     android:layout_centerHorizontal="true"
                     android:drawableStart="@drawable/ic_set_key"
-                    android:text="Account" />
+                    android:text="@string/account_settings" />
 
                 <Button
                     android:id="@+id/btnNotification"
@@ -90,7 +90,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:drawableStart="@drawable/ic_set_bell"
-                    android:text="Notifications" />
+                    android:text="@string/notification_settings" />
 
                 <Button
                     android:id="@+id/btnSensors"
@@ -100,7 +100,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:drawableStart="@drawable/ic_set_sensors"
-                    android:text="Sensors" />
+                    android:text="@string/sensor_settings" />
 
                 <Button
                     android:id="@+id/btnLanguage"
@@ -110,7 +110,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:drawableStart="@drawable/ic_set_language"
-                    android:text="Language" />
+                    android:text="@string/language_settings" />
 
                 <Button
                     android:id="@+id/btnHelp"
@@ -120,7 +120,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="20dp"
                     android:drawableStart="@drawable/ic_set_help"
-                    android:text="Help" />
+                    android:text="@string/help_settings" />
             </RelativeLayout>
         </ScrollView>
     </RelativeLayout>
