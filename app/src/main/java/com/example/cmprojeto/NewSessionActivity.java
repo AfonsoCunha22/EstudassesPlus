@@ -59,7 +59,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         goBack = (ImageView) findViewById(R.id.goBack);
         
         if(receiveBundle != null){
-            selectedLocation.setText(receiveBundle.getDouble("latitude")+" : "+receiveBundle.getDouble("longitude"));
+            selectedLocation.setText(getLocationFromLarLong(receiveBundle.getDouble("latitude"), receiveBundle.getDouble("longitude")));
         }else{
             selectedLocation.setText((R.string.pls_local));
         }
@@ -146,6 +146,19 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
                     , new  String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
         }
 
+    }
+    private String getLocationFromLarLong(Double latitude, Double longitude){
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        try {
+            List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if(null!=listAddresses&&listAddresses.size()>0){
+                String _Location;
+                return _Location = listAddresses.get(0).getAddressLine(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Inválido";
     }
 
 }
