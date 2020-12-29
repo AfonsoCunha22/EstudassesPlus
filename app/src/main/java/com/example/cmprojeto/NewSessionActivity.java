@@ -1,7 +1,6 @@
 package com.example.cmprojeto;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -38,14 +36,17 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
     Button confirm;
     ImageView timeP, dateP, locationP, goBack;
     TextView selectedTime,selectedDate, selectedLocation;
-    Bundle bundle;
+    Bundle receiveBundle, sendBundle;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_session);
-        bundle = getIntent().getExtras();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        receiveBundle = getIntent().getExtras();
+        sendBundle = new Bundle();
         confirm = (Button) findViewById(R.id.confirm_button);
         timeP = (ImageView) findViewById(R.id.timeButton);
         dateP = (ImageView) findViewById(R.id.dateButton);
@@ -57,11 +58,11 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         selectedDate.setText(R.string.pls_date);
         goBack = (ImageView) findViewById(R.id.goBack);
         
-        //if(bundle.containsKey("latitude") && bundle.containsKey("longitude")){
-        //    selectedLocation.setText(bundle.getDouble("latitude")+" : "+bundle.getDouble("longitude"));
-        //}else{
-        //    selectedLocation.setText((R.string.pls_local));
-        //}
+        if(receiveBundle != null){
+            selectedLocation.setText(receiveBundle.getDouble("latitude")+" : "+receiveBundle.getDouble("longitude"));
+        }else{
+            selectedLocation.setText((R.string.pls_local));
+        }
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,8 +88,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         locationP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                startActivity(intent);
+                getLocation();
             }
         });
         goBack.setOnClickListener(v -> {
@@ -112,6 +112,40 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String aux = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
         selectedDate.setText(aux);
+    }
+    private void getLocation() {
+        if(ActivityCompat.checkSelfPermission(NewSessionActivity.this
+                , Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    Location location = task.getResult();
+                    if(location !=null) {
+                        Geocoder geocoder = new Geocoder(NewSessionActivity.this,
+                                Locale.getDefault());
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(
+                                    location.getLatitude(), location.getLongitude(), 1
+                            );
+                            sendBundle.putDouble("curLatitude",location.getLatitude());
+                            System.out.println("macaco2-"+location.getLatitude());
+                            sendBundle.putDouble("curLongitude",location.getLongitude());
+                            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                            intent.putExtras(sendBundle);
+                            startActivity(intent);
+                            //bundle.putString("localidade",addresses.get(0).getLocality());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+
+                        }
+                    }
+                }
+            });
+        }else{
+            ActivityCompat.requestPermissions(NewSessionActivity.this
+                    , new  String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        }
+
     }
 
 }
