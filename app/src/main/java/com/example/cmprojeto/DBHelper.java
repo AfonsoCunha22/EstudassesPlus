@@ -42,10 +42,7 @@ import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
-
-
 public class DBHelper{
-
 
     FirebaseFirestore fstore;
     FirebaseAuth mAuth;
@@ -53,60 +50,58 @@ public class DBHelper{
     public final static User USER = new User();
     public final static List<Plan> plans = new ArrayList<>();
 
+    public final static Map<String, Object> USER_SETTINGS = new HashMap<>();
 
     public DBHelper() {
-
         mAuth = FirebaseAuth.getInstance();
         fstore = FirebaseFirestore.getInstance();
 
+        populateDefaultSettings();
+    }
+
+    private static void populateDefaultSettings() {
+        USER_SETTINGS.put("language", "EN");
+        USER_SETTINGS.put("lightSensor", true);
+        USER_SETTINGS.put("tempSensor", true);
+        USER_SETTINGS.put("sessionStartNotification", true);
+        USER_SETTINGS.put("studyStartNotification", true);
+        USER_SETTINGS.put("studyBreakNotification", true);
+        USER_SETTINGS.put("studyEndNotification", true);
+        USER_SETTINGS.put("allowLocalization", true);
     }
 
     public void createUser(String username, String email, String password, Context context, Context appContext){
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    FirebaseUser fuser = mAuth.getCurrentUser();
-                    assert fuser != null;
-                    userID = fuser.getUid();
-                    DocumentReference documentReference = fstore.collection("users").document(userID);
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, task -> {
+            if(task.isSuccessful()) {
+                FirebaseUser fUser = mAuth.getCurrentUser();
+                assert fUser != null;
+                userID = fUser.getUid();
+                DocumentReference userReference = fstore.collection("users").document(userID);
+                DocumentReference settingsReference = fstore.collection("settings").document(userID);
 
-                    Map<String, Object> user = new HashMap<>();
-                    user.put("username", username);
-                    user.put("email", email);
-                    user.put("description", " ");
-                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "onSuccess; user Profile is created for "+ userID);
-                        }
-                    });
+                Map<String, Object> user = new HashMap<>();
+                user.put("username", username);
+                user.put("email", email);
+                user.put("description", " ");
 
-                    fuser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(context, R.string.verify_email, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(appContext, LoginActivity.class);
-                            context.startActivity(intent);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString());
-                        }
-                    });
-                }else  {
-                    if(task.getException() instanceof FirebaseAuthUserCollisionException){
-                        Toast.makeText(context, R.string.email_already_exists, Toast.LENGTH_SHORT).show();
-                    }else if(task.getException() instanceof FirebaseAuthEmailException){
-                        Toast.makeText(context, R.string.invalid_email, Toast.LENGTH_SHORT).show();
-                    }else
-                        Toast.makeText(context, R.string.reg_error, Toast.LENGTH_SHORT).show();
-                }
+                userReference.set(user).addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess; user Profile is created for "+ userID));
+                settingsReference.set(USER_SETTINGS).addOnSuccessListener(l -> Log.d(TAG, "onSuccess; Settings profile is created for " + userID));
+
+                fUser.sendEmailVerification().addOnSuccessListener(aVoid -> {
+                    Toast.makeText(context, R.string.verify_email, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(appContext, LoginActivity.class);
+                    context.startActivity(intent);
+                }).addOnFailureListener(e -> Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString()));
+            } else {
+                if(task.getException() instanceof FirebaseAuthUserCollisionException)
+                    Toast.makeText(context, R.string.email_already_exists, Toast.LENGTH_SHORT).show();
+                else if(task.getException() instanceof FirebaseAuthEmailException)
+                    Toast.makeText(context, R.string.invalid_email, Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(context, R.string.reg_error, Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 
     public void checkUsernameExists(String username, String email, String password, EditText editText, Context context, Context appContext, boolean login){
         fstore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -123,6 +118,7 @@ public class DBHelper{
                             }
                         }
                     }
+
                     if(login){
                         if (!checkUsernameExists){
                             createUser(username, email, password, context, appContext);
@@ -140,7 +136,7 @@ public class DBHelper{
                 loadUser();
                 Intent intent = new Intent(appContext, HomeActivity.class);
                 context.startActivity(intent);
-            }else  {
+            } else  {
                 if(task.getException() instanceof FirebaseAuthInvalidCredentialsException){
                     Toast.makeText(context, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
                 }else if(task.getException() instanceof FirebaseAuthInvalidUserException){
@@ -232,9 +228,5 @@ public class DBHelper{
                 Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString());
             }
         });
-    }
-
-    public User getUSER(){
-        return USER;
     }
 }

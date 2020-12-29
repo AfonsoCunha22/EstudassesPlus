@@ -12,8 +12,8 @@ import android.widget.ImageView;
 
 public class SensorSettingsActivity extends AppCompatActivity {
     ImageView goBack;
-
     SwitchCompat tempSwitch, lightSwitch;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +22,18 @@ public class SensorSettingsActivity extends AppCompatActivity {
 
         goBack = (ImageView) findViewById(R.id.goBack);
 
-
         tempSwitch = (SwitchCompat) findViewById(R.id.tempSwitch);
         lightSwitch = (SwitchCompat) findViewById(R.id.lightSwitch);
+
+        dbHelper = new DBHelper();
+
+        tempSwitch.setOnClickListener(v -> {
+
+        });
+
+        lightSwitch.setOnClickListener(v -> {
+
+        });
 
         goBack.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
