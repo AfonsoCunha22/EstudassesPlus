@@ -45,13 +45,13 @@ public class RegisterActivity extends AppCompatActivity {
             String userEmail = email.getText().toString().trim();
 
             if (userName.isEmpty()){
-                username.setError("Username can't be empty");
+                username.setError(getResources().getString(R.string.username_empty));
             } else if(userPass.isEmpty()) {
-                password.setError("Password can't be empty");
+                password.setError(getResources().getString(R.string.password_empty));
             } else if(userRePass.isEmpty()) {
-                rePassword.setError("Please confirm password");
+                rePassword.setError(getResources().getString(R.string.password_not_confirmed));
             } else if(userEmail.isEmpty()) {
-                email.setError("Email can't be empty");
+                email.setError(getResources().getString(R.string.email_empty));
             } else {
                 if(userPass.length() >= 6) {
                     if(userPass.equals(userRePass)) {
@@ -63,10 +63,10 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        rePassword.setError("Password and confirmation are different");
+                        rePassword.setError(getResources().getString(R.string.password_conf_different));
                     }
                 } else {
-                    password.setError("Password needs to have at least 6 characters");
+                    password.setError(getResources().getString(R.string.password_too_small));
                 }
             }
         });

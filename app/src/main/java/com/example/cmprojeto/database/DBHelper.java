@@ -15,12 +15,15 @@ import com.example.cmprojeto.callbacks.UserCallback;
 import com.example.cmprojeto.model.Color;
 import com.example.cmprojeto.model.Plan;
 import com.example.cmprojeto.model.UserInfo;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -169,5 +172,19 @@ public class DBHelper{
             Intent intent = new Intent(appContext, LoginActivity.class);
             context.startActivity(intent);
         }).addOnFailureListener(e -> Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString()));
+    }
+    public void createPlan(Plan plan){
+
+
+        DatabaseReference in = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference postsRef = in.child("plans");
+        DatabaseReference newPostRef = postsRef.push();
+
+        newPostRef.push().setValue(plan).addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                Log.d("Cenas", "YA MEU");
+            }
+        });
     }
 }

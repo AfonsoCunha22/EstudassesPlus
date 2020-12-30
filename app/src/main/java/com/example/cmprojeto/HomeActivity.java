@@ -30,8 +30,6 @@ public class HomeActivity extends AppCompatActivity {
     ImageView openMenu;
     DrawerLayout drawer;
     Button buttonResendEmail, session, settings, home, study;
-    DBHelper dbHelper;
-    Button buttonResendEmail, session, settings, home;
     DBHelper dbHelper = DBHelper.getInstance();
 
     @Override

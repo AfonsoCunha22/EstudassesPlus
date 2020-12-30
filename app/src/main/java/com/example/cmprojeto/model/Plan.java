@@ -2,7 +2,7 @@ package com.example.cmprojeto.model;
 
 public class Plan {
     private String id, description;
-    private Subject subject;
+    private String  subject;
     private long time;
     private Color color;
     private boolean active;
@@ -10,7 +10,7 @@ public class Plan {
     public Plan() {
     }
 
-    public Plan(Subject subject, String description, long time, Color color, boolean active) {
+    public Plan(String subject, String description, long time, Color color, boolean active) {
         this.subject = subject;
         this.description = description;
         this.time = time;
@@ -18,7 +18,7 @@ public class Plan {
         this.active = active;
     }
 
-    public Subject getSubject() {
+    public String getSubject() {
         return subject;
     }
 
@@ -38,7 +38,7 @@ public class Plan {
         this.id = id;
     }
 
-    public void setCurricularUnit(Subject subject) {
+    public void setCurricularUnit(String subject) {
         this.subject = subject;
     }
 
@@ -54,11 +54,11 @@ public class Plan {
         this.color = color;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setActive(boolean active) {this.active = active;}
+
     public String getPlanInfo(){
         return "Dados de utilizador:\n\n"+
-                "CurricularUnit: "+ getCurricularUnit() +
+                "CurricularUnit: "+ getSubject() +
                 "\nTime: "+ getTime()+
                 "\nColor: "+ getColor()+
                 "\nDescription: "+ getDescription();

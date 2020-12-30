@@ -2,10 +2,11 @@ package com.example.cmprojeto;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.example.cmprojeto.database.*;
+
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,11 +18,12 @@ import java.util.Locale;
 
 public class TimerActivity extends AppCompatActivity {
     //TODO Import the active plan from the database
-    private Plan plan = new Plan(new Subject("CM"), "Let's Study", 90, Color.RED, true);
+    private Plan plan = new Plan("Mobile Computing", "Let's Study", 90, Color.RED, true);
 
     private TextView mTimerText;
     private TextView mTimerPauseText;
 
+    DBHelper dbHelper = DBHelper.getInstance();
     private Button mStartStop;
     private Button mReset;
 
@@ -37,7 +39,6 @@ public class TimerActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plans);
-
         mTimerText = (TextView) findViewById(R.id.timer);
         mTimerPauseText = (TextView) findViewById(R.id.pause);
 
@@ -47,8 +48,8 @@ public class TimerActivity extends AppCompatActivity {
         mStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBHelper dbHelper = new DBHelper();
-                dbHelper.createPlan(new Subject("CM"), 90, Color.RED, "Let's Study");
+
+                dbHelper.createPlan(new Plan("Mobile Computing","Let's Study", 90, Color.RED, false));
             }
         });
 
