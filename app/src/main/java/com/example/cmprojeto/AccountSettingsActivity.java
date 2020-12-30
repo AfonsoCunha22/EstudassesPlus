@@ -15,6 +15,7 @@ import com.example.cmprojeto.database.DBHelper;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class AccountSettingsActivity extends AppCompatActivity {
     ImageView goBack;
@@ -44,6 +45,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         dbHelper.getUserInfo(user -> {
             emailField.setText(user.getEmail());
             nameField.setText(user.getUsername());
+            //TODO: Add user password to password field
         });
 
         btnImage.setOnClickListener(v -> {
@@ -65,7 +67,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             try {
                 final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final InputStream imageStream = getContentResolver().openInputStream(Objects.requireNonNull(imageUri));
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 userImage.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {

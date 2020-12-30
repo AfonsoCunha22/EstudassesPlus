@@ -173,18 +173,12 @@ public class DBHelper{
             context.startActivity(intent);
         }).addOnFailureListener(e -> Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString()));
     }
+
     public void createPlan(Plan plan){
-
-
         DatabaseReference in = FirebaseDatabase.getInstance().getReference();
         DatabaseReference postsRef = in.child("plans");
         DatabaseReference newPostRef = postsRef.push();
 
-        newPostRef.push().setValue(plan).addOnCanceledListener(new OnCanceledListener() {
-            @Override
-            public void onCanceled() {
-                Log.d("Cenas", "YA MEU");
-            }
-        });
+        newPostRef.push().setValue(plan).addOnCanceledListener(() -> Log.d("Cenas", "YA MEU"));
     }
 }

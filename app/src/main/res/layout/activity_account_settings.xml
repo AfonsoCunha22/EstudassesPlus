@@ -68,11 +68,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/userImageContainer"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:focusable="true" >
 
                 <TextView
                     android:id="@+id/nameLabel"
