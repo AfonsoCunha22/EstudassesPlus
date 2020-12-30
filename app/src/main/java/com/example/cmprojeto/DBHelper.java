@@ -3,14 +3,14 @@ package com.example.cmprojeto;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Debug;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,20 +22,16 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -44,19 +40,14 @@ import static android.content.ContentValues.TAG;
 
 
 public class DBHelper{
-
-
     FirebaseFirestore fstore;
     FirebaseAuth mAuth;
     String userID;
     public final static User USER = new User();
 
-
     public DBHelper() {
-
         mAuth = FirebaseAuth.getInstance();
         fstore = FirebaseFirestore.getInstance();
-
     }
 
     public void createUser(String username, String email, String password, Context context, Context appContext){
@@ -105,6 +96,26 @@ public class DBHelper{
         });
     }
 
+    public void createPlan(Subject subject, long minutes, Color color, String description){
+        Plan plan = new Plan();
+
+        plan.setColor(color);
+        plan.setActive(false);
+        plan.setCurricularUnit(subject);
+        plan.setTime(minutes);
+        plan.setDescription(description);
+
+        DatabaseReference in = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference postsRef = in.child("plans");
+        DatabaseReference newPostRef = postsRef.push();
+
+        newPostRef.push().setValue(plan).addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                Log.d("Cenas", "YA MEU");
+            }
+        });
+    }
 
     public void checkUsernameExists(String username, String email, String password, EditText editText, Context context, Context appContext, boolean login){
         fstore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
