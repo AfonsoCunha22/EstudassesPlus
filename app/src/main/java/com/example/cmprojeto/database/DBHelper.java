@@ -11,9 +11,11 @@ import com.example.cmprojeto.LoginActivity;
 import com.example.cmprojeto.R;
 import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.callbacks.PlanCallback;
+import com.example.cmprojeto.callbacks.SessionCallback;
 import com.example.cmprojeto.callbacks.UserCallback;
 import com.example.cmprojeto.model.Color;
 import com.example.cmprojeto.model.Plan;
+import com.example.cmprojeto.model.Session;
 import com.example.cmprojeto.model.UserInfo;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,8 +29,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +90,21 @@ public class DBHelper{
             }
         });
     }
+    public void createSession(String subject, Date date, int hours,int minute, Double latitude,Double longitude, String description){
+
+
+        Map<String, Object> session = new HashMap<>();
+        session.put("userID", mAuth.getCurrentUser().getUid());
+        session.put("subject", subject);
+        session.put("date", date);
+        session.put("hours", hours);
+        session.put("minutes", minute);
+        session.put("latitude", latitude);
+        session.put("longitude", longitude);
+        session.put("description", description);
+
+        fStore.collection("sessions").add(session);
+    }
 
     public void checkUsernameExists(String username, BooleanCallback callback) {
         fStore.collection("users").whereEqualTo("username", username).get().addOnCompleteListener(task -> {
@@ -124,7 +144,25 @@ public class DBHelper{
             }
         });
     }
+    public void getSessions(SessionCallback callback) {
+        fStore.collection("session").get().addOnCompleteListener(task -> {
+            if (task.isComplete()) {
+                List<Session> sessions = new ArrayList<>();
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    Color color = Color.toColor(Objects.requireNonNull(doc.get("color")).toString());
+                    sessions.add(
+                            new Session(
+                                    doc.getString("subjectName"),
+                                    doc.getDate("date"),
+                                    new Time(doc.getDouble("hour").intValue(),doc.getDouble("minute").intValue(),0),
+                                    new LatLng(doc.getDouble("latitude"),doc.getDouble("latitude")),
+                                    Objects.requireNonNull(doc.get("description")).toString()));
+                }
 
+                callback.manageUserSession(sessions);
+            }
+        });
+    }
     public void loginUser(String email, String password, Context context, Context appContext){
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, task -> {
             if(task.isSuccessful()){
@@ -176,7 +214,7 @@ public class DBHelper{
 
     public void createPlan(Plan plan){
 
-        DocumentReference plansReference = fStore.collection("plans").document();
+
         Map<String, Object> planMap = new HashMap<>();
         planMap.put("subjectName", plan.getSubject());
         planMap.put("description", plan.getDescription());
@@ -185,7 +223,8 @@ public class DBHelper{
         planMap.put("color", plan.getColor().toString());
         planMap.put("active", plan.isActive());
 
-        plansReference.set(planMap);
+        fStore.collection("plans").add(planMap);
 
     }
+
 }

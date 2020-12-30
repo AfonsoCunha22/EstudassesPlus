@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.cmprojeto.database.DBHelper;
 import com.example.cmprojeto.fragments.DatePickerFragment;
 import com.example.cmprojeto.fragments.TimePickerFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -31,6 +33,7 @@ import com.google.android.gms.tasks.Task;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,7 +43,11 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
     TextView selectedTime,selectedDate, selectedLocation;
     Bundle receiveBundle, sendBundle;
     FusedLocationProviderClient fusedLocationProviderClient;
-
+    EditText subject, description;
+    DBHelper dbHelper = DBHelper.getInstance();
+    int  minute,hour;
+    Calendar cal;
+    Double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,8 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         receiveBundle = getIntent().getExtras();
         sendBundle = new Bundle();
+        subject = (EditText) findViewById(R.id.editSubject);
+        description = (EditText) findViewById(R.id.editDescription);
         confirm = (Button) findViewById(R.id.confirm_button);
         timeP = (ImageView) findViewById(R.id.timeButton);
         dateP = (ImageView) findViewById(R.id.dateButton);
@@ -59,9 +68,12 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         selectedTime.setText(R.string.pls_time);
         selectedDate.setText(R.string.pls_date);
         goBack = (ImageView) findViewById(R.id.goBack);
+        cal=Calendar.getInstance();
         
         if(receiveBundle != null){
             selectedLocation.setText(getLocationFromLarLong(receiveBundle.getDouble("latitude"), receiveBundle.getDouble("longitude")));
+            this.latitude=receiveBundle.getDouble("latitude");
+            this.longitude=receiveBundle.getDouble("longitude");
         }else{
             selectedLocation.setText((R.string.pls_local));
         }
@@ -69,6 +81,14 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dbHelper.createSession(subject.getText().toString(),
+                       cal.getTime(),
+                        hour,
+                        minute,
+                        latitude,
+                        longitude,
+                        description.getText().toString()
+                        );
                 Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
                 startActivity(intent);
             }
@@ -103,12 +123,15 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         String aux = R.string.selected_time_label + hourOfDay + ":" + minute;
+        this.hour=hourOfDay;
+        this.minute=minute;
         selectedTime.setText(aux);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
+        cal.set(year,month,dayOfMonth);
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
