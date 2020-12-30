@@ -1,4 +1,4 @@
-package com.example.cmprojeto;
+package com.example.cmprojeto.model;
 
 public class Plan {
     private String id, description;
@@ -56,5 +56,11 @@ public class Plan {
 
     public void setActive(boolean active) {
         this.active = active;
+    public String getPlanInfo(){
+        return "Dados de utilizador:\n\n"+
+                "CurricularUnit: "+ getCurricularUnit() +
+                "\nTime: "+ getTime()+
+                "\nColor: "+ getColor()+
+                "\nDescription: "+ getDescription();
     }
 }

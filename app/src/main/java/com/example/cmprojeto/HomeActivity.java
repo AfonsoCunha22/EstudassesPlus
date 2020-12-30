@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
+import com.example.cmprojeto.database.DBHelper;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -30,12 +31,13 @@ public class HomeActivity extends AppCompatActivity {
     DrawerLayout drawer;
     Button buttonResendEmail, session, settings, home, study;
     DBHelper dbHelper;
+    Button buttonResendEmail, session, settings, home;
+    DBHelper dbHelper = DBHelper.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        dbHelper = new DBHelper();
         session = (Button) findViewById(R.id.sessionsMenu);
         settings = (Button) findViewById(R.id.settingsMenu);
         home = (Button) findViewById(R.id.homeMenu);
@@ -76,10 +78,10 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         settings.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
         });
+
         home.setOnClickListener(v -> {
             drawer.closeDrawer(Gravity.LEFT);
         });
@@ -103,7 +105,5 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
         });
-
-        System.out.println(dbHelper.getUSER().getUserInfo());
     }
 }

@@ -32,18 +32,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     FusedLocationProviderClient fusedLocationProviderClient;
-    Bundle bundle;
+    Bundle receiveBundle, sendBundle;
     Double latitude,longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        bundle= new Bundle();
+        sendBundle= new Bundle();
+        receiveBundle=getIntent().getExtras();
         latitude=38.521741;
         longitude=-8.838514;
         //38.521741, -8.838514
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -64,47 +64,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        getLocation();
-        LatLng userLocation = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker in Sydney"));
+        System.out.println("macaco3-"+receiveBundle.getDouble("curLatitude"));
+        LatLng userLocation = new LatLng(receiveBundle.getDouble("curLatitude"), receiveBundle.getDouble("curLongitude"));
+        mMap.addMarker(new MarkerOptions().position(userLocation).title("You"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
         mMap.setOnMapClickListener((GoogleMap.OnMapClickListener) v -> {
-            bundle.putDouble("latitude", v.latitude);
-            bundle.putDouble("longitude", v.longitude);
+            sendBundle.putDouble("latitude", v.latitude);
+            sendBundle.putDouble("longitude", v.longitude);
             Intent intent = new Intent(getApplicationContext(), NewSessionActivity.class);
-            intent.putExtras(bundle);
+            intent.putExtras(sendBundle);
             startActivity(intent);
         });
 
 
     }
-    private void getLocation() {
-        if(ActivityCompat.checkSelfPermission(MapsActivity.this
-                , Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
-            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    Location location = task.getResult();
-                    if(location !=null) {
-                        Geocoder geocoder = new Geocoder(MapsActivity.this,
-                                Locale.getDefault());
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(
-                                    location.getLatitude(), location.getLongitude(), 1
-                            );
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        } catch (IOException e) {
-                            e.printStackTrace();
 
-                        }
-                    }
-                }
-            });
-        }else{
-            ActivityCompat.requestPermissions(MapsActivity.this
-                    , new  String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
-        }
-
-    }
 }
