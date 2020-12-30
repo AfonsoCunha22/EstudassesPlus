@@ -56,6 +56,8 @@ public class Plan {
 
     public void setActive(boolean active) {this.active = active;}
 
+    public boolean isActive() { return active;}
+
     public String getPlanInfo(){
         return "Dados de utilizador:\n\n"+
                 "CurricularUnit: "+ getSubject() +

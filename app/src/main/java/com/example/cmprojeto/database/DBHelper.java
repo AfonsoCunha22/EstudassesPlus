@@ -175,10 +175,17 @@ public class DBHelper{
     }
 
     public void createPlan(Plan plan){
-        DatabaseReference in = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference postsRef = in.child("plans");
-        DatabaseReference newPostRef = postsRef.push();
 
-        newPostRef.push().setValue(plan).addOnCanceledListener(() -> Log.d("Cenas", "YA MEU"));
+        DocumentReference plansReference = fStore.collection("plans").document();
+        Map<String, Object> planMap = new HashMap<>();
+        planMap.put("subjectName", plan.getSubject());
+        planMap.put("description", plan.getDescription());
+        planMap.put("time", plan.getTime());
+        planMap.put("userID", mAuth.getCurrentUser().getUid());
+        planMap.put("color", plan.getColor().toString());
+        planMap.put("active", plan.isActive());
+
+        plansReference.set(planMap);
+
     }
 }
