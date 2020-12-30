@@ -16,16 +16,16 @@ import com.example.cmprojeto.callbacks.UserCallback;
 import com.example.cmprojeto.model.Color;
 import com.example.cmprojeto.model.Plan;
 import com.example.cmprojeto.model.Session;
+import com.example.cmprojeto.model.SubjectList;
 import com.example.cmprojeto.model.UserInfo;
-import com.google.android.gms.tasks.OnCanceledListener;
+import com.example.cmprojeto.model.UserPlans;
+import com.example.cmprojeto.model.UserSessions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,6 +42,11 @@ import java.util.Objects;
 import static android.content.ContentValues.TAG;
 
 public class DBHelper{
+    public static final UserInfo USER = new UserInfo();
+    public static final UserPlans USER_PLANS = new UserPlans();
+    public static final UserSessions USER_SESSIONS = new UserSessions();
+    public static final SubjectList SUBJECT_LIST = new SubjectList();
+
     FirebaseFirestore fStore;
     FirebaseAuth mAuth;
     String userID;
@@ -60,8 +65,8 @@ public class DBHelper{
         fStore = FirebaseFirestore.getInstance();
     }
 
-    public void createUser(String username, String email, String password, Context context, Context appContext){
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, task -> {
+    public void createUser(UserInfo userInfo, Context context, Context appContext){
+        mAuth.createUserWithEmailAndPassword(userInfo.getEmail(), userInfo.getPassword()).addOnCompleteListener((Activity) context, task -> {
             if(task.isSuccessful()) {
                 FirebaseUser fUser = mAuth.getCurrentUser();
                 assert fUser != null;
@@ -69,9 +74,15 @@ public class DBHelper{
                 DocumentReference userReference = fStore.collection("users").document(userID);
 
                 Map<String, Object> user = new HashMap<>();
-                user.put("username", username);
-                user.put("email", email);
-                user.put("description", " ");
+                user.put("username", userInfo.getUsername());
+                user.put("email", userInfo.getEmail());
+                user.put("description", userInfo.getDescription());
+
+                try {
+                    user.put("password", PasswordUtils.encrypt(userInfo.getPassword()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 userReference.set(user).addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess; user Profile is created for "+ userID));
 
@@ -90,9 +101,8 @@ public class DBHelper{
             }
         });
     }
+
     public void createSession(String subject, Date date, int hours,int minute, Double latitude,Double longitude, String description){
-
-
         Map<String, Object> session = new HashMap<>();
         session.put("userID", mAuth.getCurrentUser().getUid());
         session.put("subject", subject);
@@ -118,8 +128,9 @@ public class DBHelper{
             if(task.isComplete()) {
                 callback.manageUserInformation(
                         new UserInfo(Objects.requireNonNull(task.getResult().get("username")).toString(),
-                        "password", Objects.requireNonNull(task.getResult().get("email")).toString(),
-                        "description"));
+                                Objects.requireNonNull(task.getResult().get("password")).toString(),
+                                Objects.requireNonNull(task.getResult().get("email")).toString(),
+                                "description"));
             }
         });
     }
@@ -144,12 +155,12 @@ public class DBHelper{
             }
         });
     }
+
     public void getSessions(SessionCallback callback) {
         fStore.collection("session").get().addOnCompleteListener(task -> {
             if (task.isComplete()) {
                 List<Session> sessions = new ArrayList<>();
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                    Color color = Color.toColor(Objects.requireNonNull(doc.get("color")).toString());
                     sessions.add(
                             new Session(
                                     doc.getString("subjectName"),
@@ -163,6 +174,7 @@ public class DBHelper{
             }
         });
     }
+
     public void loginUser(String email, String password, Context context, Context appContext){
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener((Activity) context, task -> {
             if(task.isSuccessful()){
@@ -171,11 +183,11 @@ public class DBHelper{
                 Intent intent = new Intent(appContext, HomeActivity.class);
                 context.startActivity(intent);
             } else {
-                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException){
+                if(task.getException() instanceof FirebaseAuthInvalidCredentialsException)
                     Toast.makeText(context, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
-                }else if(task.getException() instanceof FirebaseAuthInvalidUserException){
+                else if(task.getException() instanceof FirebaseAuthInvalidUserException)
                     Toast.makeText(context, R.string.not_available_user, Toast.LENGTH_SHORT).show();
-                }else
+                else
                     Toast.makeText(context, R.string.log_error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -185,15 +197,15 @@ public class DBHelper{
         return mAuth.getCurrentUser() != null;
     }
 
-    public void logout(){
+    public void logout() {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public boolean emailVerified(){
+    public boolean emailVerified() {
         return !Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified();
     }
 
-    public void resetPassword(String email, Context context){
+    public void resetPassword(String email, Context context) {
         mAuth.sendPasswordResetEmail(email).addOnSuccessListener(aVoid -> {
             Toast.makeText(context, R.string.password_link_sent, Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
@@ -213,8 +225,6 @@ public class DBHelper{
     }
 
     public void createPlan(Plan plan){
-
-
         Map<String, Object> planMap = new HashMap<>();
         planMap.put("subjectName", plan.getSubject());
         planMap.put("description", plan.getDescription());
@@ -224,7 +234,6 @@ public class DBHelper{
         planMap.put("active", plan.isActive());
 
         fStore.collection("plans").add(planMap);
-
     }
 
 }

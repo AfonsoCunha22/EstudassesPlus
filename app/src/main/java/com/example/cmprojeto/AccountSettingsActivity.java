@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.example.cmprojeto.database.DBHelper;
+import com.example.cmprojeto.database.PasswordUtils;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -25,6 +26,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     EditText emailField;
     EditText nameField;
+    EditText passField;
 
     DBHelper dbHelper = DBHelper.getInstance();
 
@@ -39,14 +41,11 @@ public class AccountSettingsActivity extends AppCompatActivity {
         userImage = (ImageView) findViewById(R.id.userImage);
 
         nameField = (EditText) findViewById((R.id.nameField));
+        passField = (EditText) findViewById((R.id.passField));
         emailField = (EditText) findViewById(R.id.emailField);
         emailField.setEnabled(false);
 
-        dbHelper.getUserInfo(user -> {
-            emailField.setText(user.getEmail());
-            nameField.setText(user.getUsername());
-            //TODO: Add user password to password field
-        });
+        populateActivity();
 
         btnImage.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -73,6 +72,28 @@ public class AccountSettingsActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void populateActivity() {
+        if(!DBHelper.USER.isPopulated()) {
+            dbHelper.getUserInfo(user -> {
+                DBHelper.USER.populateUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getDescription());
+                fillControls(user.getEmail(), user.getUsername(), user.getPassword());
+            });
+        } else {
+            fillControls(DBHelper.USER.getEmail(), DBHelper.USER.getUsername(), DBHelper.USER.getPassword());
+        }
+    }
+
+    private void fillControls(String email, String username, String password) {
+        emailField.setText(email);
+        nameField.setText(username);
+
+        try {
+            passField.setText(PasswordUtils.decrypt(password));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

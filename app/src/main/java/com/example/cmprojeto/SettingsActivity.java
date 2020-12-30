@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cmprojeto.database.DBHelper;
+import com.example.cmprojeto.database.PasswordUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -33,9 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnLanguage = (Button) findViewById(R.id.btnLanguage);
         btnHelp = (Button) findViewById(R.id.btnHelp);
 
-        dbHelper.getUserInfo(user -> {
-            userName.setText(user.getUsername());
-        });
+        populateActivity();
 
         btnAccount.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), AccountSettingsActivity.class);
@@ -52,9 +51,30 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        btnLanguage.setOnClickListener( v -> {
+            Intent intent = new Intent(getApplicationContext(), LanguageSettingsActivity.class);
+            startActivity(intent);
+        });
+
+        btnHelp.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), HelpSettingsActivity.class);
+            startActivity(intent);
+        });
+
         goBack.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void populateActivity() {
+        if(!DBHelper.USER.isPopulated()) {
+            dbHelper.getUserInfo(user -> {
+                DBHelper.USER.populateUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getDescription());
+                userName.setText(user.getUsername());
+            });
+        } else {
+            userName.setText(DBHelper.USER.getUsername());
+        }
     }
 }

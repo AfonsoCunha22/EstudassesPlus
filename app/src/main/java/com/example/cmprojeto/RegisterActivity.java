@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.cmprojeto.database.DBHelper;
+import com.example.cmprojeto.model.UserInfo;
+import com.google.firebase.firestore.auth.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -44,30 +46,27 @@ public class RegisterActivity extends AppCompatActivity {
             String userRePass = rePassword.getText().toString().trim();
             String userEmail = email.getText().toString().trim();
 
-            if (userName.isEmpty()){
+            if (userName.isEmpty())
                 username.setError(getResources().getString(R.string.username_empty));
-            } else if(userPass.isEmpty()) {
+            else if(userPass.isEmpty())
                 password.setError(getResources().getString(R.string.password_empty));
-            } else if(userRePass.isEmpty()) {
+            else if(userRePass.isEmpty())
                 rePassword.setError(getResources().getString(R.string.password_not_confirmed));
-            } else if(userEmail.isEmpty()) {
+            else if(userEmail.isEmpty())
                 email.setError(getResources().getString(R.string.email_empty));
-            } else {
+            else {
                 if(userPass.length() >= 6) {
                     if(userPass.equals(userRePass)) {
                         dbHelper.checkUsernameExists(userName, result -> {
-                            if(result) {
+                            if(result)
                                 username.setError(getResources().getString(R.string.username_exists));
-                            } else {
-                                dbHelper.createUser(userName, userEmail, userPass, RegisterActivity.this, getApplicationContext());
-                            }
+                            else
+                                dbHelper.createUser(new UserInfo(userName, userPass, userEmail, " "), RegisterActivity.this, getApplicationContext());
                         });
-                    } else {
+                    } else
                         rePassword.setError(getResources().getString(R.string.password_conf_different));
-                    }
-                } else {
+                } else
                     password.setError(getResources().getString(R.string.password_too_small));
-                }
             }
         });
 

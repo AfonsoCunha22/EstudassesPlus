@@ -30,12 +30,9 @@ public class SessionActivity extends AppCompatActivity {
         settings = (Button) findViewById(R.id.settingsMenu);
         home = (Button) findViewById(R.id.homeMenu);
 
-        newSession.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), NewSessionActivity.class);
-                startActivity(intent);
-            }
+        newSession.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), NewSessionActivity.class);
+            startActivity(intent);
         });
 
         openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
@@ -49,6 +46,7 @@ public class SessionActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
         });
+
         home.setOnClickListener(v ->{
             drawer.closeDrawer(Gravity.LEFT);
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
