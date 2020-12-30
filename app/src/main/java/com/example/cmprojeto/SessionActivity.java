@@ -14,7 +14,7 @@ public class SessionActivity extends AppCompatActivity {
     Button newSession;
     DrawerLayout drawer;
     ImageView openMenu;
-    Button session, settings, home;
+    Button session, settings, home, study;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +24,13 @@ public class SessionActivity extends AppCompatActivity {
         openMenu = (ImageView) findViewById(R.id.openMenu);
         newSession = (Button) findViewById(R.id.newSession);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
+
         drawer.closeDrawer(Gravity.LEFT);
 
         session = (Button) findViewById(R.id.sessionsMenu);
         settings = (Button) findViewById(R.id.settingsMenu);
         home = (Button) findViewById(R.id.homeMenu);
+        study = (Button) findViewById(R.id.studyMenu);
 
         newSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +44,11 @@ public class SessionActivity extends AppCompatActivity {
 
         session.setOnClickListener(v -> {
             drawer.closeDrawer(Gravity.LEFT);
+        });
+        study.setOnClickListener(v -> {
+            drawer.closeDrawer(Gravity.LEFT);
+            Intent intent = new Intent(getApplicationContext(), TimerActivity.class);
+            startActivity(intent);
         });
 
         settings.setOnClickListener(v -> {
