@@ -235,5 +235,4 @@ public class DBHelper{
 
         fStore.collection("plans").add(planMap);
     }
-
 }

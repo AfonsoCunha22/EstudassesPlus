@@ -47,7 +47,7 @@ public class SessionActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        home.setOnClickListener(v ->{
+        home.setOnClickListener(v -> {
             drawer.closeDrawer(Gravity.LEFT);
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);

@@ -58,7 +58,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="pls_local">\"Please choose the location\"</string>
     <string name="sensors_warning">* Settings apply when creating a new study plan</string>
-    <string name="temperature_sensor">Temperature Sensor</string>
+    <string name="accelerometer">Accelerometer</string>
     <string name="light_sensor">Light Sensor</string>
     <string name="account_settings">Account</string>
     <string name="notification_settings">Notifications</string>

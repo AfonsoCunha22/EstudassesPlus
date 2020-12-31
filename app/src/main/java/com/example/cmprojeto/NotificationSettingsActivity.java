@@ -6,17 +6,17 @@ import androidx.appcompat.widget.SwitchCompat;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 public class NotificationSettingsActivity extends AppCompatActivity {
-
     SwitchCompat sessionStart;
     SwitchCompat studyStart;
     SwitchCompat studyBreak;
     SwitchCompat studyEnd;
 
     ImageView goBack;
+
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,21 @@ public class NotificationSettingsActivity extends AppCompatActivity {
         studyEnd = (SwitchCompat) findViewById(R.id.studyEnd);
         goBack = (ImageView) findViewById(R.id.goBack);
 
-        SharedPreferences preferences = getSharedPreferences("notificationSettings", MODE_PRIVATE);
+        preferences = getSharedPreferences("notificationSettings", MODE_PRIVATE);
+        setupSharedPreferences();
 
+        sessionStart.setOnCheckedChangeListener((compoundButton, b) -> updatePreferences());
+        studyStart.setOnCheckedChangeListener((compoundButton, b) -> updatePreferences());
+        studyBreak.setOnCheckedChangeListener((compoundButton, b) -> updatePreferences());
+        studyEnd.setOnCheckedChangeListener((compoundButton, b) -> updatePreferences());
+
+        goBack.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void setupSharedPreferences() {
         if(preferences.getBoolean("isFirstRun", true)) {
             SharedPreferences.Editor edit = preferences.edit();
             edit.putBoolean("isFirstRun", false);
@@ -46,34 +59,16 @@ public class NotificationSettingsActivity extends AppCompatActivity {
             studyBreak.setChecked(preferences.getBoolean("studyBreak", true));
             studyEnd.setChecked(preferences.getBoolean("studyEnd", true));
         }
+    }
 
-        sessionStart.setOnCheckedChangeListener((compoundButton, b) -> {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean("sessionStart", sessionStart.isChecked());
-            edit.apply();
-        });
+    private void updatePreferences() {
+        SharedPreferences.Editor edit = preferences.edit();
 
-        studyStart.setOnCheckedChangeListener((compoundButton, b) -> {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean("studyStart", studyStart.isChecked());
-            edit.apply();
-        });
+        edit.putBoolean("sessionStart", sessionStart.isChecked());
+        edit.putBoolean("studyStart", studyStart.isChecked());
+        edit.putBoolean("studyBreak", studyBreak.isChecked());
+        edit.putBoolean("studyEnd", studyEnd.isChecked());
 
-        studyBreak.setOnCheckedChangeListener((compoundButton, b) -> {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean("studyBreak", studyBreak.isChecked());
-            edit.apply();
-        });
-
-        studyEnd.setOnCheckedChangeListener((compoundButton, b) -> {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean("studyEnd", studyEnd.isChecked());
-            edit.apply();
-        });
-
-        goBack.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivity(intent);
-        });
+        edit.apply();
     }
 }
