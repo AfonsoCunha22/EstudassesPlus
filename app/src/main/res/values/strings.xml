@@ -73,7 +73,10 @@
     <string name="apply">Apply</string>
     <string name="start">Start</string>
     <string name="reset">Reset</string>
+    <string name="pause">Pause</string>
     <string name="home">Home</string>
+    <string name="active_plan">Active Plan</string>
+    <string name="my_plans">My Plans</string>
 
     <string-array name="languages_array">
         <item>Portuguese - PT</item>

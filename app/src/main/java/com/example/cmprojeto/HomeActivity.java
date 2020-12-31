@@ -56,23 +56,9 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         study.setOnClickListener(v -> {
-            DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-            connectedRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    boolean connected = snapshot.getValue(Boolean.class);
-                    if (connected) {
-                        Log.d("CENAS", "connected");
-                    } else {
-                        Log.d("CENAS", "not connected");
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.w("Cenas", "Listener was cancelled");
-                }
-            });
+            drawer.closeDrawer(Gravity.LEFT);
+            Intent intent = new Intent(getApplicationContext(), TimerActivity.class);
+            startActivity(intent);
         });
 
         settings.setOnClickListener(v -> {

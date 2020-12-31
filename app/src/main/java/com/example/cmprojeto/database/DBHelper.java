@@ -72,7 +72,6 @@ public class DBHelper{
                 assert fUser != null;
                 userID = fUser.getUid();
                 DocumentReference userReference = fStore.collection("users").document(userID);
-
                 Map<String, Object> user = new HashMap<>();
                 user.put("username", userInfo.getUsername());
                 user.put("email", userInfo.getEmail());
