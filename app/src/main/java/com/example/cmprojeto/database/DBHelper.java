@@ -168,16 +168,16 @@ public class DBHelper{
     }
 
     public void getSessions(SessionCallback callback) {
-        fStore.collection("session").get().addOnCompleteListener(task -> {
+        fStore.collection("sessions").get().addOnCompleteListener(task -> {
             if (task.isComplete()) {
                 List<Session> sessions = new ArrayList<>();
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                     sessions.add(
                             new Session(
-                                    doc.getString("subjectName"),
+                                    doc.getString("subject"),
                                     doc.getDate("date"),
-                                    new Time(doc.getDouble("hour").intValue(),doc.getDouble("minute").intValue(),0),
-                                    new LatLng(doc.getDouble("latitude"),doc.getDouble("latitude")),
+                                    new Time((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
+                                    new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
                                     Objects.requireNonNull(doc.get("description")).toString()));
                 }
 
