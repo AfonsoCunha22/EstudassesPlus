@@ -6,18 +6,25 @@ import android.os.CountDownTimer;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.cmprojeto.database.*;
-
+import android.app.Fragment;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cmprojeto.model.Color;
 import com.example.cmprojeto.model.Plan;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class TimerActivity extends AppCompatActivity {
@@ -36,10 +43,13 @@ public class TimerActivity extends AppCompatActivity {
 
     private boolean mTimerRunning;
 
+
+
     Button sessions, settings, home, study;
     TextView logout;
     ImageView openMenu;
     DrawerLayout drawer;
+    LinearLayout plansLinear;
 
     private long mTimeLeftMillis = plan.getTime() * 60 * 1000;
     private long mTimeLeftPauseMillis = 10 * 60 * 1000;
@@ -54,11 +64,14 @@ public class TimerActivity extends AppCompatActivity {
         mStartStop = (Button) findViewById(R.id.b_start_pause);
         mReset = (Button) findViewById(R.id.b_reset);
 
+        plansLinear = (LinearLayout) findViewById(R.id.plansLinear);
+
         sessions = (Button) findViewById(R.id.sessionsMenu);
         settings = (Button) findViewById(R.id.settingsMenu);
         home = (Button) findViewById(R.id.homeMenu);
         study = (Button) findViewById(R.id.studyMenu);
         logout = (TextView) findViewById(R.id.logout);
+
 
 
         openMenu = (ImageView) findViewById(R.id.openMenu);
@@ -112,6 +125,7 @@ public class TimerActivity extends AppCompatActivity {
 
         updateCountDownText();
         updateCountDownPauseText(mTimeLeftPauseMillis);
+        populateActivity();
     }
 
     private void resetTimer() {
@@ -156,21 +170,21 @@ public class TimerActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 mTimerRunning = false;
-                mStartStop.setText("Start");
+                mStartStop.setText(getResources().getString(R.string.start));
                 mStartStop.setEnabled(false);
                 mReset.setEnabled(true);
             }
         }.start();
 
         mTimerRunning = true;
-        mStartStop.setText("Pause");
+        mStartStop.setText(getResources().getString(R.string.pause));
         mReset.setEnabled(false);
     }
 
     private void pauseTimer() {
         mCountDownTimer.cancel();
         mTimerRunning = false;
-        mStartStop.setText("Start");
+        mStartStop.setText(getResources().getString(R.string.start));
         mReset.setEnabled(true);
     }
 
@@ -190,6 +204,7 @@ public class TimerActivity extends AppCompatActivity {
         mTimerText.setText(timeLeftFormatted);
     }
 
+
     private void updateCountDownPauseText(long mTimeLeftMillisPause) {
         int minutes = (int) mTimeLeftMillisPause / 1000 / 60;
         int seconds = (int) mTimeLeftMillisPause / 1000 % 60;
@@ -197,5 +212,25 @@ public class TimerActivity extends AppCompatActivity {
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
 
         mTimerPauseText.setText(timeLeftFormatted);
+    }
+
+    private void populateActivity(){
+        if(!DBHelper.USER_PLANS.isPopulated()){
+            dbHelper.getUserPlans(plans -> {
+                DBHelper.USER_PLANS.populate(plans);
+
+                for (Plan p: plans) {
+                    if(!p.isActive()){
+                        Fragment fg = PlanFragment.newInstance("10 min", p.getTime()+" min",p.getSubject(), p.getColor().toString());
+                        getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, "Ola").commit();
+                        View view = fg.getView();
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100,300);
+                        //view.setLayoutParams(params);
+                        //view.requestLayout();
+                    }
+                }
+            });
+
+        }
     }
 }
