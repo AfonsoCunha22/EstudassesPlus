@@ -44,6 +44,10 @@ public class UserInfo {
         setPopulated();
     }
 
+    public void clear() {
+        isPopulated = false;
+    }
+
     private void setPopulated() {
         isPopulated = true;
     }

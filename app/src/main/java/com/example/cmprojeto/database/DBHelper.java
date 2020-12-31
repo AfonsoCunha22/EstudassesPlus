@@ -101,6 +101,18 @@ public class DBHelper{
         });
     }
 
+    public void updateUserInformation(String username, String password, Context context) {
+        DocumentReference user = fStore.collection("users").document(mAuth.getCurrentUser().getUid());
+
+        user.update("username", username);
+
+        try {
+            user.update("password", PasswordUtils.encrypt(password));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void createSession(String subject, Date date, int hours,int minute, Double latitude,Double longitude, String description){
         Map<String, Object> session = new HashMap<>();
         session.put("userID", mAuth.getCurrentUser().getUid());
@@ -156,16 +168,16 @@ public class DBHelper{
     }
 
     public void getSessions(SessionCallback callback) {
-        fStore.collection("session").get().addOnCompleteListener(task -> {
+        fStore.collection("sessions").get().addOnCompleteListener(task -> {
             if (task.isComplete()) {
                 List<Session> sessions = new ArrayList<>();
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                     sessions.add(
                             new Session(
-                                    doc.getString("subjectName"),
+                                    doc.getString("subject"),
                                     doc.getDate("date"),
-                                    new Time(doc.getDouble("hour").intValue(),doc.getDouble("minute").intValue(),0),
-                                    new LatLng(doc.getDouble("latitude"),doc.getDouble("latitude")),
+                                    new Time((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
+                                    new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
                                     Objects.requireNonNull(doc.get("description")).toString()));
                 }
 
@@ -234,5 +246,4 @@ public class DBHelper{
 
         fStore.collection("plans").add(planMap);
     }
-
 }

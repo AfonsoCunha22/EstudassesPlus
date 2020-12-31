@@ -4,24 +4,49 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.example.cmprojeto.callbacks.SessionCallback;
+import com.example.cmprojeto.database.DBHelper;
+import com.example.cmprojeto.model.Session;
+
+import java.util.List;
 
 public class SessionActivity extends AppCompatActivity {
     Button newSession;
     DrawerLayout drawer;
     ImageView openMenu;
     Button session, settings, home, study;
+    ListView list;
+    DBHelper dbHelper = DBHelper.getInstance();
+    String[] arrSessoes;
+    ArrayAdapter<String> adp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
+        arrSessoes = new String[15];
+        dbHelper.getSessions(sessions -> {
 
+            if(sessions.size()!=0){
+                arrSessoes = new String[sessions.size()];
+                for(int i =0;i<sessions.size();i++){
+                    arrSessoes[i]=sessions.get(i).getDescription();
+                }
+            }
+        });
+
+        list = (ListView) findViewById(R.id.listView);
         openMenu = (ImageView) findViewById(R.id.openMenu);
+        adp = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrSessoes);
+        list.setAdapter(adp);
         newSession = (Button) findViewById(R.id.newSession);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
 
@@ -54,7 +79,7 @@ public class SessionActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        home.setOnClickListener(v ->{
+        home.setOnClickListener(v -> {
             drawer.closeDrawer(Gravity.LEFT);
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
