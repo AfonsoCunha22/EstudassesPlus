@@ -101,6 +101,18 @@ public class DBHelper{
         });
     }
 
+    public void updateUserInformation(String username, String password, Context context) {
+        DocumentReference user = fStore.collection("users").document(mAuth.getCurrentUser().getUid());
+
+        user.update("username", username);
+
+        try {
+            user.update("password", PasswordUtils.encrypt(password));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void createSession(String subject, Date date, int hours,int minute, Double latitude,Double longitude, String description){
         Map<String, Object> session = new HashMap<>();
         session.put("userID", mAuth.getCurrentUser().getUid());

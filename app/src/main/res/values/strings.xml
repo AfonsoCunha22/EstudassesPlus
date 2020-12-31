@@ -77,7 +77,8 @@
     <string name="home">Home</string>
     <string name="active_plan">Active Plan</string>
     <string name="my_plans">My Plans</string>
-
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
     <string-array name="languages_array">
         <item>Portuguese - PT</item>
         <item>English - EN</item>
