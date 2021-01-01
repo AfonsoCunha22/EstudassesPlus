@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.cmprojeto.HomeActivity;
 import com.example.cmprojeto.LoginActivity;
 import com.example.cmprojeto.R;
+import com.example.cmprojeto.callbacks.AvatarCallback;
 import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.callbacks.PlanCallback;
 import com.example.cmprojeto.callbacks.SessionCallback;
@@ -30,6 +31,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -49,6 +54,7 @@ public class DBHelper{
 
     FirebaseFirestore fStore;
     FirebaseAuth mAuth;
+    FirebaseStorage storage;
     String userID;
 
     private static DBHelper instance;
@@ -63,6 +69,7 @@ public class DBHelper{
     private DBHelper() {
         mAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
     }
 
     public void createUser(UserInfo userInfo, Context context, Context appContext){
@@ -137,13 +144,35 @@ public class DBHelper{
     public void getUserInfo(UserCallback callback) {
         fStore.collection("users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).get().addOnCompleteListener(task -> {
             if(task.isComplete()) {
-                callback.manageUserInformation(
-                        new UserInfo(Objects.requireNonNull(task.getResult().get("username")).toString(),
+                downloadUserAvatar(mAuth.getCurrentUser().getUid(),  imageBytes ->
+                        callback.manageUserInformation(new UserInfo(Objects.requireNonNull(task.getResult().get("username")).toString(),
                                 Objects.requireNonNull(task.getResult().get("password")).toString(),
                                 Objects.requireNonNull(task.getResult().get("email")).toString(),
-                                "description"));
+                                "description", imageBytes)));
             }
         });
+    }
+
+    public void uploadUserAvatar(byte[] data, Context context) {
+        StorageReference storageRef = storage.getReference();
+        StorageReference avatarRef = storageRef.child(mAuth.getCurrentUser().getUid() + "/avatar.jpg");
+
+        UploadTask uploadTask = avatarRef.putBytes(data);
+        uploadTask.addOnFailureListener(exception -> Toast.makeText(context, R.string.avatar_failure, Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(taskSnapshot -> Toast.makeText(context, R.string.avatar_success, Toast.LENGTH_SHORT).show());
+    }
+
+    private void downloadUserAvatar(String userID, AvatarCallback callback) {
+        StorageReference storageRef = storage.getReference();
+        StorageReference avatarRef = storageRef.child(userID + "/avatar.jpg");
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        avatarRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(callback::manageUserAvatar)
+                .addOnFailureListener(exception -> {
+                    int errorCode = ((StorageException) exception).getErrorCode();
+                    if (errorCode == StorageException.ERROR_OBJECT_NOT_FOUND)
+                        callback.manageUserAvatar(null);
+                });
     }
 
     public void getUserPlans(PlanCallback callback) {
@@ -153,8 +182,7 @@ public class DBHelper{
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                     Color color = Color.toColor(Objects.requireNonNull(doc.get("color")).toString());
                     userPlans.add(
-                            new Plan(
-                                    Objects.requireNonNull(
+                            new Plan(Objects.requireNonNull(
                                     doc.get("subjectName")).toString(),
                                     Objects.requireNonNull(doc.get("description")).toString(),
                                     doc.getLong("time"),

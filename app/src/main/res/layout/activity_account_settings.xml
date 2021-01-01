@@ -36,11 +36,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/userImageContainer"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
-        app:cardCornerRadius="30dp">
+        app:cardCornerRadius="75dp">
 
         <ImageView
             android:id="@+id/userImage"
@@ -49,7 +49,6 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             app:srcCompat="@drawable/avatar_default" />
-
     </androidx.cardview.widget.CardView>
 
     <ImageButton
@@ -136,7 +135,7 @@
                     android:layout_height="60dp"
                     android:layout_below="@id/emailField"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/apply"/>
             </RelativeLayout>
     </ScrollView>

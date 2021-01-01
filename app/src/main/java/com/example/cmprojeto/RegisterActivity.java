@@ -61,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if(result)
                                 username.setError(getResources().getString(R.string.username_exists));
                             else
-                                dbHelper.createUser(new UserInfo(userName, userPass, userEmail, " "), RegisterActivity.this, getApplicationContext());
+                                dbHelper.createUser(new UserInfo(userName, userPass, userEmail, " ", null), RegisterActivity.this, getApplicationContext());
                         });
                     } else
                         rePassword.setError(getResources().getString(R.string.password_conf_different));
