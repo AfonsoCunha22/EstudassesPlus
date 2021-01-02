@@ -44,21 +44,10 @@ public class NotificationSettingsActivity extends AppCompatActivity {
     }
 
     private void setupSharedPreferences() {
-        if(preferences.getBoolean("isFirstRun", true)) {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean("isFirstRun", false);
-            edit.putBoolean("sessionStart", true);
-            edit.putBoolean("studyStart", true);
-            edit.putBoolean("studyBreak", true);
-            edit.putBoolean("studyEnd", true);
-
-            edit.apply();
-        } else {
-            sessionStart.setChecked(preferences.getBoolean("sessionStart", true));
-            studyStart.setChecked(preferences.getBoolean("studyStart", true));
-            studyBreak.setChecked(preferences.getBoolean("studyBreak", true));
-            studyEnd.setChecked(preferences.getBoolean("studyEnd", true));
-        }
+        sessionStart.setChecked(preferences.getBoolean("sessionStart", true));
+        studyStart.setChecked(preferences.getBoolean("studyStart", true));
+        studyBreak.setChecked(preferences.getBoolean("studyBreak", true));
+        studyEnd.setChecked(preferences.getBoolean("studyEnd", true));
     }
 
     private void updatePreferences() {

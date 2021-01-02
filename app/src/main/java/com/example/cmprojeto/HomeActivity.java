@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,6 +31,8 @@ public class HomeActivity extends AppCompatActivity {
     ImageView openMenu;
     DrawerLayout drawer;
     Button buttonResendEmail, session, settings, home, study;
+
+    SharedPreferences preferences;
     DBHelper dbHelper = DBHelper.getInstance();
 
     @Override
@@ -46,6 +49,8 @@ public class HomeActivity extends AppCompatActivity {
         openMenu = (ImageView) findViewById(R.id.openMenu);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawer.closeDrawer(Gravity.LEFT);
+
+        setupSharedPreferences();
 
         openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
 
@@ -91,4 +96,29 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    private void setupSharedPreferences() {
+        preferences = getSharedPreferences("notificationSettings", MODE_PRIVATE);
+
+        if(preferences.getBoolean("isFirstRun", true)) {
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putBoolean("isFirstRun", false);
+            edit.putBoolean("sessionStart", true);
+            edit.putBoolean("studyStart", true);
+            edit.putBoolean("studyBreak", true);
+            edit.putBoolean("studyEnd", true);
+
+            edit.apply();
+        }
+
+        preferences = getSharedPreferences("sensorSettings", MODE_PRIVATE);
+
+        if(preferences.getBoolean("isFirstRun", true)) {
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putBoolean("isFirstRun", false);
+            edit.putBoolean("accelerometerSwitch", true);
+            edit.putBoolean("lightSwitch", true);
+
+            edit.apply();
+        }
+    }
 }
