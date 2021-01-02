@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewPlan">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:translationZ="90dp"
+                android:elevation="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/goBack"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_arrow_back" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="163dp"
+                        android:src="@drawable/ic_book" />
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="637dp"
+                android:layout_marginTop="84dp">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="34dp"
+                    android:layout_marginTop="-10dp"
+                    android:layout_marginEnd="206dp"
+                    android:text="@string/new_plan"
+                    android:textSize="40sp" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/title"
+                    android:background="#666868" />
+
+
+                <TextView
+                    android:id="@+id/durationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="80dp"
+                    android:labelFor="@+id/durationPicker"
+                    android:text="@string/duration"
+                    android:textSize="30sp" />
+
+                <NumberPicker
+                    android:id="@+id/durationPicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/line"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="217dp"
+                    android:layout_marginTop="9dp" />
+
+                <TextView
+                    android:id="@+id/colorLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/durationLabel"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="100dp"
+                    android:labelFor="@+id/colorSpinner"
+                    android:text="@string/color"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/subjectLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/colorLabel"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="30dp"
+                    android:labelFor="@+id/subjectSpinner"
+                    android:text="@string/subject"
+                    android:textSize="30sp" />
+
+
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/colorSpinner"
+                    android:layout_width="200dp"
+                    android:layout_height="39dp"
+                    android:layout_below="@+id/durationPicker"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="59dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="90dp"
+                    android:layout_toEndOf="@+id/colorLabel"
+                    android:dropDownWidth="200dp" />
+
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/subjectSpinner"
+                    android:layout_width="136dp"
+                    android:layout_height="36dp"
+                    android:layout_below="@+id/colorSpinner"
+                    android:layout_marginStart="59dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_toEndOf="@+id/colorLabel"
+                    android:dropDownWidth="200dp" />
+
+                <Button
+                    android:id="@+id/addSubjectBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/descriptionLabel"
+                    android:layout_below="@+id/colorSpinner"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginEnd="34dp"
+                    android:layout_toEndOf="@+id/subjectSpinner"
+                    android:background="@drawable/ic_add_circle" />
+
+                <TextView
+                    android:id="@+id/descriptionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/subjectLabel"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="40dp"
+                    android:labelFor="@+id/editDescription"
+                    android:text="@string/description"
+                    android:textSize="30sp" />
+
+                <EditText
+                    android:id="@+id/editDescription"
+                    android:layout_width="298dp"
+                    android:layout_height="100dp"
+                    android:layout_below="@+id/descriptionLabel"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="58dp"
+                    android:ems="10"
+                    android:gravity="start|bottom"
+                    android:hint="@string/description_hint"
+                    android:inputType="textMultiLine" />
+
+                <Button
+                    android:id="@+id/addPlanBtn"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/editDescription"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#1F517C"
+                    android:text="@string/add_plan"
+                    android:textAlignment="center" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+
+</RelativeLayout>

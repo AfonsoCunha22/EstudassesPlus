@@ -38,6 +38,10 @@ public class Plan {
         this.id = id;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public void setCurricularUnit(String subject) {
         this.subject = subject;
     }
@@ -59,10 +63,11 @@ public class Plan {
     public boolean isActive() { return active;}
 
     public String getPlanInfo(){
-        return "Dados de utilizador:\n\n"+
+        return "Dados do Plano:\n\n"+
                 "CurricularUnit: "+ getSubject() +
                 "\nTime: "+ getTime()+
                 "\nColor: "+ getColor()+
-                "\nDescription: "+ getDescription();
+                "\nDescription: "+ getDescription() +
+                "\nID do plano na BD: "+ getId();
     }
 }
