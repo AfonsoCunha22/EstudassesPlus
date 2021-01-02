@@ -143,9 +143,19 @@ public class DBHelper{
         });
     }
 
-    public void updatePlanActive(String newPlanID, String oldPlanID){
-        fStore.collection("plans").document(oldPlanID).update("active",false);
+    public void updatePlanActive(String newPlanID, String oldPlanID, BooleanCallback callback){
+        if(oldPlanID!=null){
+            fStore.collection("plans").document(oldPlanID).update("active",false);
+        }
         fStore.collection("plans").document(newPlanID).update("active",true);
+        for (Plan plan: USER_PLANS.getPlans()) {
+            if(plan.getId().equals(newPlanID)){
+                plan.setActive(true);
+            }else {
+                plan.setActive(false);
+            }
+        }
+        callback.exists(true);
     }
 
     public void getUserInfo(UserCallback callback) {
@@ -286,7 +296,7 @@ public class DBHelper{
         }).addOnFailureListener(e -> Log.d(TAG, "OnFailure: "+ R.string.verify_email_not_sent + e.toString()));
     }
 
-    public void createPlan(Plan plan){
+    public void createPlan(Plan plan, BooleanCallback complete){
         Map<String, Object> planMap = new HashMap<>();
         planMap.put("subjectName", plan.getSubject());
         planMap.put("description", plan.getDescription());
@@ -295,7 +305,11 @@ public class DBHelper{
         planMap.put("color", plan.getColor().toString());
         planMap.put("active", plan.isActive());
 
-        fStore.collection("plans").add(planMap);
+        fStore.collection("plans").add(planMap).addOnCompleteListener(task -> {
+            plan.setId(task.getResult().getId());
+            USER_PLANS.getPlans().add(plan);
+            complete.exists(true);
+        });
     }
 
     public void createSubject(String subject, BooleanCallback callback){

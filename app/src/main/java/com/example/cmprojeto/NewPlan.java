@@ -61,8 +61,6 @@ public class NewPlan extends AppCompatActivity {
 
         colorSpinner.setAdapter(new ArrayAdapter<>(NewPlan.this, android.R.layout.simple_spinner_dropdown_item, colors));
         subjectSpinner.setAdapter(subjectsAdapter);
-        //System.out.println(DBHelper.SUBJECT_LIST.getSubjects());
-        //System.out.println("Numero de items no adapter: "+ subjectsAdapter.getCount());
         addSubjectBtn.setOnClickListener(v -> {
             EditText newSubject = new EditText(v.getContext());
             AlertDialog.Builder addSubjectDialog = new AlertDialog.Builder(v.getContext());
@@ -116,10 +114,13 @@ public class NewPlan extends AppCompatActivity {
             }else if (description.getText().toString().isEmpty()){
                 description.setError(getText(R.string.desc_err));
             }else {
-                dbHelper.createPlan(new Plan(subjectSpinner.getSelectedItem().toString(), description.getText().toString(), durationPicker.getValue(), Color.NameToObject(colorSpinner.getSelectedItem().toString()), false));
-                Intent intent = new Intent(getApplicationContext(), TimerActivity.class);
-                startActivity(intent);
-                finish();
+                dbHelper.createPlan(new Plan(subjectSpinner.getSelectedItem().toString(), description.getText().toString(), durationPicker.getValue(), Color.NameToObject(colorSpinner.getSelectedItem().toString()), false), complete ->{
+                    if(complete){
+                        Intent intent = new Intent(getApplicationContext(), TimerActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
             }
         });
     }
@@ -138,6 +139,5 @@ public class NewPlan extends AppCompatActivity {
                 }
             });
         }
-        //System.out.println("Numero de items no adapter: "+ subjectsAdapter.getCount());
     }
 }

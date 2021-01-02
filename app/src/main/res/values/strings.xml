@@ -98,6 +98,10 @@
     <string name="color_err">Please select a color</string>
     <string name="desc_err">Description shouldn\'t be empty</string>
     <string name="exit_plan_confirmation">This plan isn\'t saved. Do you want to continue?</string>
+    <string name="break_notif">50min have passed since you last stopped… You can rest now!</string>
+    <string name="study_notif">Time to work! We\'re working on </string>
+    <string name="endStudy_notif">Plan has ended… If you want to continue please start again or select another plan</string>
+    <string name="no_plan">No active plan</string>
     <string-array name="languages_array">
         <item>Portuguese - PT</item>
         <item>English - EN</item>

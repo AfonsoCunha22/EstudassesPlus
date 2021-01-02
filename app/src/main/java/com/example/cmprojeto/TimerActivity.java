@@ -1,12 +1,19 @@
 package com.example.cmprojeto;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorStateListDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Gravity;
@@ -23,7 +30,10 @@ import com.example.cmprojeto.database.*;
 import android.app.Fragment;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentContainerView;
@@ -54,7 +64,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
 
     private boolean mTimerRunning;
 
-
+    SharedPreferences preferences;
 
     View circleView;
     Button sessions, settings, home, study;
@@ -62,6 +72,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
     ImageView openMenu;
     DrawerLayout drawer;
     LinearLayout plansLinear;
+
 
     private long mTimeLeftMillis = 0;
     private long mTimeLeftPauseMillis = 10 * 60 * 1000;
@@ -81,6 +92,8 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
         circleView = (View) findViewById(R.id.circleView);
 
         plansLinear = (LinearLayout) findViewById(R.id.plansLinear);
+
+        preferences = getSharedPreferences("notificationSettings", MODE_PRIVATE);
 
         sessions = (Button) findViewById(R.id.sessionsMenu);
         settings = (Button) findViewById(R.id.settingsMenu);
@@ -154,6 +167,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
             descDialog.create().show();
         });
 
+        createNotificationChannel();
         populateActivity();
     }
 
@@ -193,6 +207,15 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
                             startTimer();
                         }
                     }.start();
+                    if(preferences.getBoolean("studyBreak",true)){
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(TimerActivity.this, "Estudasses+")
+                                .setSmallIcon(R.drawable.icon)
+                                .setContentTitle("Break time!")
+                                .setContentText(getText(R.string.break_notif))
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(TimerActivity.this);
+                        notificationManager.notify(100,builder.build());
+                    }
                 }
             }
 
@@ -202,8 +225,29 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
                 mStartStop.setText(getResources().getString(R.string.start));
                 mStartStop.setEnabled(false);
                 mReset.setEnabled(true);
+                if(preferences.getBoolean("studyEnd",true)){
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(TimerActivity.this,"estudasses+")
+                            .setSmallIcon(R.drawable.icon)
+                            .setContentTitle("Plan has ended!")
+                            .setContentText(getText(R.string.endStudy_notif))
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(TimerActivity.this);
+                    notificationManager.notify(100,builder.build());
+                }
             }
         }.start();
+        if(preferences.getBoolean("studyStart",true)){
+            System.out.println("Entrei aqui rapazes");
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(TimerActivity.this, "estudasses+")
+                    .setSmallIcon(R.drawable.icon)
+                    .setContentTitle("Work time!")
+                    .setContentText(getText(R.string.study_notif) + " " + mSubjectText.getText().toString())
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify(100,builder.build());
+
+
+        }
 
         mTimerRunning = true;
         mStartStop.setText(getResources().getString(R.string.pause));
@@ -240,10 +284,11 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
 
     private void updateCircleColor(){
         GradientDrawable drawable = (GradientDrawable) circleView.getBackground();
-        Color color = null;
-
         System.out.println(currentPlan.getColor().toString());
-        //drawable.setStroke(1,Color.YELLOW);
+        String x = "";
+        x = currentPlan.getColor().toString().substring(0, 1) + "FF" + currentPlan.getColor().toString().substring(1, currentPlan.getColor().toString().length());
+        System.out.println(x);
+        drawable.setStroke(1,Color.parseColor(x));
     }
 
 
@@ -284,6 +329,16 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
                 }
             });
         }else {
+            for (Plan plan:DBHelper.USER_PLANS.getPlans()) {
+                if(plan.isActive()){
+                    currentPlan = plan;
+                    updateSubjectName();
+                    updateCountDownText();
+                    updateCountDownPauseText(mTimeLeftPauseMillis);
+                    updateCircleColor();
+                    mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
+                }
+            }
             dbHelper.getUserPlans(plans -> {
                 for (Plan p: plans) {
                     if (!DBHelper.USER_PLANS.getPlans().contains(p)){
@@ -291,13 +346,6 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
                             PlanFragment fg = PlanFragment.newInstance(p.getTime()+" min",p.getSubject(), p.getColor().toString(), p.getId());
                             fg.setClickInterface(this);
                             getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, p.getId()).commit();
-                        }else {
-                            currentPlan = p;
-                            updateSubjectName();
-                            updateCountDownText();
-                            updateCountDownPauseText(mTimeLeftPauseMillis);
-                            updateCircleColor();
-                            mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
                         }
                     }
                 }
@@ -305,24 +353,58 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
         }
     }
 
+    public void createNotificationChannel(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String name = "plansChannel";
+            String description = "Channel for plans notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("estudasses+", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+    }
+
     @Override
     public void buttonClicked(String planID) {
-        PlanFragment fg = PlanFragment.newInstance(currentPlan.getTime()+" min",currentPlan.getSubject(), currentPlan.getColor().toString(), currentPlan.getId());
-        fg.setClickInterface(this);
-        getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, currentPlan.getId()).commit();
-        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag(planID)).commit();
-        dbHelper.updatePlanActive(planID, currentPlan.getId());
+        pauseTimer();
+        resetTimer();
+        if(currentPlan!=null){
+            PlanFragment fg = PlanFragment.newInstance(currentPlan.getTime()+" min",currentPlan.getSubject(), currentPlan.getColor().toString(), currentPlan.getId());
+            fg.setClickInterface(this);
+            getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, currentPlan.getId()).commit();
+            dbHelper.updatePlanActive(planID, currentPlan.getId(), callback ->{
+                if (callback) {
+                    getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag(planID)).commit();
+                    updateCurrentPlan(planID);
+                }
+            });
+        }else {
+            dbHelper.updatePlanActive(planID, null, callback ->{
+                if (callback) {
+                    getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag(planID)).commit();
+                    updateCurrentPlan(planID);
+                }
+            });
+        }
+
+
+
+
+    }
+
+    public void updateCurrentPlan(String planID){
         for (Plan plan: DBHelper.USER_PLANS.getPlans()){
             if (plan.getId().equals(planID)){
                 currentPlan = plan;
+                mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
+                resetTimer();
+                updateSubjectName();
+                updateCountDownPauseText(mTimeLeftPauseMillis);
+                updateCountDownText();
+                updateCircleColor();
             }
         }
-        mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
-        resetTimer();
-        updateSubjectName();
-        updateCountDownPauseText(mTimeLeftPauseMillis);
-        updateCountDownText();
-        updateCircleColor();
-
     }
 }

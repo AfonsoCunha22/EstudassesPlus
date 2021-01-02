@@ -68,6 +68,7 @@ public class Plan {
                 "\nTime: "+ getTime()+
                 "\nColor: "+ getColor()+
                 "\nDescription: "+ getDescription() +
-                "\nID do plano na BD: "+ getId();
+                "\nID do plano na BD: "+ getId() +
+                "\nIs Active? "+ isActive();
     }
 }
