@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.example.cmprojeto.database.DBHelper;
 import com.example.cmprojeto.database.PasswordUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -79,6 +81,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 final InputStream imageStream = getContentResolver().openInputStream(Objects.requireNonNull(imageUri));
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
+                //TODO: Make sure selected image is below 1MB in size
+
                 userImage.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -86,20 +90,34 @@ public class AccountSettingsActivity extends AppCompatActivity {
         }
     }
 
+    private void uploadAvatar() {
+        userImage.setDrawingCacheEnabled(true);
+        userImage.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) userImage.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+        byte[] data = baos.toByteArray();
+        dbHelper.uploadUserAvatar(data, getApplicationContext());
+    }
+
     private void populateActivity() {
         if(!DBHelper.USER.isPopulated()) {
             dbHelper.getUserInfo(user -> {
-                DBHelper.USER.populateUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getDescription());
-                fillControls(user.getEmail(), user.getUsername(), user.getPassword());
+                DBHelper.USER.populateUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getDescription(), user.getAvatar());
+                fillControls(user.getEmail(), user.getUsername(), user.getPassword(), user.getAvatar());
             });
         } else {
-            fillControls(DBHelper.USER.getEmail(), DBHelper.USER.getUsername(), DBHelper.USER.getPassword());
+            fillControls(DBHelper.USER.getEmail(), DBHelper.USER.getUsername(), DBHelper.USER.getPassword(), DBHelper.USER.getAvatar());
         }
     }
 
-    private void fillControls(String email, String username, String password) {
+    private void fillControls(String email, String username, String password, byte[] avatar) {
         emailField.setText(email);
         nameField.setText(username);
+
+        if(avatar != null)
+            userImage.setImageBitmap(BitmapFactory.decodeByteArray(avatar, 0, avatar.length));
 
         try {
             passField.setText(PasswordUtils.decrypt(password));
@@ -132,6 +150,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 String password = passField.getText().toString();
 
                 dbHelper.updateUserInformation(username, password, getApplicationContext());
+                uploadAvatar();
                 DBHelper.USER.clear();
 
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);

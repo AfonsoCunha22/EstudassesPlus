@@ -3,6 +3,7 @@ package com.example.cmprojeto;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,9 +13,8 @@ import com.example.cmprojeto.database.DBHelper;
 import com.example.cmprojeto.database.PasswordUtils;
 
 public class SettingsActivity extends AppCompatActivity {
-
     TextView userName;
-    ImageView goBack;
+    ImageView goBack, userImage;
     Button btnAccount;
     Button btnNotifications, btnSensors, btnLanguage, btnHelp;
 
@@ -26,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         goBack = (ImageView) findViewById(R.id.goBack);
+        userImage = (ImageView) findViewById(R.id.userImage);
         userName = (TextView) findViewById(R.id.userName);
 
         btnAccount = (Button) findViewById(R.id.btnAccount);
@@ -34,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnLanguage = (Button) findViewById(R.id.btnLanguage);
         btnHelp = (Button) findViewById(R.id.btnHelp);
 
+        userImage.setImageResource(R.drawable.avatar_default);
         populateActivity();
 
         btnAccount.setOnClickListener(v -> {
@@ -70,11 +72,18 @@ public class SettingsActivity extends AppCompatActivity {
     private void populateActivity() {
         if(!DBHelper.USER.isPopulated()) {
             dbHelper.getUserInfo(user -> {
-                DBHelper.USER.populateUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getDescription());
-                userName.setText(user.getUsername());
+                DBHelper.USER.populateUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getDescription(), user.getAvatar());
+                fillControls(user.getUsername(), user.getAvatar());
             });
         } else {
-            userName.setText(DBHelper.USER.getUsername());
+            fillControls(DBHelper.USER.getUsername(), DBHelper.USER.getAvatar());
         }
+    }
+
+    private void fillControls(String username, byte[] avatar) {
+        userName.setText(username);
+
+        if(avatar != null)
+            userImage.setImageBitmap(BitmapFactory.decodeByteArray(avatar, 0, avatar.length));
     }
 }
