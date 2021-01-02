@@ -36,17 +36,8 @@ public class SensorSettingsActivity extends AppCompatActivity {
     }
 
     private void setupSharedPreferences() {
-        if(preferences.getBoolean("isFirstRun", true)) {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean("isFirstRun", false);
-            edit.putBoolean("accelerometerSwitch", true);
-            edit.putBoolean("lightSwitch", true);
-
-            edit.apply();
-        } else {
-            accelerometerSwitch.setChecked(preferences.getBoolean("accelerometerSwitch", true));
-            lightSwitch.setChecked(preferences.getBoolean("lightSwitch", true));
-        }
+        accelerometerSwitch.setChecked(preferences.getBoolean("accelerometerSwitch", true));
+        lightSwitch.setChecked(preferences.getBoolean("lightSwitch", true));
     }
 
     private void updatePreferences() {
