@@ -13,6 +13,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorStateListDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -28,6 +32,7 @@ import android.widget.TextView;
 import com.example.cmprojeto.callbacks.FragmentClick;
 import com.example.cmprojeto.database.*;
 import android.app.Fragment;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -45,7 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class TimerActivity extends AppCompatActivity implements FragmentClick {
+public class TimerActivity extends AppCompatActivity implements FragmentClick, SensorEventListener {
     //TODO Import the active plan from the database
     private Plan currentPlan = null;
 
@@ -62,9 +67,15 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
     private CountDownTimer mCountDownTimer;
     private CountDownTimer mCountDownPauseTimer;
 
+    //Sensors
+    private SensorManager sensorManager;
+    private Toast warning;
+    private boolean isWorking;
+
     private boolean mTimerRunning;
 
     SharedPreferences preferences;
+    SharedPreferences sensorPreferences;
 
     View circleView;
     Button sessions, settings, home, study;
@@ -84,7 +95,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
         mTimerText = (TextView) findViewById(R.id.timer);
         mTimerPauseText = (TextView) findViewById(R.id.pause);
         mSubjectText = (TextView) findViewById(R.id.subject);
-
+        isWorking=false;
         mStartStop = (Button) findViewById(R.id.b_start_pause);
         mReset = (Button) findViewById(R.id.b_reset);
         mDescription = (Button) findViewById(R.id.b_description);
@@ -94,6 +105,10 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
         plansLinear = (LinearLayout) findViewById(R.id.plansLinear);
 
         preferences = getSharedPreferences("notificationSettings", MODE_PRIVATE);
+        //Sensors Initiating
+        sensorPreferences = getSharedPreferences("sensorSettings", MODE_PRIVATE);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        warning = new Toast(this);
 
         sessions = (Button) findViewById(R.id.sessionsMenu);
         settings = (Button) findViewById(R.id.settingsMenu);
@@ -147,6 +162,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
             @Override
             public void onClick(View view) {
                 startTimer();
+
             }
         });
 
@@ -179,6 +195,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
     }
 
     private void startTimer() {
+        isWorking=true;
         mCountDownTimer = new CountDownTimer(mTimeLeftMillis, 1000) {
             @Override
             public void onTick(long l) {
@@ -215,6 +232,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(TimerActivity.this);
                         notificationManager.notify(100,builder.build());
+                        isWorking=false;
                     }
                 }
             }
@@ -233,6 +251,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(TimerActivity.this);
                     notificationManager.notify(100,builder.build());
+                    isWorking=false;
                 }
             }
         }.start();
@@ -263,13 +282,14 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
         mStartStop.setCompoundDrawables(ContextCompat.getDrawable(this, R.drawable.ic_start), null, null ,null);
         mStartStop.setOnClickListener(l ->{startTimer();});
         mReset.setEnabled(true);
+        isWorking=false;
     }
 
     private void resetPauseTimer(){
         mTimeLeftPauseMillis = 10 * 60 * 1000;
         mReset.setEnabled(true);
         mStartStop.setEnabled(true);
-
+        isWorking=true;
         updateCountDownPauseText(mTimeLeftPauseMillis);
     }
 
@@ -368,7 +388,10 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
 
     @Override
     public void buttonClicked(String planID) {
-        pauseTimer();
+        if(mCountDownTimer!=null){
+            pauseTimer();
+        }
+
         resetTimer();
         if(currentPlan!=null){
             PlanFragment fg = PlanFragment.newInstance(currentPlan.getTime()+" min",currentPlan.getSubject(), currentPlan.getColor().toString(), currentPlan.getId());
@@ -406,5 +429,73 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick {
                 updateCircleColor();
             }
         }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+            float lighting = event.values[0];
+            if ((lighting < 80) && isWorking) {
+                showAToast("Room too dark !");
+            } else if ((lighting > 25000) && isWorking) {
+                showAToast("Room too bright!");
+            }
+        }
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float movement = event.values[0];
+            if ((Math.abs(movement) > 1)&&isWorking) {
+                showAToast("Its not break time! Don't touch your phone and keep studying!");
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+    public void showAToast (String st){
+        try{ warning.getView().isShown();
+            warning.setText(st);
+        } catch (Exception e) {
+            warning = Toast.makeText(this, st, Toast.LENGTH_SHORT);
+        }
+        warning.show();
+    }
+    private void loadAmbientLight() {
+        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        if (sensor != null) {
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+        } else {
+            Toast.makeText(this, "No Light Sensor !", Toast.LENGTH_LONG).show();
+        }
+    }
+    private void loadAccelerometer() {
+        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        if (sensor != null) {
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+        } else {
+            Toast.makeText(this, "No accelerometer Sensor !", Toast.LENGTH_LONG).show();
+        }
+    }
+    private void unregisterAll() {
+        sensorManager.unregisterListener(this);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(sensorPreferences.getBoolean("lightSwitch",false)){
+            loadAmbientLight();
+        }
+        if(sensorPreferences.getBoolean("accelerometerSwitch",false)){
+            loadAccelerometer();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterAll();
     }
 }
