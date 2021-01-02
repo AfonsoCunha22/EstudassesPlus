@@ -1,9 +1,11 @@
 package com.example.cmprojeto;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.Fragment;
 
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.cmprojeto.callbacks.FragmentClick;
 import com.example.cmprojeto.database.DBHelper;
+import com.example.cmprojeto.model.Color;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,22 +72,27 @@ public class MenuFragment extends Fragment {
         home = (Button) view.findViewById(R.id.homeMenu);
         study = (Button) view.findViewById(R.id.studyMenu);
         textViewLogout = (TextView) view.findViewById(R.id.logout);
+        if(dbHelper.emailNotVerified()){
+            session.setBackground(ContextCompat.getDrawable(getActivity().getApplicationContext(),R.drawable.reddish));
+        }
 
-        session.setOnClickListener(v -> {
-            if(getActivity() instanceof SessionActivity){
-                clickInterface.buttonClicked("");
-            }else{
-                clickInterface.buttonClicked("");
-                Intent intent = new Intent(getActivity().getApplicationContext(), SessionActivity.class);
-                startActivity(intent);
-            }
-        });
+        if(!dbHelper.emailNotVerified()){
+            session.setOnClickListener(v -> {
+                if(getActivity() instanceof SessionActivity){
+                    clickInterface.menuClicked();
+                }else{
+                    clickInterface.menuClicked();
+                    Intent intent = new Intent(getActivity().getApplicationContext(), SessionActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
         study.setOnClickListener(v -> {
             if(getActivity() instanceof TimerActivity){
-                clickInterface.buttonClicked("");
+                clickInterface.menuClicked();
             }else{
-                clickInterface.buttonClicked("");
+                clickInterface.menuClicked();
                 Intent intent = new Intent(getActivity().getApplicationContext(), TimerActivity.class);
                 startActivity(intent);
             }
@@ -92,9 +100,9 @@ public class MenuFragment extends Fragment {
 
         settings.setOnClickListener(v -> {
             if(getActivity() instanceof SettingsActivity){
-                clickInterface.buttonClicked("");
+                clickInterface.menuClicked();
             }else{
-                clickInterface.buttonClicked("");
+                clickInterface.menuClicked();
                 Intent intent = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
             }
@@ -102,9 +110,9 @@ public class MenuFragment extends Fragment {
 
         home.setOnClickListener(v -> {
             if(getActivity() instanceof HomeActivity){
-                clickInterface.buttonClicked("");
+                clickInterface.menuClicked();
             }else {
-                clickInterface.buttonClicked("");
+                clickInterface.menuClicked();
                 Intent intent = new Intent(getActivity().getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }

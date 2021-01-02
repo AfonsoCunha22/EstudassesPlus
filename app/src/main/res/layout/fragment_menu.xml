@@ -5,6 +5,7 @@
     android:id="@+id/nav_menu"
     android:layout_height="match_parent"
     android:layout_gravity="left"
+    android:background="@drawable/menu_background"
     tools:context=".MenuFragment">
         <ScrollView
             android:layout_height="match_parent"
@@ -17,54 +18,67 @@
                     android:id="@+id/homeMenu"
                     android:layout_width="match_parent"
                     android:layout_height="78dp"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/settingsMenu"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="503dp"
+                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="0dp"
-                    android:alpha="0.25"
+                    android:background="@drawable/transparent"
+                    android:drawableLeft="@drawable/ic_home"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="50dp"
                     android:text="@string/home" />
 
                 <Button
                     android:id="@+id/sessionsMenu"
                     android:layout_width="match_parent"
                     android:layout_height="78dp"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/usernameMenu"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="266dp"
-                    android:layout_marginEnd="0dp"
-                    android:alpha="0.25"
-                    android:text="@string/sessions" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="1dp"
+                    android:background="@drawable/transparent"
+                    android:drawableLeft="@drawable/ic_sessions"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="50dp"
+                    android:text="@string/sessions"
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/studyMenu"
                     android:layout_width="match_parent"
                     android:layout_height="78dp"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/sessionsMenu"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="344dp"
-                    android:layout_marginEnd="0dp"
-                    android:alpha="0.25"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:background="@drawable/transparent"
+                    android:drawableLeft="@drawable/ic_book"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="50dp"
                     android:text="@string/study" />
 
                 <Button
                     android:id="@+id/settingsMenu"
                     android:layout_width="match_parent"
                     android:layout_height="78dp"
-                    android:layout_alignParentTop="true"
+                    android:layout_below="@+id/studyMenu"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="424dp"
-                    android:layout_marginEnd="0dp"
-                    android:alpha="0.25"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:background="@drawable/transparent"
+                    android:drawableLeft="@drawable/ic_settings"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="50dp"
                     android:text="@string/settings" />
 
                 <TextView
                     android:id="@+id/usernameMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/avatarMenu"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
                     android:layout_marginStart="60dp"
-                    android:layout_marginTop="198dp"
+                    android:layout_marginTop="2dp"
                     android:text="TextView"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -73,10 +87,10 @@
                     android:id="@+id/logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/homeMenu"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
                     android:layout_marginStart="85dp"
-                    android:layout_marginTop="632dp"
+                    android:layout_marginTop="75dp"
                     android:text="@string/logout"
                     android:textSize="24sp" />
 
@@ -88,7 +102,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginEnd="191dp"
-                    android:layout_marginBottom="11dp"
+                    android:layout_marginBottom="-7dp"
                     android:src="@drawable/icon" />
 
                 <ImageView

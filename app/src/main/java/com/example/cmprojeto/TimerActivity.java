@@ -78,8 +78,6 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick, S
     SharedPreferences sensorPreferences;
 
     View circleView;
-    Button sessions, settings, home, study;
-    TextView logout;
     ImageView openMenu;
     DrawerLayout drawer;
     LinearLayout plansLinear;
@@ -110,47 +108,17 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick, S
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         warning = new Toast(this);
 
-        sessions = (Button) findViewById(R.id.sessionsMenu);
-        settings = (Button) findViewById(R.id.settingsMenu);
-        home = (Button) findViewById(R.id.homeMenu);
-        study = (Button) findViewById(R.id.studyMenu);
-        logout = (TextView) findViewById(R.id.logout);
 
 
 
         openMenu = (ImageView) findViewById(R.id.openMenu);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawer.closeDrawer(Gravity.LEFT);
-
+        MenuFragment fg = MenuFragment.newInstance();
+        fg.setClickInterface(this);
+        getFragmentManager().beginTransaction().add(drawer.getId(),fg, "menu").commit();
         openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
 
-        sessions.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
-            startActivity(intent);
-        });
 
-        study.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-        });
-
-        settings.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivity(intent);
-        });
-
-        home.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(intent);
-        });
-
-        logout.setOnClickListener(v -> {
-            dbHelper.logout();
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-        });
 
         mCreatePlan.setOnClickListener(v -> {
             drawer.closeDrawer(Gravity.LEFT);
@@ -415,6 +383,11 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick, S
 
 
 
+    }
+
+    @Override
+    public void menuClicked() {
+        drawer.closeDrawer(Gravity.LEFT);
     }
 
     public void updateCurrentPlan(String planID){

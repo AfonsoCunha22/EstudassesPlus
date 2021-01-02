@@ -56,13 +56,13 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
         openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
 
 
-        if(dbHelper.emailVerified()){
+        if(dbHelper.emailNotVerified()){
             textViewEmail.setVisibility(View.VISIBLE);
             buttonResendEmail.setVisibility(View.VISIBLE);
         }
 
         buttonResendEmail.setOnClickListener(v -> {
-            if(dbHelper.emailVerified()){
+            if(dbHelper.emailNotVerified()){
                 dbHelper.resendEmailVerification(HomeActivity.this, getApplicationContext());
             }else {
                 textViewEmail.setVisibility(View.GONE);
@@ -99,6 +99,11 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
 
     @Override
     public void buttonClicked(String planID) {
+        drawer.closeDrawer(Gravity.LEFT);
+    }
+
+    @Override
+    public void menuClicked() {
         drawer.closeDrawer(Gravity.LEFT);
     }
 }

@@ -273,7 +273,7 @@ public class DBHelper{
         FirebaseAuth.getInstance().signOut();
     }
 
-    public boolean emailVerified() {
+    public boolean emailNotVerified() {
         return !Objects.requireNonNull(mAuth.getCurrentUser()).isEmailVerified();
     }
 
