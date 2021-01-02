@@ -28,7 +28,29 @@ public enum Color {
             case "#FFFF00":
                 return YELLOW;
             default:
-                return RED;
+                return WHITE;
         }
     }
+    public static String toName(Color color){
+        switch (color){
+            case RED: return "Red";
+            case BLUE: return "Blue";
+            case BROWN: return "Brown";
+            case GREEN: return "Green";
+            case YELLOW: return "Yellow";
+            default: return "White";
+        }
+    }
+
+    public static Color NameToObject(String color){
+        switch (color){
+            case "Red": return RED;
+            case "Blue": return BLUE;
+            case "Brown": return BROWN;
+            case "Green": return GREEN;
+            case "Yellow": return YELLOW;
+            default: return WHITE;
+        }
+    }
+
 }

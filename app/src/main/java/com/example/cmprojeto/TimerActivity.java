@@ -1,6 +1,12 @@
 package com.example.cmprojeto;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorStateListDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Gravity;
@@ -11,32 +17,37 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.cmprojeto.callbacks.FragmentClick;
 import com.example.cmprojeto.database.*;
 import android.app.Fragment;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.cmprojeto.model.Color;
 import com.example.cmprojeto.model.Plan;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class TimerActivity extends AppCompatActivity {
+public class TimerActivity extends AppCompatActivity implements FragmentClick {
     //TODO Import the active plan from the database
-    private Plan plan = new Plan("Mobile Computing", "Let's Study", 90, Color.RED, true);
+    private Plan currentPlan = null;
 
     private TextView mTimerText;
     private TextView mTimerPauseText;
+    private TextView mSubjectText;
 
     DBHelper dbHelper = DBHelper.getInstance();
     private Button mStartStop;
     private Button mReset;
+    private Button mDescription;
+    private Button mCreatePlan;
 
     private CountDownTimer mCountDownTimer;
     private CountDownTimer mCountDownPauseTimer;
@@ -45,13 +56,14 @@ public class TimerActivity extends AppCompatActivity {
 
 
 
+    View circleView;
     Button sessions, settings, home, study;
     TextView logout;
     ImageView openMenu;
     DrawerLayout drawer;
     LinearLayout plansLinear;
 
-    private long mTimeLeftMillis = plan.getTime() * 60 * 1000;
+    private long mTimeLeftMillis = 0;
     private long mTimeLeftPauseMillis = 10 * 60 * 1000;
 
     @Override
@@ -60,9 +72,13 @@ public class TimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_plans);
         mTimerText = (TextView) findViewById(R.id.timer);
         mTimerPauseText = (TextView) findViewById(R.id.pause);
+        mSubjectText = (TextView) findViewById(R.id.subject);
 
         mStartStop = (Button) findViewById(R.id.b_start_pause);
         mReset = (Button) findViewById(R.id.b_reset);
+        mDescription = (Button) findViewById(R.id.b_description);
+        mCreatePlan = (Button) findViewById(R.id.createPlanBtn);
+        circleView = (View) findViewById(R.id.circleView);
 
         plansLinear = (LinearLayout) findViewById(R.id.plansLinear);
 
@@ -108,11 +124,16 @@ public class TimerActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        mCreatePlan.setOnClickListener(v -> {
+            drawer.closeDrawer(Gravity.LEFT);
+            Intent intent = new Intent(getApplicationContext(), NewPlan.class);
+            startActivity(intent);
+        });
+
         mStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                dbHelper.createPlan(new Plan("Mobile Computing","Let's Study", 90, Color.RED, false));
+                startTimer();
             }
         });
 
@@ -123,13 +144,21 @@ public class TimerActivity extends AppCompatActivity {
             }
         });
 
-        updateCountDownText();
-        updateCountDownPauseText(mTimeLeftPauseMillis);
+        mDescription.setOnClickListener(v->{
+            AlertDialog.Builder descDialog = new AlertDialog.Builder(v.getContext());
+            descDialog.setTitle(getResources().getString(R.string.description));
+            if(currentPlan == null) descDialog.setMessage(getResources().getString(R.string.no_plan_selected));
+            else  descDialog.setMessage(currentPlan.getDescription());
+            descDialog.setPositiveButton("Ok", (dialog, which) -> { });
+            descDialog.setIcon(R.drawable.ic_description);
+            descDialog.create().show();
+        });
+
         populateActivity();
     }
 
     private void resetTimer() {
-        mTimeLeftMillis = plan.getTime() * 60 * 1000;
+        mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
         updateCountDownText();
         mReset.setEnabled(false);
         mStartStop.setEnabled(true);
@@ -178,6 +207,8 @@ public class TimerActivity extends AppCompatActivity {
 
         mTimerRunning = true;
         mStartStop.setText(getResources().getString(R.string.pause));
+        mStartStop.setCompoundDrawables(ContextCompat.getDrawable(this, R.drawable.ic_pause), null, null ,null);
+        mStartStop.setOnClickListener(l ->{pauseTimer();});
         mReset.setEnabled(false);
     }
 
@@ -185,6 +216,8 @@ public class TimerActivity extends AppCompatActivity {
         mCountDownTimer.cancel();
         mTimerRunning = false;
         mStartStop.setText(getResources().getString(R.string.start));
+        mStartStop.setCompoundDrawables(ContextCompat.getDrawable(this, R.drawable.ic_start), null, null ,null);
+        mStartStop.setOnClickListener(l ->{startTimer();});
         mReset.setEnabled(true);
     }
 
@@ -192,6 +225,7 @@ public class TimerActivity extends AppCompatActivity {
         mTimeLeftPauseMillis = 10 * 60 * 1000;
         mReset.setEnabled(true);
         mStartStop.setEnabled(true);
+
         updateCountDownPauseText(mTimeLeftPauseMillis);
     }
 
@@ -204,6 +238,14 @@ public class TimerActivity extends AppCompatActivity {
         mTimerText.setText(timeLeftFormatted);
     }
 
+    private void updateCircleColor(){
+        GradientDrawable drawable = (GradientDrawable) circleView.getBackground();
+        Color color = null;
+
+        System.out.println(currentPlan.getColor().toString());
+        //drawable.setStroke(1,Color.YELLOW);
+    }
+
 
     private void updateCountDownPauseText(long mTimeLeftMillisPause) {
         int minutes = (int) mTimeLeftMillisPause / 1000 / 60;
@@ -214,6 +256,11 @@ public class TimerActivity extends AppCompatActivity {
         mTimerPauseText.setText(timeLeftFormatted);
     }
 
+    private void updateSubjectName(){
+        if(currentPlan == null) mSubjectText.setText(getResources().getString(R.string.no_plan_selected));
+        else mSubjectText.setText(currentPlan.getSubject());
+    }
+
     private void populateActivity(){
         if(!DBHelper.USER_PLANS.isPopulated()){
             dbHelper.getUserPlans(plans -> {
@@ -221,16 +268,61 @@ public class TimerActivity extends AppCompatActivity {
 
                 for (Plan p: plans) {
                     if(!p.isActive()){
-                        Fragment fg = PlanFragment.newInstance("10 min", p.getTime()+" min",p.getSubject(), p.getColor().toString());
-                        getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, "Ola").commit();
-                        View view = fg.getView();
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100,300);
-                        //view.setLayoutParams(params);
-                        //view.requestLayout();
+                        PlanFragment fg = PlanFragment.newInstance(p.getTime()+" min",p.getSubject(), p.getColor().toString(), p.getId());
+                        fg.setClickInterface(this);
+                        getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, p.getId()).commit();
+
+                    }else {
+                        currentPlan = p;
+                        updateSubjectName();
+                        updateCountDownText();
+                        updateCountDownPauseText(mTimeLeftPauseMillis);
+                        updateCircleColor();
+                        mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
+                    }
+                    System.out.println(p.getPlanInfo());
+                }
+            });
+        }else {
+            dbHelper.getUserPlans(plans -> {
+                for (Plan p: plans) {
+                    if (!DBHelper.USER_PLANS.getPlans().contains(p)){
+                        if(!p.isActive()){
+                            PlanFragment fg = PlanFragment.newInstance(p.getTime()+" min",p.getSubject(), p.getColor().toString(), p.getId());
+                            fg.setClickInterface(this);
+                            getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, p.getId()).commit();
+                        }else {
+                            currentPlan = p;
+                            updateSubjectName();
+                            updateCountDownText();
+                            updateCountDownPauseText(mTimeLeftPauseMillis);
+                            updateCircleColor();
+                            mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
+                        }
                     }
                 }
             });
-
         }
+    }
+
+    @Override
+    public void buttonClicked(String planID) {
+        PlanFragment fg = PlanFragment.newInstance(currentPlan.getTime()+" min",currentPlan.getSubject(), currentPlan.getColor().toString(), currentPlan.getId());
+        fg.setClickInterface(this);
+        getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, currentPlan.getId()).commit();
+        getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag(planID)).commit();
+        dbHelper.updatePlanActive(planID, currentPlan.getId());
+        for (Plan plan: DBHelper.USER_PLANS.getPlans()){
+            if (plan.getId().equals(planID)){
+                currentPlan = plan;
+            }
+        }
+        mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
+        resetTimer();
+        updateSubjectName();
+        updateCountDownPauseText(mTimeLeftPauseMillis);
+        updateCountDownText();
+        updateCircleColor();
+
     }
 }

@@ -2,9 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="300dp"
+    android:layout_height="500dp"
     android:layout_centerHorizontal="true"
+    android:layout_marginStart="10dp"
     tools:context=".PlanFragment"
     android:background="@drawable/plan_fragment_background">
 
@@ -28,10 +29,10 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="123dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="156dp"
         android:text="@string/subject"
-        android:textSize="50sp"
+        android:textSize="30sp"
         app:drawableStartCompat="@drawable/ic_subject_plan" />
 
     <TextView
@@ -41,39 +42,27 @@
         android:layout_below="@id/subjectName"
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="101dp"
-        android:layout_marginTop="60dp"
-        android:text="@string/subject"
-        android:textSize="50sp"
-        app:drawableStartCompat="@drawable/ic_plan_time" />
 
-    <TextView
-        android:id="@+id/planBreak"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/planTime"
-        android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="63dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="35dp"
         android:text="@string/subject"
-        android:textSize="50sp"
-        app:drawableStartCompat="@drawable/ic_pause_bigger" />
+        android:textSize="30sp"
+        app:drawableStartCompat="@drawable/ic_plan_time" />
 
     <Button
         android:id="@+id/planColor"
         android:layout_width="match_parent"
-        android:layout_height="29dp"
-        android:layout_below="@+id/planBreak"
+        android:layout_height="170dp"
+        android:layout_below="@+id/planTime"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="49dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="137dp"
-        android:backgroundTint="@color/greenish"
-        />
+        android:layout_marginBottom="88dp"
+        android:background="@color/greenish" />
 
 
 </RelativeLayout>

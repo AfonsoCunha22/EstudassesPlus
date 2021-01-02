@@ -58,16 +58,16 @@ public class LoginActivity extends AppCompatActivity {
         resetPassword.setOnClickListener(v -> {
             EditText resetMail = new EditText(v.getContext());
             AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-            passwordResetDialog.setTitle("Reset Password");
-            passwordResetDialog.setMessage("Please enter your email");
+            passwordResetDialog.setTitle(getResources().getString(R.string.reset_password));
+            passwordResetDialog.setMessage(getResources().getString(R.string.pls_enter_email));
             passwordResetDialog.setView(resetMail);
 
-            passwordResetDialog.setPositiveButton("Yes", (dialog, which) -> {
+            passwordResetDialog.setPositiveButton(getResources().getString(R.string.yes), (dialog, which) -> {
                 String email = resetMail.getText().toString();
                 dbHelper.resetPassword(email, LoginActivity.this);
             });
 
-            passwordResetDialog.setNegativeButton("No", (dialog, which) -> {
+            passwordResetDialog.setNegativeButton(getResources().getString(R.string.no), (dialog, which) -> {
 
             });
 

@@ -13,6 +13,7 @@ import com.example.cmprojeto.callbacks.AvatarCallback;
 import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.callbacks.PlanCallback;
 import com.example.cmprojeto.callbacks.SessionCallback;
+import com.example.cmprojeto.callbacks.SubjectCallback;
 import com.example.cmprojeto.callbacks.UserCallback;
 import com.example.cmprojeto.model.Color;
 import com.example.cmprojeto.model.Plan;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
@@ -141,6 +143,11 @@ public class DBHelper{
         });
     }
 
+    public void updatePlanActive(String newPlanID, String oldPlanID){
+        fStore.collection("plans").document(oldPlanID).update("active",false);
+        fStore.collection("plans").document(newPlanID).update("active",true);
+    }
+
     public void getUserInfo(UserCallback callback) {
         fStore.collection("users").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).get().addOnCompleteListener(task -> {
             if(task.isComplete()) {
@@ -180,17 +187,33 @@ public class DBHelper{
             if (task.isComplete()) {
                 List<Plan> userPlans = new ArrayList<>();
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    System.out.println("O id do user deste plano é "+ doc.get("userID"));
                     Color color = Color.toColor(Objects.requireNonNull(doc.get("color")).toString());
-                    userPlans.add(
-                            new Plan(Objects.requireNonNull(
+                    Plan newPlan =  new Plan(
+                            Objects.requireNonNull(
                                     doc.get("subjectName")).toString(),
-                                    Objects.requireNonNull(doc.get("description")).toString(),
-                                    doc.getLong("time"),
-                                    color,
-                                    doc.getBoolean("active")));
+                            Objects.requireNonNull(doc.get("description")).toString(),
+                            doc.getLong("time"),
+                            color,
+                            doc.getBoolean("active"));
+                    newPlan.setId(doc.getId());
+                    userPlans.add(newPlan);
                 }
 
                 callback.manageUserPlans(userPlans);
+            }
+        });
+    }
+
+    public void getSubjects(SubjectCallback callback){
+        fStore.collection("subjects").get().addOnCompleteListener(task -> {
+            if (task.isComplete()){
+                List<String> subjects = new ArrayList<>();
+                for (DocumentSnapshot doc:task.getResult().getDocuments()) {
+                    subjects.add(doc.get("name").toString());
+                }
+                //System.out.println("Dentro do getSubjects: "+subjects);
+                callback.manageSubjects(subjects);
             }
         });
     }
@@ -273,5 +296,32 @@ public class DBHelper{
         planMap.put("active", plan.isActive());
 
         fStore.collection("plans").add(planMap);
+    }
+
+    public void createSubject(String subject, BooleanCallback callback){
+        Map<String, Object> subjectName = new HashMap<>();
+        subjectName.put("name", subject);
+        fStore.collection("subjects").add(subjectName).addOnCompleteListener(task -> {
+            if(task.isComplete()){
+                callback.exists(true);
+            }
+        });
+    }
+
+    public void deletePlan(String planID, PlanCallback callback){
+        fStore.collection("plans").document(planID).delete().addOnCompleteListener(task -> {
+            Plan removedPlan = null;
+            for (Plan p :
+                    USER_PLANS.getPlans()) {
+                if (p.getId().equals(planID)) {
+                    removedPlan = p;
+                }
+            }
+            ;
+            if (removedPlan != null) {
+                USER_PLANS.getPlans().remove(removedPlan);
+            }
+            callback.manageUserPlans(USER_PLANS.getPlans());
+        });
     }
 }
