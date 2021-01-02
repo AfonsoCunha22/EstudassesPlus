@@ -114,4 +114,5 @@
     <string name="avatar_failure">Could not upload avatar</string>
     <string name="avatar_success">Avatar successfully uploaded!</string>
     <string name="avatar_failed_download">Failed to download avatar</string>
+    <string name="expand">Expand</string>
 </resources>
