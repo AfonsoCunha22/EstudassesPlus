@@ -3,6 +3,7 @@ package com.example.cmprojeto;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import android.app.Fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cmprojeto.callbacks.FragmentClick;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,13 +26,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Objects;
 import com.example.cmprojeto.database.DBHelper;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements FragmentClick{
 
 
-    TextView textViewLogout, textViewEmail;
+    TextView textViewEmail;
     ImageView openMenu;
     DrawerLayout drawer;
-    Button buttonResendEmail, session, settings, home, study;
+    Button buttonResendEmail;
 
     SharedPreferences preferences;
     DBHelper dbHelper = DBHelper.getInstance();
@@ -39,41 +41,20 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        session = (Button) findViewById(R.id.sessionsMenu);
-        settings = (Button) findViewById(R.id.settingsMenu);
-        home = (Button) findViewById(R.id.homeMenu);
-        study = (Button) findViewById(R.id.studyMenu);
-        textViewLogout = (TextView) findViewById(R.id.logout);
         textViewEmail = (TextView) findViewById(R.id.emailNotVerified);
         buttonResendEmail = (Button) findViewById(R.id.resendEmail);
         openMenu = (ImageView) findViewById(R.id.openMenu);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawer.closeDrawer(Gravity.LEFT);
+        MenuFragment fg = MenuFragment.newInstance();
+        fg.setClickInterface(this);
+        getFragmentManager().beginTransaction().add(drawer.getId(),fg, "menu").commit();
+        //drawer.closeDrawer(Gravity.LEFT);
 
         setupSharedPreferences();
 
+
         openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
 
-        session.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
-            startActivity(intent);
-        });
-
-        study.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-            Intent intent = new Intent(getApplicationContext(), TimerActivity.class);
-            startActivity(intent);
-        });
-
-        settings.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivity(intent);
-        });
-
-        home.setOnClickListener(v -> {
-            drawer.closeDrawer(Gravity.LEFT);
-        });
 
         if(dbHelper.emailVerified()){
             textViewEmail.setVisibility(View.VISIBLE);
@@ -87,12 +68,6 @@ public class HomeActivity extends AppCompatActivity {
                 textViewEmail.setVisibility(View.GONE);
                 buttonResendEmail.setVisibility(View.GONE);
             }
-        });
-
-        textViewLogout.setOnClickListener(v -> {
-            dbHelper.logout();
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
         });
     }
 
@@ -120,5 +95,10 @@ public class HomeActivity extends AppCompatActivity {
 
             edit.apply();
         }
+    }
+
+    @Override
+    public void buttonClicked(String planID) {
+        drawer.closeDrawer(Gravity.LEFT);
     }
 }
