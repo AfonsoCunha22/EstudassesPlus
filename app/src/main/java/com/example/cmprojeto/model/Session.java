@@ -7,19 +7,24 @@ import java.time.LocalTime;
 import java.util.Date;
 
 public class Session {
-    private final String subject;
-    private String sessionID, userID, description;
-    private Date date;
-    private Time time;
+    private String sessionID, subject, userID, description;
+    private Date dateTime;
     private LatLng location;
 
-    public Session(String userID, String subject, Date date, Time time, LatLng location, String description) {
+    public Session(String userID, String subject, Date date, long time, LatLng location, String description) {
         this.subject = subject;
-        this.date = date;
-        this.time = time;
+        this.dateTime = date;
+        dateTime.setTime(date.getTime()+time);
         this.userID = userID;
         this.location = location;
         this.description = description;
+    }
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getSessionID() {
@@ -34,14 +39,6 @@ public class Session {
         subject = subject;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
-    }
-
     public void setLocation(LatLng location) {
         this.location = location;
     }
@@ -53,15 +50,6 @@ public class Session {
     public String getSubject() {
         return subject;
     }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
     public LatLng getLocation() {
         return location;
     }

@@ -87,9 +87,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                 for (Session s: sessions) {
                     dbHelper.getUserUsername(s.getUserID(), username -> {
-                        s.getDate().setTime(s.getTime().getTime());
-
-                        SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
+                        SessionFragment fg = SessionFragment.newInstance(s.getDateTime().toString(),
                                 username,
                                 s.getSubject(),
                                 getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
@@ -103,7 +101,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         } else {
             for (Session s: DBHelper.USER_SESSIONS.getSessions()){
                 dbHelper.getUserUsername(s.getUserID(), username -> {
-                    SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
+                    SessionFragment fg = SessionFragment.newInstance(s.getDateTime().toString(),
                             username,
                             s.getSubject(),
                             getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
@@ -135,7 +133,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         dbHelper.getFilteredSessions("subject", searchBar.getText().toString(), sessions -> {
             for (Session s: sessions){
                 dbHelper.getUserUsername(s.getUserID(), username -> {
-                    SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
+                    SessionFragment fg = SessionFragment.newInstance(s.getDateTime().toString(),
                             username,
                             s.getSubject(),
                             getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
