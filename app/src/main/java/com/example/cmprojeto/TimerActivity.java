@@ -325,19 +325,12 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick, S
                     updateCountDownPauseText(mTimeLeftPauseMillis);
                     updateCircleColor();
                     mTimeLeftMillis = currentPlan.getTime() * 60 * 1000;
+                }else{
+                    PlanFragment fg = PlanFragment.newInstance(plan.getTime()+" min",plan.getSubject(), plan.getColor().toString(), plan.getId());
+                    fg.setClickInterface(this);
+                    getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, plan.getId()).commit();
                 }
             }
-            dbHelper.getUserPlans(plans -> {
-                for (Plan p: plans) {
-                    if (!DBHelper.USER_PLANS.getPlans().contains(p)){
-                        if(!p.isActive()){
-                            PlanFragment fg = PlanFragment.newInstance(p.getTime()+" min",p.getSubject(), p.getColor().toString(), p.getId());
-                            fg.setClickInterface(this);
-                            getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, p.getId()).commit();
-                        }
-                    }
-                }
-            });
         }
     }
 
@@ -360,8 +353,9 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick, S
             pauseTimer();
         }
 
-        resetTimer();
+
         if(currentPlan!=null){
+            resetTimer();
             PlanFragment fg = PlanFragment.newInstance(currentPlan.getTime()+" min",currentPlan.getSubject(), currentPlan.getColor().toString(), currentPlan.getId());
             fg.setClickInterface(this);
             getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, currentPlan.getId()).commit();

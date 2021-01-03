@@ -122,27 +122,24 @@ public class DBHelper{
         }
     }
 
-    public void createSession(String subject, Date date, int hours,int minute, Double latitude,Double longitude, String description,BooleanCallback complete){
-        Session session = new Session(subject,date, new Time((hours*21600)+(minute*360)),new LatLng(latitude,longitude), description);
-                //String subject, Date date, Time time, LatLng location, String description
+    public void createSession(Session session,BooleanCallback complete){
         Map<String, Object> sessionMap = new HashMap<>();
         sessionMap.put("userID", mAuth.getCurrentUser().getUid());
         sessionMap.put("userName", mAuth.getCurrentUser().getDisplayName());
-        sessionMap.put("subject", subject);
-        sessionMap.put("date", date);
-        sessionMap.put("hours", hours);
-        sessionMap.put("minutes", minute);
-        sessionMap.put("latitude", latitude);
-        sessionMap.put("longitude", longitude);
-        sessionMap.put("description", description);
+        sessionMap.put("subject", session.getSubject());
+        sessionMap.put("date", session.getDate());
+        sessionMap.put("hours", session.getTime());
+        sessionMap.put("minutes",session.getTime());
+        sessionMap.put("latitude", session.getLocation().latitude);
+        sessionMap.put("longitude", session.getLocation().longitude);
+        sessionMap.put("description", session.getDescription());
         fStore.collection("sessions").add(sessionMap).addOnCompleteListener(task -> {
-            session.setUserID(mAuth.getCurrentUser().getUid());
-            session.setUserName(mAuth.getCurrentUser().getDisplayName());
+            session.setUserID(userID);
+            session.setUserName(USER.getUsername());
             session.setId(task.getResult().getId());
             USER_SESSIONS.getSessions().add(session);
             complete.exists(true);
         });
-        //fStore.collection("sessions").add(session);
     }
 
     public void checkUsernameExists(String username, BooleanCallback callback) {
@@ -279,6 +276,10 @@ public class DBHelper{
     }
 
     public void logout() {
+        USER.clear();
+        USER_PLANS.clear();
+        USER_SESSIONS.clear();
+        SUBJECT_LIST.clear();
         FirebaseAuth.getInstance().signOut();
     }
 

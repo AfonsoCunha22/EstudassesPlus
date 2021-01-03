@@ -29,13 +29,16 @@ import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.database.DBHelper;
 import com.example.cmprojeto.fragments.DatePickerFragment;
 import com.example.cmprojeto.fragments.TimePickerFragment;
+import com.example.cmprojeto.model.Session;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -93,13 +96,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.createSession(subjectSpinner.getSelectedItem().toString(),
-                       cal.getTime(),
-                        hour,
-                        minute,
-                        latitude,
-                        longitude,
-                        description.getText().toString(),
+                dbHelper.createSession(new Session(subjectSpinner.getSelectedItem().toString(), cal.getTime(), new Time((hour*21600)+(minute*360)),new LatLng(latitude,longitude), description.getText().toString()),
                         result -> {
                             if(result){
                                 Intent intent = new Intent(getApplicationContext(), SessionActivity.class);

@@ -39,7 +39,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
-        dbHelper.getSessions(sessions -> { });
+        populateActivity();
 
 
         sessionsLinear = (LinearLayout) findViewById(R.id.sessionsLinear);
@@ -86,16 +86,11 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
                 }
             });
         }else {
-
-            dbHelper.getSessions(sessions -> {
-                for (Session s: sessions) {
-                    if (!DBHelper.USER_SESSIONS.getSessions().contains(s)){
-                        SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),s.getUserName(),s.getSubject(), getLocationFromLarLong(s.getLocation().latitude,s.getLocation().longitude), s.getId());
-                        fg.setClickInterface(this);
-                        getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getId()).commit();
-                    }
-                }
-            });
+            for (Session s: DBHelper.USER_SESSIONS.getSessions()){
+                SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),s.getUserName(),s.getSubject(), getLocationFromLarLong(s.getLocation().latitude,s.getLocation().longitude), s.getId());
+                fg.setClickInterface(this);
+                getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getId()).commit();
+            }
         }
     }
     private String getLocationFromLarLong(Double latitude, Double longitude){

@@ -24,4 +24,9 @@ public class UserPlans {
     public boolean isPopulated() {
         return isPopulated;
     }
+
+    public void clear(){
+        isPopulated=false;
+        this.plans.clear();
+    }
 }
