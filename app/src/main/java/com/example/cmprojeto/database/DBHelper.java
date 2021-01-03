@@ -324,14 +324,12 @@ public class DBHelper{
 
     public void createSessionEnrollment(Session session, String role) {
         Map<String, Object> enrollment = new HashMap<>();
+        enrollment.put("sessionID", session.getSessionID());
         enrollment.put("userID", mAuth.getCurrentUser().getUid());
         enrollment.put("role", role);
 
-        DocumentReference enrollmentReference = fStore.collection("enrollments").document(session.getSessionID());
-        enrollmentReference.set(enrollment).addOnSuccessListener(aVoid -> {
-            Log.d(TAG, "onSuccess; Enrollment is created.");
+        fStore.collection("enrollments").add(enrollment).addOnCompleteListener(task -> {
             USER_SESSIONS.getSessions().add(session);
-
         });
     }
 
@@ -342,7 +340,7 @@ public class DBHelper{
 
                 int counter = 0;
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                    getSessionByID(doc.getId(), enrolledSessions, counter == task.getResult().getDocuments().size() - 1, callback);
+                    getSessionByID(doc.getString("sessionID"), enrolledSessions, counter == task.getResult().getDocuments().size() - 1, callback);
                     counter++;
                 }
             }
