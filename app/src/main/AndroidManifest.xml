@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CMProjeto">
-        <activity android:name=".NewPlan"></activity>
+        <activity android:name=".ExpandedSessionActivity"></activity>
+        <activity android:name=".NewPlan" />
         <activity android:name=".HelpSettingsActivity" />
         <activity android:name=".LanguageSettingsActivity" />
         <!--

@@ -64,26 +64,26 @@
             android:ems="10"
             android:inputType="time" /> -->
 
-    <EditText
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/editSubject"
-        android:layout_width="299dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="49dp"
-        android:ems="10"
-        android:hint="@string/subject_hint"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subjectLabel" />
+        android:layout_width="136dp"
+        android:layout_height="36dp"
+        android:layout_below="@+id/colorSpinner"
+        android:layout_marginTop="64dp"
+        android:layout_toEndOf="@+id/colorLabel"
+        android:dropDownWidth="200dp"
+
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintStart_toEndOf="@+id/subjectLabel"
+        app:layout_constraintTop_toBottomOf="@+id/newSessionTitle" />
+
     <TextView
         android:id="@+id/subjectLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="104dp"
         android:labelFor="@+id/editSubject"
         android:text="@string/subject"
         android:textSize="24sp"
@@ -149,12 +149,12 @@
         android:id="@+id/selectedDate"
         android:layout_width="136dp"
         android:layout_height="47dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="24dp"
         android:text="@string/date"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/dateButton"
-        app:layout_constraintHorizontal_bias="0.84"
+        app:layout_constraintHorizontal_bias="0.829"
         app:layout_constraintStart_toEndOf="@+id/dateLabel"
         app:layout_constraintTop_toBottomOf="@+id/selectedTime" />
 
@@ -162,11 +162,11 @@
         android:id="@+id/selectedTime"
         android:layout_width="136dp"
         android:layout_height="47dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:text="@string/time"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/timeButton"
-        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintHorizontal_bias="0.53"
         app:layout_constraintStart_toEndOf="@+id/timeLabel"
         app:layout_constraintTop_toBottomOf="@+id/editSubject" />
 
@@ -197,9 +197,19 @@
         android:id="@+id/timeButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="136dp"
-        android:layout_marginEnd="36dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
         android:src="@drawable/ic_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addButton" />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="49dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/ic_add_circle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newSessionTitle" />
 
@@ -207,8 +217,8 @@
         android:id="@+id/dateButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="36dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="40dp"
         android:src="@drawable/ic_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeButton" />

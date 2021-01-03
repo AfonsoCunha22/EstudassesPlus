@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.util.Date;
 
 public class Session {
-    private String Subject;
+    private String id, Subject,userID,userName;
     private Date date;
     private Time time;
     private LatLng location;
@@ -18,6 +18,14 @@ public class Session {
         this.time = time;
         this.location = location;
         this.description = description;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Session() {
@@ -64,4 +72,20 @@ public class Session {
     }
 
     private String description;
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }
