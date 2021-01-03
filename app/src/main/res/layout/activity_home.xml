@@ -58,6 +58,27 @@
                 android:text="@string/no_suggested_plan"
                 android:textSize="35sp"
                 android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/suggestedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="@string/suggested_plan"
+                android:textSize="35sp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/suggestedSession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/suggestedTitle"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="60dp">
+
+            </RelativeLayout>
             <View
                 android:id="@+id/sessionView"
                 android:layout_width="317dp"

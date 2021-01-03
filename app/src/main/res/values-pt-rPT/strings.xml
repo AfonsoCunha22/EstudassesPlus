@@ -30,7 +30,7 @@
     <string name="password_not_confirmed">Confirme Palavra-pass</string>
     <string name="password_conf_different">Palavra-pass e confirmação diferentes.</string>
     <string name="password_too_small">Palavra-pass com no mínimo 6 letras.</string>
-    <string name="sessions">Seções</string>
+    <string name="sessions">Sessões</string>
     <string name="study">Estudo</string>
     <string name="settings">Definições</string>
     <string name="logout">Sair</string>
@@ -99,7 +99,7 @@
     <string name="color_err">Porfavor selecionar a cor</string>
     <string name="desc_err">Descrição não deve ficar vazia</string>
     <string name="exit_plan_confirmation">Este plano não está guardado! Pretende continuar?</string>
-    <string name="break_notif">Passar 50mins desde o inicio do estudo... Hora da pausa!</string>
+    <string name="break_notif">Passaram 50mins desde o início do estudo… Hora da pausa!</string>
     <string name="study_notif">Mãos à Obra! Estamos a estudar </string>
     <string name="endStudy_notif">Plano acabou… Se pretende continuar comece de novo ou selecione um novo plano.</string>
     <string name="no_plan">Sem plano ativo</string>
@@ -115,10 +115,14 @@
     <string name="hello_blank_fragment">Olá fragment vazio</string>
     <string name="help_text">Para aceder a ajuda direta, Por favor envie email para o seguinte:</string>
     <string name="estudasses_email">estudassesplus@gmail.com</string>
-    <string name="avatar_failure">Não foi possivel inserir a imagem</string>
+    <string name="avatar_failure">Não foi possível inserir a imagem</string>
     <string name="avatar_success">Imagem inserida com sucesso!</string>
     <string name="avatar_failed_download">Erro ao baixar a imagem</string>
     <string name="expand">Expandir</string>
     <string name="enroll">Participar</string>
     <string name="open">Abrir</string>
+    <string name="access_plans_here">Aceder a planos</string>
+    <string name="my_plan">Meu Plano</string>
+    <string name="no_suggested_plan">Sem sessões sugeridas</string>
+    <string name="suggested_plan">Plano sugerido</string>
 </resources>

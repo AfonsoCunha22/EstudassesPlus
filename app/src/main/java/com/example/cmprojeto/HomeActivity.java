@@ -35,12 +35,14 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
+
 import com.example.cmprojeto.database.DBHelper;
 
 public class HomeActivity extends AppCompatActivity implements FragmentClick{
 
 
-    TextView textViewEmail,textViewAccess,plansShortcutTitle, suggestedSessionTitle;
+    TextView textViewEmail,textViewAccess,plansShortcutTitle, suggestedSessionTitle, suggestedLabel;
     ImageView openMenu;
     DrawerLayout drawer;
     Button buttonResendEmail,plansShortCut;
@@ -58,10 +60,11 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
         textViewAccess = (TextView) findViewById(R.id.toAccessEmail);
         plansShortcutTitle = (TextView) findViewById(R.id.noPlanTitle);
         suggestedSessionTitle = (TextView) findViewById(R.id.noSugestedTitle);
+        suggestedLabel = (TextView) findViewById(R.id.suggestedTitle);
         sessionView = (View) findViewById(R.id.sessionView);
         buttonResendEmail = (Button) findViewById(R.id.resendEmail);
         planLayout = (RelativeLayout) findViewById(R.id.plansLayout);
-        sessionsLayout = (RelativeLayout) findViewById(R.id.sessionLayout);
+        sessionsLayout = (RelativeLayout) findViewById(R.id.suggestedSession);
         plansShortCut = (Button) findViewById(R.id.noPlanShortcut);
         openMenu = (ImageView) findViewById(R.id.openMenu);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
@@ -80,7 +83,6 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
             startActivity(intent);
         });
 
-
         if(dbHelper.emailNotVerified()){
             textViewEmail.setVisibility(View.VISIBLE);
             textViewAccess.setVisibility(View.VISIBLE);
@@ -91,30 +93,37 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
             textViewAccess.setVisibility(View.GONE);
             sessionView.setVisibility(View.GONE);
             buttonResendEmail.setVisibility(View.GONE);
-            if(DBHelper.USER_PLANS.isPopulated())
-                dbHelper.getFilteredSessions("subject", DBHelper.USER_PLANS.getPlans().get(0).getSubject(), sessions -> {
+            if(!DBHelper.USER_PLANS.getPlans().isEmpty()){
+                Random random = new Random();
+                int index = random.nextInt(DBHelper.USER_PLANS.getPlans().size());
+                dbHelper.getFilteredSessions("subject", DBHelper.USER_PLANS.getPlans().get(index).getSubject(), sessions -> {
                     if(sessions.isEmpty()){
                         suggestedSessionTitle.setVisibility(View.VISIBLE);
                     } else {
+                        suggestedLabel.setVisibility(View.VISIBLE);
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                        dbHelper.getUserUsername(sessions.get(0).getUserID(), username -> {
-                            SessionFragment sessionFragment = SessionFragment.newInstance(sdf.format(sessions.get(0).getDateTime()),
+                        dbHelper.getUserUsername(sessions.get(index).getUserID(), username -> {
+                            SessionFragment sessionFragment = SessionFragment.newInstance(sdf.format(sessions.get(index).getDateTime()),
                                     username,
-                                    sessions.get(0).getSubject(),
-                                    getLocationFromLarLong(sessions.get(0).getLocation().latitude, sessions.get(0).getLocation().longitude),
-                                    sessions.get(0).getSessionID());
-                            fg.setClickInterface(this);
-                            getFragmentManager().beginTransaction().add(sessionsLayout.getId(),sessionFragment, sessions.get(0).getSessionID()).commit();
+                                    sessions.get(index).getSubject(),
+                                    getLocationFromLarLong(sessions.get(index).getLocation().latitude, sessions.get(index).getLocation().longitude),
+                                    sessions.get(index).getSessionID());
+                            sessionFragment.setClickInterface(this);
+                            getFragmentManager().beginTransaction().add(sessionsLayout.getId(),sessionFragment, sessions.get(index).getSessionID()).commit();
                         });
 
                     }
                 });
+            }
         }
+
         if(!DBHelper.USER_PLANS.isPopulated()){
             plansShortcutTitle.setVisibility(View.VISIBLE);
             plansShortCut.setVisibility(View.VISIBLE);
         }else{
-            Plan plan = DBHelper.USER_PLANS.getPlans().get(0);
+            Random random = new Random();
+            int index = random.nextInt(DBHelper.USER_PLANS.getPlans().size());
+            Plan plan = DBHelper.USER_PLANS.getPlans().get(index);
             PlanFragment frag = PlanFragment.newInstance(plan.getTime()+" min",plan.getSubject(), plan.getColor().toString(), plan.getId());
             fg.setClickInterface(this);
             getFragmentManager().beginTransaction().add(planLayout.getId(),frag, plan.getId()).commit();
@@ -168,6 +177,12 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
 
     @Override
     public void buttonClicked(String planID) {
+        Bundle bundle = new Bundle();
+        bundle.putString("sessionID",planID);
+
+        Intent intent = new Intent(getApplicationContext(), ExpandedSessionActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

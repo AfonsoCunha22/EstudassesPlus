@@ -123,4 +123,5 @@
     <string name="access_plans_here">Access Plans here</string>
     <string name="my_plan">My plan</string>
     <string name="no_suggested_plan">No suggested session</string>
+    <string name="suggested_plan">Suggested Plan</string>
 </resources>
