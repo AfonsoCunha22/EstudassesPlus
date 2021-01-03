@@ -19,12 +19,9 @@
 
         android:layout_below="@+id/sessionLocation"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+
         android:layout_marginStart="43dp"
         android:layout_marginTop="6dp"
-        android:layout_marginEnd="253dp"
-        android:layout_marginBottom="14dp"
         android:text="@string/subject"
         android:textSize="20sp"
         app:drawableStartCompat="@drawable/ic_session_time" />
@@ -36,10 +33,9 @@
 
         android:layout_below="@+id/sessionUser"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
+
         android:layout_marginStart="43dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="246dp"
         android:text="@string/subject"
         android:textSize="20sp"
         app:drawableStartCompat="@drawable/ic_map" />

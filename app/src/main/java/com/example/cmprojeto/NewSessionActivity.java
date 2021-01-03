@@ -97,10 +97,11 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         }
 
         confirm.setOnClickListener(v -> {
+            cal.getTime().setTime(cal.getTime().getTime()+((hour*21600)+(minute*360)));
             dbHelper.createSession(new Session(dbHelper.getUID(),
                             subjectSpinner.getSelectedItem().toString(),
                             cal.getTime(),
-                            ((hour*21600)+(minute*360)), new LatLng(latitude,longitude),
+                            new LatLng(latitude,longitude),
                             description.getText().toString()));
 
             Intent intent = new Intent(getApplicationContext(), SessionActivity.class);

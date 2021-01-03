@@ -11,10 +11,9 @@ public class Session {
     private Date dateTime;
     private LatLng location;
 
-    public Session(String userID, String subject, Date date, long time, LatLng location, String description) {
+    public Session(String userID, String subject, Date dateTime, LatLng location, String description) {
         this.subject = subject;
-        this.dateTime = date;
-        dateTime.setTime(date.getTime()+time);
+        this.dateTime = dateTime;
         this.userID = userID;
         this.location = location;
         this.description = description;
