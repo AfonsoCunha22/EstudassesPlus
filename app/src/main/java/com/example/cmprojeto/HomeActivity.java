@@ -117,7 +117,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
             }
         }
 
-        if(!DBHelper.USER_PLANS.isPopulated()){
+        if(DBHelper.USER_PLANS.getPlans().isEmpty()){
             plansShortcutTitle.setVisibility(View.VISIBLE);
             plansShortCut.setVisibility(View.VISIBLE);
         }else{
