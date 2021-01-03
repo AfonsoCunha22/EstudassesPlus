@@ -325,13 +325,25 @@ public class DBHelper{
         });
     }
 
-    public void createSessionEnrollment(Session session, String role) {
+    public void createSessionEnrollment(Session session, String role, BooleanCallback callback) {
         Map<String, Object> enrollment = new HashMap<>();
         enrollment.put("sessionID", session.getSessionID());
         enrollment.put("userID", mAuth.getCurrentUser().getUid());
         enrollment.put("role", role);
 
-        fStore.collection("enrollments").add(enrollment).addOnCompleteListener(task -> USER_SESSIONS.getSessions().add(session));
+        fStore.collection("enrollments").whereEqualTo("sessionID", session.getSessionID()).get().addOnCompleteListener(task -> {
+            if(task.isComplete()) {
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    if (doc.getString("userID").equals(mAuth.getCurrentUser().getUid()))
+                        callback.exists(true);
+                }
+
+                fStore.collection("enrollments").add(enrollment).addOnCompleteListener(t -> {
+                    USER_SESSIONS.getSessions().add(session);
+                    callback.exists(false);
+                });
+            }
+        });
     }
 
     public void getUserEnrolledSessions(SessionCallback callback) {
@@ -402,6 +414,7 @@ public class DBHelper{
                             doc.getLong("time"),
                             color,
                             doc.getBoolean("active"));
+
                     newPlan.setId(doc.getId());
                     userPlans.add(newPlan);
                 }
