@@ -28,9 +28,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class SessionActivity extends AppCompatActivity implements FragmentClick {
-    Button newSession;
     DrawerLayout drawer;
-    ImageView openMenu;
+    ImageView openMenu, newSession;
     DBHelper dbHelper = DBHelper.getInstance();
 
     LinearLayout sessionsLinear;
@@ -46,7 +45,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
         sessionsLinear = (LinearLayout) findViewById(R.id.sessionsLinear);
         openMenu = (ImageView) findViewById(R.id.openMenu);
-        newSession = (Button) findViewById(R.id.newSession);
+        newSession = (ImageView) findViewById(R.id.newSession);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         searchBtn = (ImageButton) findViewById(R.id.searchBtn);
         searchBar = (EditText) findViewById(R.id.searchBar);
@@ -96,7 +95,6 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
                 DBHelper.USER_SESSIONS.populate(sessions);
 
                 for (Session s: sessions) {
-                    System.out.println("Entrei no doc com ID "+ s.getSessionID());
                     dbHelper.getUserUsername(s.getUserID(), username -> {
                         SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
                                 username,
