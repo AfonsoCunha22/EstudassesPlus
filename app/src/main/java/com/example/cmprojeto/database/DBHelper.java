@@ -339,10 +339,32 @@ public class DBHelper{
         fStore.collection("enrollments").whereEqualTo("userID", mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
             if(task.isComplete()) {
                 List<Session> enrolledSessions = new ArrayList<>();
-                for (DocumentSnapshot doc : task.getResult().getDocuments())
-                    getSessionByID(doc.getId(), enrolledSessions::add);
 
-                callback.manageUserSession(enrolledSessions);
+                int counter = 0;
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    getSessionByID(doc.getId(), enrolledSessions, counter == task.getResult().getDocuments().size() - 1, callback);
+                    counter++;
+                }
+            }
+        });
+    }
+
+    private void getSessionByID(String sessionID, List<Session> sessions, boolean isDone, SessionCallback callback){
+        fStore.collection("sessions").document(sessionID).get().addOnCompleteListener(task -> {
+            if(task.isComplete()) {
+                DocumentSnapshot doc = task.getResult();
+
+                Session s = new Session(doc.getString("userID"),
+                        doc.getString("subject"),
+                        Objects.requireNonNull(doc.getDate("dateTime")),
+                        new LatLng(doc.getDouble("latitude"), doc.getDouble("longitude")),
+                        Objects.requireNonNull(doc.get("description")).toString());
+
+                s.setSessionID(sessionID);
+                sessions.add(s);
+
+                if(isDone)
+                    callback.manageUserSession(sessions);
             }
         });
     }
@@ -351,12 +373,13 @@ public class DBHelper{
         fStore.collection("sessions").document(sessionID).get().addOnCompleteListener(task -> {
             if(task.isComplete()) {
                 DocumentSnapshot doc = task.getResult();
-
-                callback.provideSession(new Session(doc.getString("userID"),
+                Session session = new Session(doc.getString("userID"),
                         doc.getString("subject"),
                         Objects.requireNonNull(doc.getDate("dateTime")),
                         new LatLng(doc.getDouble("latitude"), doc.getDouble("longitude")),
-                        Objects.requireNonNull(doc.get("description")).toString()));
+                        Objects.requireNonNull(doc.get("description")).toString());
+                session.setSessionID(sessionID);
+                callback.provideSession(session);
             }
         });
     }
