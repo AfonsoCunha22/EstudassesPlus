@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NewPlan">
+
     <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:translationZ="90dp"
-                android:elevation="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -32,185 +28,163 @@
                         android:layout_marginStart="163dp"
                         android:src="@drawable/ic_book" />
                 </RelativeLayout>
-            </androidx.appcompat.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="5dp"
-        android:text="@string/new_plan"
-        android:textSize="35sp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/line"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.073"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.936" />
-
-    <View
-        android:id="@+id/line"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="12dp"
-        android:background="#666868"
-        app:layout_constraintBottom_toTopOf="@+id/durationPicker"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/durationLabel"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/line"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="68dp"
-        android:labelFor="@+id/durationPicker"
-        android:text="@string/duration"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/durationPicker"
-        app:layout_constraintHorizontal_bias="0.221"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line" />
+        android:layout_marginTop="55dp" >
 
-    <NumberPicker
-        android:id="@+id/durationPicker"
-        android:layout_width="69dp"
-        android:layout_height="139dp"
-        android:layout_below="@id/line"
-        android:layout_alignParentStart="true"
-        android:layout_marginEnd="200dp"
-        android:layout_marginBottom="52dp"
-        app:layout_constraintBottom_toTopOf="@+id/colorSpinner"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:focusable="true" >
 
-    <TextView
-        android:id="@+id/colorLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/durationLabel"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="108dp"
-        android:labelFor="@+id/colorSpinner"
-        android:text="@string/color"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/durationLabel" />
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#666868" />
 
-    <TextView
-        android:id="@+id/subjectLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/colorLabel"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="36dp"
-        android:labelFor="@+id/subjectSpinner"
-        android:text="@string/subject"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/descriptionLabel"
-        app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/line"
+                android:text="@string/new_plan"
+                android:textSize="35sp"/>
 
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/colorSpinner"
-        android:layout_width="200dp"
-        android:layout_height="39dp"
-        android:layout_below="@+id/durationPicker"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="52dp"
-        android:layout_toEndOf="@+id/colorLabel"
-        android:dropDownWidth="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/subjectSpinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.44"
-        app:layout_constraintStart_toEndOf="@+id/colorLabel" />
+            <LinearLayout
+                android:id="@+id/durationLayout"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/title">
 
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/subjectSpinner"
-        android:layout_width="167dp"
-        android:layout_height="39dp"
-        android:layout_below="@+id/colorSpinner"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="68dp"
-        android:layout_toEndOf="@+id/colorLabel"
-        android:dropDownWidth="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/editDescription"
-        app:layout_constraintStart_toEndOf="@+id/subjectLabel" />
+                <TextView
+                    android:id="@+id/durationLabel"
+                    android:layout_marginTop="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/durationPicker"
+                    android:text="@string/duration"
+                    android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/addSubjectBtn"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/descriptionLabel"
-        android:layout_below="@+id/colorSpinner"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="68dp"
-        android:layout_toEndOf="@+id/subjectSpinner"
-        android:background="@drawable/ic_add_circle"
-        app:layout_constraintBottom_toTopOf="@+id/editDescription"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.281"
-        app:layout_constraintStart_toEndOf="@+id/subjectSpinner" />
+                <NumberPicker
+                    android:id="@+id/durationPicker"
+                    android:layout_width="60dp"
+                    android:layout_marginStart="200dp"
+                    android:layout_height="70dp" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/descriptionLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/subjectLabel"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="4dp"
-        android:labelFor="@+id/editDescription"
-        android:text="@string/description"
+            <LinearLayout
+                android:id="@+id/colorLayout"
+                android:layout_below="@id/durationLayout"
+                android:layout_width="350dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true" >
 
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/editDescription"
-        app:layout_constraintEnd_toEndOf="parent"
+                <TextView
+                    android:id="@+id/colorLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/colorSpinner"
+                    android:text="@string/color"
+                    android:textSize="20sp" />
 
-        app:layout_constraintHorizontal_bias="0.077"
-        app:layout_constraintStart_toStartOf="parent" />
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/colorSpinner"
+                    android:layout_width="200dp"
+                    android:layout_height="30dp"
+                    android:dropDownWidth="200dp"
+                    android:layout_marginStart="95dp"/>
+            </LinearLayout>
 
-    <EditText
-        android:id="@+id/editDescription"
-        android:layout_width="298dp"
-        android:layout_height="100dp"
-        android:layout_below="@+id/descriptionLabel"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="4dp"
-        android:ems="10"
-        android:gravity="start|bottom"
-        android:hint="@string/description_hint"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/addPlanBtn"
-        app:layout_constraintEnd_toEndOf="parent"
+            <LinearLayout
+                android:id="@+id/subjectLayout"
+                android:layout_width="350dp"
+                android:layout_below="@id/colorLayout"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true" >
 
-        app:layout_constraintHorizontal_bias="0.486"
-        app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/subjectLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/subjectSpinner"
+                    android:text="@string/subject"
+                    android:layout_marginTop="5dp"
+                    android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/addPlanBtn"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#1F517C"
-        android:text="@string/add_plan"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/subjectSpinner"
+                    android:layout_marginStart="75dp"
+                    android:layout_width="170dp"
+                    android:layout_height="30dp"
+                    android:dropDownWidth="200dp" />
+
+                <Button
+                    android:id="@+id/addSubjectBtn"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_add_circle" />
+            </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/descriptionLayout"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/subjectLayout">
+
+                <TextView
+                    android:id="@+id/descriptionLabel"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/editDescription"
+                    android:text="@string/description"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/editDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:gravity="start|bottom"
+                    android:hint="@string/description_hint"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+
+
+            <Button
+                android:id="@+id/addPlanBtn"
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="#1F517C"
+                android:text="@string/add_plan"
+                android:layout_below="@id/descriptionLayout"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
 
 
