@@ -94,22 +94,20 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
             sessionView.setVisibility(View.GONE);
             buttonResendEmail.setVisibility(View.GONE);
             if(!DBHelper.USER_PLANS.getPlans().isEmpty()){
-                Random random = new Random();
-                int index = random.nextInt(DBHelper.USER_PLANS.getPlans().size());
-                dbHelper.getFilteredSessions("subject", DBHelper.USER_PLANS.getPlans().get(index).getSubject(), sessions -> {
+                dbHelper.getFilteredSessions("subject", DBHelper.USER_PLANS.getPlans().get(0).getSubject(), sessions -> {
                     if(sessions.isEmpty()){
                         suggestedSessionTitle.setVisibility(View.VISIBLE);
                     } else {
                         suggestedLabel.setVisibility(View.VISIBLE);
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                        dbHelper.getUserUsername(sessions.get(index).getUserID(), username -> {
-                            SessionFragment sessionFragment = SessionFragment.newInstance(sdf.format(sessions.get(index).getDateTime()),
+                        dbHelper.getUserUsername(sessions.get(0).getUserID(), username -> {
+                            SessionFragment sessionFragment = SessionFragment.newInstance(sdf.format(sessions.get(0).getDateTime()),
                                     username,
-                                    sessions.get(index).getSubject(),
-                                    getLocationFromLarLong(sessions.get(index).getLocation().latitude, sessions.get(index).getLocation().longitude),
-                                    sessions.get(index).getSessionID());
+                                    sessions.get(0).getSubject(),
+                                    getLocationFromLarLong(sessions.get(0).getLocation().latitude, sessions.get(0).getLocation().longitude),
+                                    sessions.get(0).getSessionID());
                             sessionFragment.setClickInterface(this);
-                            getFragmentManager().beginTransaction().add(sessionsLayout.getId(),sessionFragment, sessions.get(index).getSessionID()).commit();
+                            getFragmentManager().beginTransaction().add(sessionsLayout.getId(),sessionFragment, sessions.get(0).getSessionID()).commit();
                         });
 
                     }
@@ -121,9 +119,7 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
             plansShortcutTitle.setVisibility(View.VISIBLE);
             plansShortCut.setVisibility(View.VISIBLE);
         }else{
-            Random random = new Random();
-            int index = random.nextInt(DBHelper.USER_PLANS.getPlans().size());
-            Plan plan = DBHelper.USER_PLANS.getPlans().get(index);
+            Plan plan = DBHelper.USER_PLANS.getPlans().get(0);
             PlanFragment frag = PlanFragment.newInstance(plan.getTime()+" min",plan.getSubject(), plan.getColor().toString(), plan.getId());
             fg.setClickInterface(this);
             getFragmentManager().beginTransaction().add(planLayout.getId(),frag, plan.getId()).commit();
