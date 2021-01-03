@@ -1,5 +1,7 @@
 package com.example.cmprojeto.model;
 
+import java.util.Objects;
+
 public class Plan {
     private String id, description;
     private String  subject;
@@ -70,5 +72,23 @@ public class Plan {
                 "\nDescription: "+ getDescription() +
                 "\nID do plano na BD: "+ getId() +
                 "\nIs Active? "+ isActive();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Plan plan = (Plan) o;
+        return time == plan.time &&
+                active == plan.active &&
+                Objects.equals(id, plan.id) &&
+                Objects.equals(description, plan.description) &&
+                Objects.equals(subject, plan.subject) &&
+                color == plan.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, subject, time, color, active);
     }
 }
