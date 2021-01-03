@@ -46,13 +46,15 @@ public class LanguageSettingsActivity extends AppCompatActivity {
         preferences = getSharedPreferences("languageSettings", MODE_PRIVATE);
         setupSharedPreferences();
 
-        confirm.setOnClickListener(v -> setLocale(lang));
+        confirm.setOnClickListener(v -> {
+            setLocale(lang);
+        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences.Editor edit = preferences.edit();
                 edit.putString("selectedLanguage", parent.getItemAtPosition(position).toString().split(" ")[2]);
-
+                lang = parent.getItemAtPosition(position).toString().split(" ")[2].toLowerCase();
                 edit.apply();
 
                 //TODO - Change the display language of the application
@@ -84,9 +86,14 @@ public class LanguageSettingsActivity extends AppCompatActivity {
     private void setupSharedPreferences() {
         String selectedLanguage = preferences.getString("selectedLanguage",  "PT");
         
-        if(selectedLanguage.equals("EN"))
-            spinner.setSelection(1); // English Index
-        else
-            spinner.setSelection(0); // Portuguese Index
+        if(selectedLanguage.equals("EN")){
+            spinner.setSelection(1);
+            lang = "en";
+        }
+
+        else{
+            spinner.setSelection(0);
+            lang = "pt";
+        }
     }
 }
