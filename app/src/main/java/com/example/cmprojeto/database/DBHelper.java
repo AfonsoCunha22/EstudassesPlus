@@ -135,7 +135,7 @@ public class DBHelper{
             session.setUserID(userID);
             session.setSessionID(task.getResult().getId());
 
-            createSessionEnrollment(session, "creator");
+            createSessionEnrollment(session, "creator", b -> {});
         });
     }
 
