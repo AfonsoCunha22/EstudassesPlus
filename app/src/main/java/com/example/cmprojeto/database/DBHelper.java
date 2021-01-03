@@ -134,7 +134,6 @@ public class DBHelper{
         fStore.collection("sessions").add(sessionMap).addOnCompleteListener(task -> {
             session.setUserID(userID);
             session.setSessionID(task.getResult().getId());
-            USER_SESSIONS.getSessions().add(session);
 
             createSessionEnrollment(session, "creator");
         });
@@ -310,13 +309,17 @@ public class DBHelper{
                 List<Session> sessions = new ArrayList<>();
 
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                    sessions.add(
-                            new Session(doc.getString("userID"),
-                                    doc.getString("subject"),
-                                    Objects.requireNonNull(doc.getDate("dateTime")) ,
-                                    new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
-                                    Objects.requireNonNull(doc.get("description")).toString()));
+                    Session session = new Session(doc.getString("userID"),
+                            doc.getString("subject"),
+                            Objects.requireNonNull(doc.getDate("dateTime")) ,
+                            new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
+                            Objects.requireNonNull(doc.get("description")).toString());
+
+                    session.setSessionID(doc.getId());
+
+                    sessions.add(session);
                 }
+
                 callback.manageUserSession(sessions);
             }
         });
@@ -328,9 +331,7 @@ public class DBHelper{
         enrollment.put("userID", mAuth.getCurrentUser().getUid());
         enrollment.put("role", role);
 
-        fStore.collection("enrollments").add(enrollment).addOnCompleteListener(task -> {
-            USER_SESSIONS.getSessions().add(session);
-        });
+        fStore.collection("enrollments").add(enrollment).addOnCompleteListener(task -> USER_SESSIONS.getSessions().add(session));
     }
 
     public void getUserEnrolledSessions(SessionCallback callback) {
