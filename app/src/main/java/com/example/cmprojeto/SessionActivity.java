@@ -70,6 +70,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
     public void buttonClicked(String sessionID) {
         Bundle bundle = new Bundle();
         bundle.putString("sessionID",sessionID);
+
         Intent intent = new Intent(getApplicationContext(), ExpandedSessionActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -80,9 +81,9 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         drawer.closeDrawer(Gravity.LEFT);
     }
 
-    private void populateActivity(){
+    private void populateActivity() {
         if(!DBHelper.USER_SESSIONS.isPopulated()) {
-            dbHelper.getSessions(sessions -> {
+            dbHelper.getUserEnrolledSessions(sessions -> {
                 DBHelper.USER_SESSIONS.populate(sessions);
 
                 for (Session s: sessions) {
