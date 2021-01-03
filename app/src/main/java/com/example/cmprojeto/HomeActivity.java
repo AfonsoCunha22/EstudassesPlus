@@ -105,6 +105,16 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
 
             edit.apply();
         }
+
+        preferences = getSharedPreferences("languageSettings", MODE_PRIVATE);
+
+        if(preferences.getBoolean("isFirstRun", true)) {
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putBoolean("isFirstRun", false);
+            edit.putString("selectedLanguage", "EN");
+
+            edit.apply();
+        }
     }
 
     @Override

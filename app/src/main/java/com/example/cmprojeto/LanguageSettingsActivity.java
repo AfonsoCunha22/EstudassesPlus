@@ -17,6 +17,8 @@ public class LanguageSettingsActivity extends AppCompatActivity {
     ImageView goBack;
     Spinner spinner;
 
+    SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,22 +33,8 @@ public class LanguageSettingsActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        SharedPreferences preferences = getSharedPreferences("notificationSettings", MODE_PRIVATE);
-
-        if(preferences.getBoolean("isFirstRun", true)) {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean("isFirstRun", false);
-            edit.putString("selectedLanguage", "EN");
-
-            edit.apply();
-        } else {
-            String selectedLanguage = preferences.getString("selectedLanguage",  "EN");
-
-            if(selectedLanguage.equals("EN"))
-                spinner.setSelection(1); // English Index
-            else
-                spinner.setSelection(0); // Portuguese Index
-        }
+        preferences = getSharedPreferences("languageSettings", MODE_PRIVATE);
+        setupSharedPreferences();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -69,5 +57,14 @@ public class LanguageSettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void setupSharedPreferences() {
+        String selectedLanguage = preferences.getString("selectedLanguage",  "PT");
+        
+        if(selectedLanguage.equals("EN"))
+            spinner.setSelection(1); // English Index
+        else
+            spinner.setSelection(0); // Portuguese Index
     }
 }
