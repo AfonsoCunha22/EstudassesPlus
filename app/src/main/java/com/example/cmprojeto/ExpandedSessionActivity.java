@@ -21,9 +21,8 @@ import java.util.Locale;
 
 public class ExpandedSessionActivity extends AppCompatActivity {
     DBHelper dbHelper = DBHelper.getInstance();
-    TextView subjectLabel, userLabel, locationLabel, dateTimeLabel;
+    TextView subjectLabel, userLabel, locationLabel, dateTimeLabel, descriptionLabel;
     Button enrollButton;
-    Session session;
     SimpleDateFormat sdf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +33,18 @@ public class ExpandedSessionActivity extends AppCompatActivity {
         userLabel=findViewById(R.id.userLabel);
         locationLabel=findViewById(R.id.locationLabel);
         dateTimeLabel=findViewById(R.id.dateTimeLabel);
+        descriptionLabel=findViewById(R.id.descriptionText);
         enrollButton=findViewById(R.id.enrollButton);
-        dbHelper.getSessionByID(getIntent().getExtras().getString("sessionID"), s -> {
-                    session = s;
+        dbHelper.getSessionByID(getIntent().getExtras().getString("sessionID"), session -> {
+            dbHelper.getUserUsername(session.getUserID(), username -> {
+                userLabel.setText(username);
+            });
+            subjectLabel.setText(session.getSubject());
+            locationLabel.setText(getLocationFromLarLong(session.getLocation().latitude, session.getLocation().longitude));
+            dateTimeLabel.setText(sdf.format(session.getDateTime()));
+            descriptionLabel.setText(session.getDescription());
                 });
-        dbHelper.getUserUsername(session.getUserID(), username -> {
-            userLabel.setText(username);
-        });
-        subjectLabel.setText(session.getSubject());
-        locationLabel.setText(getLocationFromLarLong(session.getLocation().latitude, session.getLocation().longitude));
-        dateTimeLabel.setText(sdf.format(session.getDateTime()));
+
     }
     private String getLocationFromLarLong(Double latitude, Double longitude){
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
