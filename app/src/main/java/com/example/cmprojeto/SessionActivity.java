@@ -49,7 +49,6 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         fg.setClickInterface(this);
         getFragmentManager().beginTransaction().add(drawer.getId(),fg, "menu").commit();
         populateActivity();
-
         newSession.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), NewSessionActivity.class);
             startActivity(intent);
