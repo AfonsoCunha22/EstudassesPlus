@@ -2,12 +2,16 @@ package com.example.cmprojeto;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.callbacks.SessionCallback;
 import com.example.cmprojeto.callbacks.SingleSessionCallback;
 import com.example.cmprojeto.database.DBHelper;
@@ -43,7 +47,18 @@ public class ExpandedSessionActivity extends AppCompatActivity {
             locationLabel.setText(getLocationFromLarLong(session.getLocation().latitude, session.getLocation().longitude));
             dateTimeLabel.setText(sdf.format(session.getDateTime()));
             descriptionLabel.setText(session.getDescription());
+        });
+        enrollButton.setOnClickListener(v -> {
+            dbHelper.getSessionByID(getIntent().getExtras().getString("sessionID"), session -> {
+                dbHelper.createSessionEnrollment(session, "member", result -> {
+                    if(result){
+                        Toast.makeText(getApplicationContext(),"You are already enrolled.",Toast.LENGTH_SHORT);
+                    }
                 });
+            });
+            Intent intent = new Intent(getApplicationContext(), ExpandedSessionActivity.class);
+            startActivity(intent);
+        });
 
     }
     private String getLocationFromLarLong(Double latitude, Double longitude){
