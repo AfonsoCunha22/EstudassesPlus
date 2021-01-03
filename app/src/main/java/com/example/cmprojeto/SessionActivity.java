@@ -54,7 +54,8 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         MenuFragment fg = MenuFragment.newInstance();
         fg.setClickInterface(this);
         getFragmentManager().beginTransaction().add(drawer.getId(),fg, "menu").commit();
-
+        openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
+        System.out.println(drawer.getChildCount());
         populateActivity();
 
         newSession.setOnClickListener(v -> {
@@ -71,7 +72,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
             }
         });
 
-        openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
+
     }
 
     @Override
@@ -92,8 +93,8 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
     private void populateActivity() {
         if(!DBHelper.USER_SESSIONS.isPopulated()) {
             dbHelper.getUserEnrolledSessions(sessions -> {
+                System.out.println(drawer.getChildCount());
                 DBHelper.USER_SESSIONS.populate(sessions);
-
                 for (Session s: sessions) {
                     dbHelper.getUserUsername(s.getUserID(), username -> {
                         SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
@@ -104,7 +105,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                         fg.setClickInterface(this);
                         getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
-                        System.out.println(fg.getId());
+                        System.out.println(drawer.getChildCount());
                     });
                 }
             });
@@ -119,7 +120,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                     fg.setClickInterface(this);
                     getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
-                    System.out.println(fg.getId());
+                    System.out.println(drawer.getChildCount());
                 });
             }
         }

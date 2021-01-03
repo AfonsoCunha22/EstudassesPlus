@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="500dp"
+    android:layout_height="300dp"
     android:layout_centerHorizontal="true"
     android:layout_marginStart="10dp"
     tools:context=".PlanFragment"
@@ -13,14 +13,14 @@
 
     <Button
         android:id="@+id/deleteButton"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="3dp"
-        android:drawableStart="@drawable/ic_close"
-        android:background="@drawable/round_button" />
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/round_button"
+        android:drawableStart="@drawable/ic_close" />
 
     <TextView
         android:id="@+id/subjectName"
@@ -29,8 +29,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="74dp"
         android:text="@string/subject"
         android:textSize="30sp"
         app:drawableStartCompat="@drawable/ic_subject_plan" />
@@ -43,8 +43,8 @@
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
 
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="11dp"
         android:text="@string/subject"
         android:textSize="30sp"
         app:drawableStartCompat="@drawable/ic_plan_time" />
@@ -52,16 +52,14 @@
     <Button
         android:id="@+id/planColor"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="50dp"
+        android:text="@string/open"
         android:layout_below="@+id/planTime"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="88dp"
         android:background="@color/greenish" />
 
 
