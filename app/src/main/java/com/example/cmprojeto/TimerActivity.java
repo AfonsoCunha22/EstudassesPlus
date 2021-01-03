@@ -117,7 +117,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick, S
         fg.setClickInterface(this);
         getFragmentManager().beginTransaction().add(drawer.getId(),fg, "menu").commit();
         openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
-
+        System.out.println(drawer.getChildCount());
 
 
         mCreatePlan.setOnClickListener(v -> {

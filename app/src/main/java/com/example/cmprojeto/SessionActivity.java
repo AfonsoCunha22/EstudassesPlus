@@ -54,7 +54,8 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         MenuFragment fg = MenuFragment.newInstance();
         fg.setClickInterface(this);
         getFragmentManager().beginTransaction().add(drawer.getId(),fg, "menu").commit();
-
+        openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
+        System.out.println(drawer.getChildCount());
         populateActivity();
 
         newSession.setOnClickListener(v -> {
@@ -71,7 +72,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
             }
         });
 
-        openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
+
     }
 
     @Override
@@ -93,7 +94,8 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         if(!DBHelper.USER_SESSIONS.isPopulated()) {
             dbHelper.getUserEnrolledSessions(sessions -> {
                 DBHelper.USER_SESSIONS.populate(sessions);
-
+                System.out.println("Filho do drawer no index: "+drawer.getChildAt(0));
+                System.out.println("Filho do drawer no index: "+drawer.getChildAt(1));
                 for (Session s: sessions) {
                     dbHelper.getUserUsername(s.getUserID(), username -> {
                         SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
@@ -104,7 +106,8 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                         fg.setClickInterface(this);
                         getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
-                        System.out.println(fg.getId());
+                        System.out.println("Filho do drawer no index: "+drawer.getChildAt(0));
+                        System.out.println("Filho do drawer no index: "+drawer.getChildAt(1));
                     });
                 }
             });
@@ -119,7 +122,8 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                     fg.setClickInterface(this);
                     getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
-                    System.out.println(fg.getId());
+                    System.out.println("Filho do drawer no index: "+drawer.getChildAt(0));
+                    System.out.println("Filho do drawer no index: "+drawer.getChildAt(1));
                 });
             }
         }
@@ -150,7 +154,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     for(Fragment fragment: getFragmentManager().getFragments()){
-                        getFragmentManager().beginTransaction().remove(fragment).commit();
+                        if(fragment instanceof SessionFragment) getFragmentManager().beginTransaction().remove(fragment).commit();
                     }
                 }
 

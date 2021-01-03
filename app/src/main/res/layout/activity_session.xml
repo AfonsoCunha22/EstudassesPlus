@@ -5,80 +5,86 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".SessionActivity"
     android:fitsSystemWindows="true">
-
     <RelativeLayout
+        android:id="@+id/menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".SessionActivity">
-
-        <androidx.appcompat.widget.Toolbar
+        android:layout_height="match_parent">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/openMenu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_menu" />
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_sessions" />
-
-                <ImageView
-                    android:id="@+id/newSession"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="15dp"
-                    app:srcCompat="@drawable/ic_baseline_add" />
-            </RelativeLayout>
-        </androidx.appcompat.widget.Toolbar>
-
-        <LinearLayout
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="70dp"
-            android:id="@+id/searchLinear"
-            android:layout_centerHorizontal="true"
-            android:focusableInTouchMode="true"
-            android:focusable="true" >
-
-            <EditText
-                android:id="@+id/searchBar"
-                android:layout_width="300dp"
-                android:layout_height="50dp" />
-
-            <ImageButton
-                android:id="@+id/searchBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                app:srcCompat="@drawable/ic_search" />
-        </LinearLayout>
-
-        <ScrollView
-            android:id="@+id/sessionScroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/searchLinear"
-            android:layout_marginTop="50dp">
-
-            <LinearLayout
-                android:id="@+id/sessionsLinear"
+            <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_centerHorizontal="true">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/openMenu"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_menu" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_sessions" />
+
+                    <ImageView
+                        android:id="@+id/newSession"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="15dp"
+                        app:srcCompat="@drawable/ic_baseline_add" />
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="350dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="70dp"
+                android:id="@+id/searchLinear"
+                android:layout_centerHorizontal="true"
+                android:focusableInTouchMode="true"
+                android:focusable="true" >
+
+                <EditText
+                    android:id="@+id/searchBar"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp" />
+
+                <ImageButton
+                    android:id="@+id/searchBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    app:srcCompat="@drawable/ic_search" />
             </LinearLayout>
-        </ScrollView>
+
+            <ScrollView
+                android:id="@+id/sessionScroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/searchLinear"
+                android:layout_marginTop="50dp">
+
+                <LinearLayout
+                    android:id="@+id/sessionsLinear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+
     </RelativeLayout>
+
 </androidx.drawerlayout.widget.DrawerLayout>
