@@ -304,6 +304,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick, S
                         PlanFragment fg = PlanFragment.newInstance(p.getTime()+" min",p.getSubject(), p.getColor().toString(), p.getId());
                         fg.setClickInterface(this);
                         getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, p.getId()).commit();
+                        System.out.println(fg.getId());
 
                     }else {
                         currentPlan = p;
@@ -329,6 +330,7 @@ public class TimerActivity extends AppCompatActivity implements FragmentClick, S
                     PlanFragment fg = PlanFragment.newInstance(plan.getTime()+" min",plan.getSubject(), plan.getColor().toString(), plan.getId());
                     fg.setClickInterface(this);
                     getFragmentManager().beginTransaction().add(plansLinear.getId(),fg, plan.getId()).commit();
+                    System.out.println(fg.getId());
                 }
             }
         }

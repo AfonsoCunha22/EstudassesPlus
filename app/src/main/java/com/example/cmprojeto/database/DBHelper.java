@@ -331,6 +331,7 @@ public class DBHelper{
         enrollmentReference.set(enrollment).addOnSuccessListener(aVoid -> {
             Log.d(TAG, "onSuccess; Enrollment is created.");
             USER_SESSIONS.getSessions().add(session);
+
         });
     }
 

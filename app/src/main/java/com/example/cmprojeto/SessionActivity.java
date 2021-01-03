@@ -104,6 +104,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                         fg.setClickInterface(this);
                         getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
+                        System.out.println(fg.getId());
                     });
                 }
             });
@@ -118,6 +119,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                     fg.setClickInterface(this);
                     getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
+                    System.out.println(fg.getId());
                 });
             }
         }
