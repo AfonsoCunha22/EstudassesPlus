@@ -100,7 +100,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
             dbHelper.createSession(new Session(dbHelper.getUID(),
                             subjectSpinner.getSelectedItem().toString(),
                             cal.getTime(),
-                            new Time((hour*21600)+(minute*360)), new LatLng(latitude,longitude),
+                            ((hour*21600)+(minute*360)), new LatLng(latitude,longitude),
                             description.getText().toString()));
 
             Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
@@ -154,15 +154,15 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        this.hour = hourOfDay;
-        this.minute = minute;
+        this.hour=hourOfDay;
+        this.minute=minute;
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR, hourOfDay);
         c.set(Calendar.MINUTE, minute);
-
-        String timeString = "" + cal.getTime().getTime();
-        selectedTime.setText(timeString);
+        this.minute = (int) ((cal.getTimeInMillis() / (1000*60)) % 60);
+        this.hour = (int) ((cal.getTimeInMillis() / (1000*60*60)) % 24);
+        selectedTime.setText(hourOfDay + ":"+minute);
     }
 
     @Override

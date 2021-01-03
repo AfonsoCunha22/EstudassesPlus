@@ -128,16 +128,13 @@ public class DBHelper{
         sessionMap.put("userID", mAuth.getCurrentUser().getUid());
         sessionMap.put("userName", mAuth.getCurrentUser().getDisplayName());
         sessionMap.put("subject", session.getSubject());
-        sessionMap.put("date", session.getDate());
-        sessionMap.put("hours", session.getTime());
-        sessionMap.put("minutes",session.getTime());
+        sessionMap.put("dateTime", session.getDateTime());
         sessionMap.put("latitude", session.getLocation().latitude);
         sessionMap.put("longitude", session.getLocation().longitude);
         sessionMap.put("description", session.getDescription());
 
         fStore.collection("sessions").add(sessionMap).addOnCompleteListener(task -> {
             session.setUserID(userID);
-            session.setUserName(USER.getUsername());
             session.setSessionID(task.getResult().getId());
             USER_SESSIONS.getSessions().add(session);
         });
@@ -244,7 +241,7 @@ public class DBHelper{
                             new Session(doc.getString("userID"),
                                     doc.getString("subject"),
                                     doc.getDate("date"),
-                                    new Time((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
+                                    ((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
                                     new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
                                     Objects.requireNonNull(doc.get("description")).toString()));
                 }
@@ -360,7 +357,7 @@ public class DBHelper{
                             new Session(doc.getString("userID"),
                                     doc.getString("subject"),
                                     doc.getDate("date"),
-                                    new Time((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
+                                    ((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
                                     new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
                                     Objects.requireNonNull(doc.get("description")).toString()));
                 }

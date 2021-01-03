@@ -86,9 +86,8 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
                 DBHelper.USER_SESSIONS.populate(sessions);
 
                 for (Session s: sessions) {
-                    s.getDate().setTime(s.getTime().getTime());
 
-                    SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
+                    SessionFragment fg = SessionFragment.newInstance(s.getDateTime().toString(),
                             s.getUserName(),
                             s.getSubject(),
                             getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
@@ -100,7 +99,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
             });
         } else {
             for (Session s: DBHelper.USER_SESSIONS.getSessions()){
-                SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
+                SessionFragment fg = SessionFragment.newInstance(s.getDateTime().toString(),
                         s.getUserName(),
                         s.getSubject(),
                         getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
