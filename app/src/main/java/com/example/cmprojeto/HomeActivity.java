@@ -29,10 +29,11 @@ import com.example.cmprojeto.database.DBHelper;
 public class HomeActivity extends AppCompatActivity implements FragmentClick{
 
 
-    TextView textViewEmail;
+    TextView textViewEmail,textViewAccess;
     ImageView openMenu;
     DrawerLayout drawer;
     Button buttonResendEmail;
+    View sessionView;
 
     SharedPreferences preferences;
     DBHelper dbHelper = DBHelper.getInstance();
@@ -42,6 +43,8 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         textViewEmail = (TextView) findViewById(R.id.emailNotVerified);
+        textViewAccess = (TextView) findViewById(R.id.toAccessEmail);
+        sessionView = (View) findViewById(R.id.sessionView);
         buttonResendEmail = (Button) findViewById(R.id.resendEmail);
         openMenu = (ImageView) findViewById(R.id.openMenu);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
@@ -58,7 +61,14 @@ public class HomeActivity extends AppCompatActivity implements FragmentClick{
 
         if(dbHelper.emailNotVerified()){
             textViewEmail.setVisibility(View.VISIBLE);
+            textViewAccess.setVisibility(View.VISIBLE);
+            sessionView.setVisibility(View.VISIBLE);
             buttonResendEmail.setVisibility(View.VISIBLE);
+        }else {
+            textViewEmail.setVisibility(View.GONE);
+            textViewAccess.setVisibility(View.GONE);
+            sessionView.setVisibility(View.GONE);
+            buttonResendEmail.setVisibility(View.GONE);
         }
 
         buttonResendEmail.setOnClickListener(v -> {

@@ -92,10 +92,10 @@ public class NewPlan extends AppCompatActivity {
         goBack.setOnClickListener(v -> {
             AlertDialog.Builder exitConf = new AlertDialog.Builder(v.getContext());
             exitConf.setMessage(getResources().getString(R.string.exit_plan_confirmation));
-            exitConf.setPositiveButton(getText(R.string.yes), (dialog, which) -> {});
+            exitConf.setPositiveButton(getText(R.string.yes), (dialog, which) -> {Intent intent = new Intent(getApplicationContext(), TimerActivity.class);
+                startActivity(intent);});
             exitConf.setNegativeButton(getText(R.string.no), (dialog, which) -> {
-                Intent intent = new Intent(getApplicationContext(), TimerActivity.class);
-                startActivity(intent);
+
             });
             exitConf.create().show();
 

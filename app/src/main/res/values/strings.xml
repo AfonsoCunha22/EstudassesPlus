@@ -102,6 +102,8 @@
     <string name="study_notif">Time to work! We\'re working on </string>
     <string name="endStudy_notif">Plan has ended… If you want to continue please start again or select another plan</string>
     <string name="no_plan">No active plan</string>
+    <string name="resend_email">Resend Email</string>
+    <string name="to_access_sessions">To access sessions</string>
     <string-array name="languages_array">
         <item>Portuguese - PT</item>
         <item>English - EN</item>

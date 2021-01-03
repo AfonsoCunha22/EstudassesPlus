@@ -6,12 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".HomeActivity">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -24,52 +26,91 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_width="40dp"
                     android:id="@+id/openMenu"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_menu" />
+
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_home"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_home" />
             </RelativeLayout>
 
 
         </androidx.appcompat.widget.Toolbar>
 
-        <TextView
-            android:id="@+id/emailNotVerified"
-            android:layout_width="119dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="148dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginEnd="144dp"
-            android:text="@string/email_not_verified"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#DF0000"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="161dp"
-            tools:layout_editor_absoluteY="43dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="322dp"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginTop="2dp">
 
-        <Button
-            android:id="@+id/resendEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="142dp"
-            android:layout_marginTop="60dp"
-            android:backgroundTint="#DCE6F3"
-            android:hint="Resend Email"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="150dp"
-            tools:layout_editor_absoluteY="90dp" />
+            <View
+                android:id="@+id/sessionView"
+                android:layout_width="317dp"
+                android:layout_height="286dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="54dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="39dp"
+                android:visibility="gone"
+                android:background="@drawable/ic_lock" />
+
+            <TextView
+                android:id="@+id/emailNotVerified"
+                android:layout_width="119dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="153dp"
+                android:layout_marginTop="115dp"
+                android:layout_marginEnd="138dp"
+                android:text="@string/email_not_verified"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#DF0000"
+                android:visibility="gone"
+                tools:layout_editor_absoluteX="161dp"
+                tools:layout_editor_absoluteY="43dp" />
+
+            <TextView
+                android:id="@+id/toAccessEmail"
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="113dp"
+                android:layout_marginTop="232dp"
+                android:layout_marginEnd="93dp"
+                android:text="@string/to_access_sessions"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#DF0000"
+                tools:layout_editor_absoluteX="161dp"
+                android:visibility="gone"
+                tools:layout_editor_absoluteY="43dp" />
+
+            <Button
+                android:id="@+id/resendEmail"
+                android:layout_width="214dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="107dp"
+                android:layout_marginTop="272dp"
+                android:backgroundTint="#812121"
+                android:hint="@string/resend_email"
+                android:visibility="gone"
+                tools:layout_editor_absoluteX="150dp"
+                tools:layout_editor_absoluteY="90dp" />
+        </RelativeLayout>
 
 
     </RelativeLayout>

@@ -42,28 +42,28 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/new_plan"
         android:textSize="35sp"
-
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/line"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.06"
+        app:layout_constraintHorizontal_bias="0.073"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.936" />
 
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@id/title"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="12dp"
         android:background="#666868"
         app:layout_constraintBottom_toTopOf="@+id/durationPicker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/durationLabel"
@@ -71,23 +71,23 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/line"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="68dp"
         android:labelFor="@+id/durationPicker"
         android:text="@string/duration"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/durationPicker"
-        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintHorizontal_bias="0.221"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line" />
 
     <NumberPicker
         android:id="@+id/durationPicker"
-        android:layout_width="60dp"
-        android:layout_height="148dp"
+        android:layout_width="69dp"
+        android:layout_height="139dp"
         android:layout_below="@id/line"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="152dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginEnd="200dp"
+        android:layout_marginBottom="52dp"
         app:layout_constraintBottom_toTopOf="@+id/colorSpinner"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -97,11 +97,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/durationLabel"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="108dp"
         android:labelFor="@+id/colorSpinner"
         android:text="@string/color"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/durationLabel" />
 
@@ -111,11 +111,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/colorLabel"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="36dp"
         android:labelFor="@+id/subjectSpinner"
         android:text="@string/subject"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/descriptionLabel"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -126,12 +126,12 @@
         android:layout_below="@+id/durationPicker"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="64dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="52dp"
         android:layout_toEndOf="@+id/colorLabel"
         android:dropDownWidth="200dp"
         app:layout_constraintBottom_toTopOf="@+id/subjectSpinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.557"
+        app:layout_constraintHorizontal_bias="0.44"
         app:layout_constraintStart_toEndOf="@+id/colorLabel" />
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
@@ -139,8 +139,8 @@
         android:layout_width="167dp"
         android:layout_height="39dp"
         android:layout_below="@+id/colorSpinner"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="68dp"
         android:layout_toEndOf="@+id/colorLabel"
         android:dropDownWidth="200dp"
         app:layout_constraintBottom_toTopOf="@+id/editDescription"
@@ -153,12 +153,12 @@
         android:layout_above="@+id/descriptionLabel"
         android:layout_below="@+id/colorSpinner"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="68dp"
         android:layout_toEndOf="@+id/subjectSpinner"
         android:background="@drawable/ic_add_circle"
         app:layout_constraintBottom_toTopOf="@+id/editDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.362"
+        app:layout_constraintHorizontal_bias="0.281"
         app:layout_constraintStart_toEndOf="@+id/subjectSpinner" />
 
     <TextView
@@ -167,15 +167,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/subjectLabel"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:labelFor="@+id/editDescription"
         android:text="@string/description"
 
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/editDescription"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.092"
+        app:layout_constraintHorizontal_bias="0.077"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -185,7 +185,7 @@
         android:layout_below="@+id/descriptionLabel"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="4dp"
         android:ems="10"
         android:gravity="start|bottom"
         android:hint="@string/description_hint"
@@ -193,6 +193,7 @@
         app:layout_constraintBottom_toTopOf="@+id/addPlanBtn"
         app:layout_constraintEnd_toEndOf="parent"
 
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -200,7 +201,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#1F517C"
         android:text="@string/add_plan"
         android:textAlignment="center"

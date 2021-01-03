@@ -9,38 +9,6 @@
         android:id="@+id/menu"
         android:layout_height="match_parent"
         android:layout_width="match_parent">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:translationZ="90dp"
-            android:elevation="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/openMenu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_menu" />
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginStart="163dp"
-                    android:src="@drawable/ic_book" />
-            </RelativeLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,7 +17,35 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:translationZ="90dp"
+                    android:elevation="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/openMenu"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_menu" />
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="163dp"
+                            android:src="@drawable/ic_book" />
+                    </RelativeLayout>
+
+                </androidx.appcompat.widget.Toolbar>
                 <TextView
                     android:id="@+id/activePlanText"
                     android:layout_width="wrap_content"
