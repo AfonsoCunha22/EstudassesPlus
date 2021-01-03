@@ -14,6 +14,7 @@ import com.example.cmprojeto.callbacks.AvatarCallback;
 import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.callbacks.PlanCallback;
 import com.example.cmprojeto.callbacks.SessionCallback;
+import com.example.cmprojeto.callbacks.StringCallback;
 import com.example.cmprojeto.callbacks.SubjectCallback;
 import com.example.cmprojeto.callbacks.UserCallback;
 import com.example.cmprojeto.model.Color;
@@ -137,7 +138,6 @@ public class DBHelper{
 
         fStore.collection("sessions").add(sessionMap).addOnCompleteListener(task -> {
             session.setUserID(userID);
-            session.setUserName(USER.getUsername());
             session.setSessionID(task.getResult().getId());
             USER_SESSIONS.getSessions().add(session);
         });
@@ -366,6 +366,14 @@ public class DBHelper{
                 }
 
                 callback.manageUserSession(sessions);
+            }
+        });
+    }
+
+    public void getUserUsername(String userID, StringCallback callback) {
+        fStore.collection("users").document(userID).get().addOnCompleteListener(task -> {
+            if(task.isComplete()) {
+                callback.fieldValue(task.getResult().getString("username"));
             }
         });
     }

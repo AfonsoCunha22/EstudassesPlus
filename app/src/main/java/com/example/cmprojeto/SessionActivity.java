@@ -81,33 +81,37 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
     }
 
     private void populateActivity(){
-        if(!DBHelper.USER_SESSIONS.isPopulated()){
+        if(!DBHelper.USER_SESSIONS.isPopulated()) {
             dbHelper.getSessions(sessions -> {
                 DBHelper.USER_SESSIONS.populate(sessions);
 
                 for (Session s: sessions) {
-                    s.getDate().setTime(s.getTime().getTime());
+                    dbHelper.getUserUsername(s.getUserID(), username -> {
+                        s.getDate().setTime(s.getTime().getTime());
 
+                        SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
+                                username,
+                                s.getSubject(),
+                                getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
+                                s.getSessionID());
+
+                        fg.setClickInterface(this);
+                        getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
+                    });
+                }
+            });
+        } else {
+            for (Session s: DBHelper.USER_SESSIONS.getSessions()){
+                dbHelper.getUserUsername(s.getUserID(), username -> {
                     SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
-                            s.getUserName(),
+                            username,
                             s.getSubject(),
                             getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
                             s.getSessionID());
 
                     fg.setClickInterface(this);
-                    getFragmentManager().beginTransaction().add(sessionsLinear.getId(), fg, s.getSessionID()).commit();
-                }
-            });
-        } else {
-            for (Session s: DBHelper.USER_SESSIONS.getSessions()){
-                SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
-                        s.getUserName(),
-                        s.getSubject(),
-                        getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
-                        s.getSessionID());
-
-                fg.setClickInterface(this);
-                getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
+                    getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
+                });
             }
         }
     }
@@ -129,11 +133,18 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
     private void populateSearchResult() {
         dbHelper.getFilteredSessions("subject", searchBar.getText().toString(), sessions -> {
+            for (Session s: sessions){
+                dbHelper.getUserUsername(s.getUserID(), username -> {
+                    SessionFragment fg = SessionFragment.newInstance(s.getDate().toString(),
+                            username,
+                            s.getSubject(),
+                            getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
+                            s.getSessionID());
 
-        });
-
-        dbHelper.getFilteredSessions("subject", searchBar.getText().toString(), sessions -> {
-
+                    fg.setClickInterface(this);
+                    getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
+                });
+            }
         });
     }
 }
