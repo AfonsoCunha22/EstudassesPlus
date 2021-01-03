@@ -142,7 +142,7 @@ public class DBHelper{
             USER_SESSIONS.getSessions().add(session);
             complete.exists(true);
         });
-        fStore.collection("sessions").add(session);
+        //fStore.collection("sessions").add(session);
     }
 
     public void checkUsernameExists(String username, BooleanCallback callback) {

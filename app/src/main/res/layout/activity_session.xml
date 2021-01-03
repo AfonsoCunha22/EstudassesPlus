@@ -40,17 +40,27 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <ListView
-            android:id="@+id/listView"
+        <ScrollView
+            android:id="@+id/plansScroll"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             android:layout_above="@+id/newSession"
             android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="52dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="66dp" />
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="113dp"
+            android:layout_marginBottom="492dp">
+
+            <LinearLayout
+                android:id="@+id/sessionsLinear"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
         <Button
             android:id="@+id/newSession"
             android:layout_width="164dp"
