@@ -9,11 +9,11 @@ import android.widget.Toast;
 import com.example.cmprojeto.HomeActivity;
 import com.example.cmprojeto.LoginActivity;
 import com.example.cmprojeto.R;
-import com.example.cmprojeto.SessionActivity;
 import com.example.cmprojeto.callbacks.AvatarCallback;
 import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.callbacks.PlanCallback;
 import com.example.cmprojeto.callbacks.SessionCallback;
+import com.example.cmprojeto.callbacks.SingleSessionCallback;
 import com.example.cmprojeto.callbacks.StringCallback;
 import com.example.cmprojeto.callbacks.SubjectCallback;
 import com.example.cmprojeto.callbacks.UserCallback;
@@ -34,15 +34,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +135,8 @@ public class DBHelper{
             session.setUserID(userID);
             session.setSessionID(task.getResult().getId());
             USER_SESSIONS.getSessions().add(session);
+
+            createSessionEnrollment(session, "creator");
         });
     }
 
@@ -154,7 +153,7 @@ public class DBHelper{
         }
         fStore.collection("plans").document(newPlanID).update("active",true);
         for (Plan plan: USER_PLANS.getPlans()) {
-            if(plan.getId().equals(newPlanID)){
+            if(plan.getId().equals(newPlanID)) {
                 plan.setActive(true);
             } else {
                 plan.setActive(false);
@@ -197,29 +196,6 @@ public class DBHelper{
                 });
     }
 
-    public void getUserPlans(PlanCallback callback) {
-        fStore.collection("plans").whereEqualTo("userID", Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).get().addOnCompleteListener(task -> {
-            if (task.isComplete()) {
-                List<Plan> userPlans = new ArrayList<>();
-                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                    System.out.println("O id do user deste plano é "+ doc.get("userID"));
-                    Color color = Color.toColor(Objects.requireNonNull(doc.get("color")).toString());
-                    Plan newPlan =  new Plan(
-                            Objects.requireNonNull(
-                                    doc.get("subjectName")).toString(),
-                            Objects.requireNonNull(doc.get("description")).toString(),
-                            doc.getLong("time"),
-                            color,
-                            doc.getBoolean("active"));
-                    newPlan.setId(doc.getId());
-                    userPlans.add(newPlan);
-                }
-
-                callback.manageUserPlans(userPlans);
-            }
-        });
-    }
-
     public void getSubjects(SubjectCallback callback){
         fStore.collection("subjects").get().addOnCompleteListener(task -> {
             if (task.isComplete()){
@@ -229,24 +205,6 @@ public class DBHelper{
                 }
 
                 callback.manageSubjects(subjects);
-            }
-        });
-    }
-
-    public void getSessions(SessionCallback callback) {
-        fStore.collection("sessions").get().addOnCompleteListener(task -> {
-            if (task.isComplete()) {
-                List<Session> sessions = new ArrayList<>();
-                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                    sessions.add(
-                            new Session(doc.getString("userID"),
-                                    doc.getString("subject"),
-                                    Objects.requireNonNull(doc.getDate("dateTime")),
-                                    new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
-                                    Objects.requireNonNull(doc.get("description")).toString()));
-                }
-
-                callback.manageUserSession(sessions);
             }
         });
     }
@@ -338,11 +296,10 @@ public class DBHelper{
                 if (p.getId().equals(planID)) {
                     removedPlan = p;
                 }
-            }
-            ;
-            if (removedPlan != null) {
+            } if (removedPlan != null) {
                 USER_PLANS.getPlans().remove(removedPlan);
             }
+
             callback.manageUserPlans(USER_PLANS.getPlans());
         });
     }
@@ -365,10 +322,68 @@ public class DBHelper{
         });
     }
 
+    public void createSessionEnrollment(Session session, String role) {
+        Map<String, Object> enrollment = new HashMap<>();
+        enrollment.put("userID", mAuth.getCurrentUser().getUid());
+        enrollment.put("role", role);
+
+        DocumentReference enrollmentReference = fStore.collection("enrollments").document(session.getSessionID());
+        enrollmentReference.set(enrollment).addOnSuccessListener(aVoid -> {
+            Log.d(TAG, "onSuccess; Enrollment is created.");
+            USER_SESSIONS.getSessions().add(session);
+        });
+    }
+
+    public void getUserEnrolledSessions(SessionCallback callback) {
+        fStore.collection("enrollments").whereEqualTo("userID", mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
+            if(task.isComplete()) {
+                List<Session> enrolledSessions = new ArrayList<>();
+                for (DocumentSnapshot doc : task.getResult().getDocuments())
+                    getSessionByID(doc.getId(), enrolledSessions::add);
+
+                callback.manageUserSession(enrolledSessions);
+            }
+        });
+    }
+
+    public void getSessionByID(String sessionID, SingleSessionCallback callback) {
+        fStore.collection("sessions").document(sessionID).get().addOnCompleteListener(task -> {
+            if(task.isComplete()) {
+                DocumentSnapshot doc = task.getResult();
+
+                callback.provideSession(new Session(doc.getString("userID"),
+                        doc.getString("subject"),
+                        Objects.requireNonNull(doc.getDate("dateTime")),
+                        new LatLng(doc.getDouble("latitude"), doc.getDouble("longitude")),
+                        Objects.requireNonNull(doc.get("description")).toString()));
+            }
+        });
+    }
+
     public void getUserUsername(String userID, StringCallback callback) {
         fStore.collection("users").document(userID).get().addOnCompleteListener(task -> {
             if(task.isComplete()) {
                 callback.fieldValue(task.getResult().getString("username"));
+            }
+        });
+    }
+
+    public void getUserPlans(PlanCallback callback) {
+        fStore.collection("plans").whereEqualTo("userID", Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).get().addOnCompleteListener(task -> {
+            if (task.isComplete()) {
+                List<Plan> userPlans = new ArrayList<>();
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    Color color = Color.toColor(Objects.requireNonNull(doc.get("color")).toString());
+                    Plan newPlan =  new Plan(Objects.requireNonNull(doc.get("subjectName")).toString(),
+                            Objects.requireNonNull(doc.get("description")).toString(),
+                            doc.getLong("time"),
+                            color,
+                            doc.getBoolean("active"));
+                    newPlan.setId(doc.getId());
+                    userPlans.add(newPlan);
+                }
+
+                callback.manageUserPlans(userPlans);
             }
         });
     }
