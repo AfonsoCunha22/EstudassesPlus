@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -88,10 +89,16 @@ public class PlanFragment extends Fragment {
         duration.setText(getArguments().getString(Duration));
         colorButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor((getArguments().getString(ColorSt)))));
         planID = getArguments().getString(PlanID);
+        if(getActivity() instanceof HomeActivity){
+            colorButton.setText(R.string.my_plan);
+        }else{
+            colorButton.setOnClickListener(v1 -> {
+                clickInterface.buttonClicked(planID);
+            });
+        }
 
-        colorButton.setOnClickListener(v1 -> {
-            clickInterface.buttonClicked(planID);
-        });
+
+
 
         deleteButton.setOnClickListener(l->{
             AlertDialog.Builder confirmDialog = new AlertDialog.Builder(l.getContext());

@@ -94,8 +94,6 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         if(!DBHelper.USER_SESSIONS.isPopulated()) {
             dbHelper.getUserEnrolledSessions(sessions -> {
                 DBHelper.USER_SESSIONS.populate(sessions);
-                System.out.println("Filho do drawer no index: "+drawer.getChildAt(0));
-                System.out.println("Filho do drawer no index: "+drawer.getChildAt(1));
                 for (Session s: sessions) {
                     dbHelper.getUserUsername(s.getUserID(), username -> {
                         SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
@@ -106,8 +104,6 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                         fg.setClickInterface(this);
                         getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
-                        System.out.println("Filho do drawer no index: "+drawer.getChildAt(0));
-                        System.out.println("Filho do drawer no index: "+drawer.getChildAt(1));
                     });
                 }
             });

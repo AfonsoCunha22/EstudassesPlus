@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Estudasses+</string>
-    <string name="username">Username</string>
+    <string name="app_name" translatable="false">Estudasses+</string>
+    <string name="username" translatable="false">Username</string>
     <string name="password">Password</string>
     <string name="re_password">Confirm Password</string>
     <string name="signUp">Sign Up</string>
@@ -120,4 +120,7 @@
     <string name="expand">Expand</string>
     <string name="enroll">Enroll</string>
     <string name="open">Open</string>
+    <string name="access_plans_here">Access Plans here</string>
+    <string name="my_plan">My plan</string>
+    <string name="no_suggested_plan">No suggested session</string>
 </resources>

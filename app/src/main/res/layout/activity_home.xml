@@ -43,10 +43,21 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:id="@+id/sessionLayout"
             android:layout_height="322dp"
             android:layout_below="@+id/toolbar"
             android:layout_marginTop="2dp">
 
+            <TextView
+                android:id="@+id/noSugestedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp"
+                android:text="@string/no_suggested_plan"
+                android:textSize="35sp"
+                android:visibility="gone"/>
             <View
                 android:id="@+id/sessionView"
                 android:layout_width="317dp"
@@ -110,6 +121,43 @@
                 android:visibility="gone"
                 tools:layout_editor_absoluteX="150dp"
                 tools:layout_editor_absoluteY="90dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/plansLayout"
+            android:layout_below="@+id/sessionLayout">
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="0dp"
+                android:background="#666868" />
+            <TextView
+                android:id="@+id/noPlanTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="@string/no_plan"
+                android:textSize="50sp"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/noPlanShortcut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/noPlanTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:drawableBottom="@drawable/ic_book"
+                android:text="@string/access_plans_here"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+
+
         </RelativeLayout>
 
 
