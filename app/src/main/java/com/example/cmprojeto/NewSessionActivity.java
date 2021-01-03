@@ -48,8 +48,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class NewSessionActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener , DatePickerDialog.OnDateSetListener {
-    Button confirm, addSubjectBtn;
-    ImageView timeP, dateP, locationP, goBack;
+    Button confirm;
+    ImageView timeP, dateP, locationP, goBack, addSubjectBtn;
     TextView selectedTime,selectedDate, selectedLocation;
     Bundle receiveBundle, sendBundle;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -70,7 +70,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         receiveBundle = getIntent().getExtras();
         sendBundle = new Bundle();
         subjectsAdapter = new ArrayAdapter<>(NewSessionActivity.this, android.R.layout.simple_spinner_dropdown_item, DBHelper.SUBJECT_LIST.getSubjects());
-        addSubjectBtn = (Button) findViewById(R.id.addButton);
+        addSubjectBtn = (ImageView) findViewById(R.id.addButton);
         description = (EditText) findViewById(R.id.editDescription);
         confirm = (Button) findViewById(R.id.confirm_button);
         timeP = (ImageView) findViewById(R.id.timeButton);
@@ -79,10 +79,8 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         selectedTime = (TextView) findViewById(R.id.selectedTime);
         selectedDate = (TextView) findViewById(R.id.selectedDate);
         selectedLocation=(TextView) findViewById(R.id.selectedLocal);
-        selectedTime.setText(R.string.pls_time);
-        selectedDate.setText(R.string.pls_date);
         goBack = (ImageView) findViewById(R.id.goBack);
-        cal=Calendar.getInstance();
+        cal = Calendar.getInstance();
         subjectSpinner = (SearchableSpinner) findViewById(R.id.editSubject);
         subjectSpinner.setAdapter(subjectsAdapter);
 

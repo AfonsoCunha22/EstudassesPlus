@@ -109,7 +109,7 @@ public class DBHelper{
         });
     }
 
-    public void updateUserInformation(String username, String password, Context context) {
+    public void updateUserInformation(String username, String password) {
         DocumentReference user = fStore.collection("users").document(mAuth.getCurrentUser().getUid());
 
         user.update("username", username);

@@ -149,7 +149,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 String username = nameField.getText().toString();
                 String password = passField.getText().toString();
 
-                dbHelper.updateUserInformation(username, password, getApplicationContext());
+                dbHelper.updateUserInformation(username, password);
                 uploadAvatar();
                 DBHelper.USER.clear();
 

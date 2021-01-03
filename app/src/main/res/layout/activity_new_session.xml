@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,12 +9,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -34,205 +29,198 @@
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/newSessionTitle"
-        android:layout_width="245dp"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="117dp"
-        android:layout_marginTop="61dp"
-        android:layout_marginEnd="102dp"
-        android:gravity="center"
-        android:text="@string/new_session"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="60dp">
 
-        <!-- <EditText
-            android:id="@+id/editTime"
-            android:layout_width="281dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/timeLabel"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="50dp"
-            android:ems="10"
-            android:inputType="time" /> -->
+            android:focusableInTouchMode="true"
+            android:focusable="true" >
 
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-        android:id="@+id/editSubject"
-        android:layout_width="136dp"
-        android:layout_height="36dp"
-        android:layout_below="@+id/colorSpinner"
-        android:layout_marginTop="64dp"
-        android:layout_toEndOf="@+id/colorLabel"
-        android:dropDownWidth="200dp"
+            <TextView
+                android:id="@+id/newSessionTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_session"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-        app:layout_constraintEnd_toStartOf="@+id/addButton"
-        app:layout_constraintHorizontal_bias="0.456"
-        app:layout_constraintStart_toEndOf="@+id/subjectLabel"
-        app:layout_constraintTop_toBottomOf="@+id/newSessionTitle" />
+            <LinearLayout
+                android:id="@+id/subjectLayout"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/newSessionTitle" >
 
-    <TextView
-        android:id="@+id/subjectLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="104dp"
-        android:labelFor="@+id/editSubject"
-        android:text="@string/subject"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/newSessionTitle" />
+                <TextView
+                    android:id="@+id/subjectLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/editSubject"
+                    android:text="@string/subject"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editDescription"
-        android:layout_width="298dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-        android:gravity="start|bottom"
-        android:hint="@string/description_hint"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/confirm_button"
-        app:layout_constraintStart_toStartOf="parent" />
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/editSubject"
+                    android:layout_marginStart="65dp"
+                    android:layout_width="160dp"
+                    android:layout_height="30dp"
+                    android:dropDownWidth="200dp" />
 
-    <TextView
-        android:id="@+id/descriptionLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginBottom="16dp"
-        android:labelFor="@+id/editDescription"
-        android:text="@string/description"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/editDescription"
-        app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/addButton"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_add_circle" />
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/confirm_button"
-        android:layout_width="164dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="135dp"
-        android:layout_marginEnd="110dp"
-        android:layout_marginBottom="36dp"
-        android:backgroundTint="#304D71"
-        android:text="@string/confirm"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+            <LinearLayout
+                android:id="@+id/timeLayout"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/subjectLayout">
 
-    <TextView
-        android:id="@+id/selectedLocal"
-        android:layout_width="166dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="42dp"
-        android:text="@string/location"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/descriptionLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedDate"
-        app:layout_constraintVertical_bias="1.0" />
+                <TextView
+                    android:id="@+id/timeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@id/selectedTime"
+                    android:text="@string/time"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/selectedDate"
-        android:layout_width="136dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/date"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/dateButton"
-        app:layout_constraintHorizontal_bias="0.829"
-        app:layout_constraintStart_toEndOf="@+id/dateLabel"
-        app:layout_constraintTop_toBottomOf="@+id/selectedTime" />
+                <TextView
+                    android:id="@+id/selectedTime"
+                    android:layout_width="200dp"
+                    android:maxWidth="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/selectedTime"
-        android:layout_width="136dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="28dp"
-        android:text="@string/time"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/timeButton"
-        app:layout_constraintHorizontal_bias="0.53"
-        app:layout_constraintStart_toEndOf="@+id/timeLabel"
-        app:layout_constraintTop_toBottomOf="@+id/editSubject" />
+                <ImageView
+                    android:id="@+id/timeButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_time" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/dateLabel"
-        android:layout_width="73dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="32dp"
-        android:labelFor="@+id/editDate"
-        android:text="@string/date"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeLabel" />
+            <LinearLayout
+                android:id="@+id/dateLayout"
+                android:layout_width="350dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/timeLayout" >
 
-    <ImageView
-        android:id="@+id/locationButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="36dp"
-        android:src="@drawable/ic_map"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateButton" />
+                <TextView
+                    android:id="@+id/dateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/selectedDate"
+                    android:text="@string/date"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/timeButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
-        android:src="@drawable/ic_time"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addButton" />
+                <TextView
+                    android:id="@+id/selectedDate"
+                    android:layout_width="200dp"
+                    android:maxWidth="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="45dp"
+                    android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="49dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/ic_add_circle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newSessionTitle" />
+                <ImageView
+                    android:id="@+id/dateButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_date" />
+            </LinearLayout>
 
-    <ImageView
-        android:id="@+id/dateButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="40dp"
-        android:src="@drawable/ic_date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeButton" />
+            <LinearLayout
+                android:id="@+id/locationLayout"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/dateLayout"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true">
 
-    <TextView
-        android:id="@+id/timeLabel"
-        android:layout_width="72dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="72dp"
-        android:text="@string/time"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editSubject" />
+                <TextView
+                    android:id="@+id/locationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location"
+                    android:textStyle="bold"
+                    android:textSize="24sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/selectedLocal"
+                    android:layout_width="185dp"
+                    android:maxWidth="185dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/locationButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="15dp"
+                    android:src="@drawable/ic_map"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/descriptionLayout"
+                android:layout_below="@id/locationLayout"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/descriptionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:labelFor="@+id/editDescription"
+                    android:text="@string/description"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="start|bottom"
+                    android:hint="@string/description_hint"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/confirm_button"
+                android:layout_width="165dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/descriptionLayout"
+                android:backgroundTint="#304D71"
+                android:text="@string/confirm" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

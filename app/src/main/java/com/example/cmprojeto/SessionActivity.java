@@ -147,12 +147,13 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
                 colorError.setMessage(getResources().getString(R.string.no_sessions_found));
                 colorError.setPositiveButton("Ok", (dialog, which) -> {});
                 colorError.create().show();
-            }else {
+            } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     for(Fragment fragment: getFragmentManager().getFragments()){
                         getFragmentManager().beginTransaction().remove(fragment).commit();
                     }
                 }
+
                 for (Session s: sessions){
                     dbHelper.getUserUsername(s.getUserID(), username -> {
                         SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
@@ -166,7 +167,6 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
                     });
                 }
             }
-
         });
     }
 }

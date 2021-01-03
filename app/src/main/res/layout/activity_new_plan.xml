@@ -11,23 +11,23 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/goBack"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/ic_arrow_back" />
+            <ImageView
+                android:id="@+id/goBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_arrow_back" />
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginStart="163dp"
-                        android:src="@drawable/ic_book" />
-                </RelativeLayout>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="163dp"
+                android:src="@drawable/ic_book" />
+        </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
@@ -140,9 +140,6 @@
                     android:background="@drawable/ic_add_circle" />
             </LinearLayout>
 
-
-
-
             <LinearLayout
                 android:id="@+id/descriptionLayout"
                 android:layout_width="350dp"
@@ -170,8 +167,6 @@
                     android:hint="@string/description_hint"
                     android:inputType="textMultiLine" />
             </LinearLayout>
-
-
 
             <Button
                 android:id="@+id/addPlanBtn"
