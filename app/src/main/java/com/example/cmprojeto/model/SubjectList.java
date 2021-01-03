@@ -24,6 +24,7 @@ public class SubjectList {
     public boolean isPopulated() {
         return isPopulated;
     }
+
     public void clear(){
         isPopulated=false;
         this.subjects.clear();

@@ -53,7 +53,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
     FusedLocationProviderClient fusedLocationProviderClient;
     EditText description;
     DBHelper dbHelper = DBHelper.getInstance();
-    int  minute,hour;
+    int minute, hour;
     Calendar cal;
     Double latitude, longitude;
     ArrayAdapter<String> subjectsAdapter;
@@ -63,6 +63,7 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_session);
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         receiveBundle = getIntent().getExtras();
         sendBundle = new Bundle();
@@ -89,47 +90,38 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
             selectedLocation.setText(getLocationFromLarLong(receiveBundle.getDouble("latitude"), receiveBundle.getDouble("longitude")));
             this.latitude=receiveBundle.getDouble("latitude");
             this.longitude=receiveBundle.getDouble("longitude");
-        }else{
+        } else {
             selectedLocation.setText((R.string.pls_local));
         }
 
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dbHelper.createSession(new Session(subjectSpinner.getSelectedItem().toString(), cal.getTime(), new Time((hour*21600)+(minute*360)),new LatLng(latitude,longitude), description.getText().toString()),
-                        result -> {
-                            if(result){
-                                Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
-                                startActivity(intent);
-                            }
-                        });
+        confirm.setOnClickListener(v -> {
+            dbHelper.createSession(new Session(dbHelper.getUID(),
+                            subjectSpinner.getSelectedItem().toString(),
+                            cal.getTime(),
+                            new Time((hour*21600)+(minute*360)), new LatLng(latitude,longitude),
+                            description.getText().toString()));
 
-            }
+            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
+            startActivity(intent);
         });
-        timeP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.show(getSupportFragmentManager(), "time picker");
-            }
+
+        timeP.setOnClickListener(v -> {
+            DialogFragment timePicker = new TimePickerFragment();
+            timePicker.show(getSupportFragmentManager(), "time picker");
         });
-        dateP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment datePicker = new DatePickerFragment();
-                datePicker.show(getSupportFragmentManager(), "date picker");
-            }
+
+        dateP.setOnClickListener(v -> {
+            DialogFragment datePicker = new DatePickerFragment();
+            datePicker.show(getSupportFragmentManager(), "date picker");
         });
-        locationP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getLocation();
-            }
-        });
+
+        locationP.setOnClickListener(v -> getLocation());
+
         goBack.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
             startActivity(intent);
         });
+
         addSubjectBtn.setOnClickListener(v -> {
             EditText newSubject = new EditText(v.getContext());
             AlertDialog.Builder addSubjectDialog = new AlertDialog.Builder(v.getContext());
@@ -142,11 +134,10 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
                 if(subjectName.trim().equals("")){
                     Toast.makeText(this, getText(R.string.subject_err),
                             Toast.LENGTH_LONG).show();
-                }else if(subjectName.trim().length() > 15){
+                } else if(subjectName.trim().length() > 15){
                     Toast.makeText(this, getText(R.string.subject_too_long),
                             Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     dbHelper.createSubject(subjectName, callback -> {
                         subjectsAdapter.add(subjectName.trim());
                         subjectsAdapter.setNotifyOnChange(true);
@@ -155,37 +146,21 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
             });
 
             addSubjectDialog.setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {});
-
             addSubjectDialog.create().show();
         });
-
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        this.hour=hourOfDay;
-        this.minute=minute;
+        this.hour = hourOfDay;
+        this.minute = minute;
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR, hourOfDay);
         c.set(Calendar.MINUTE, minute);
 
-        selectedTime.setText(""+cal.getTime().getTime());
-    }
-    public void populateActivity(){
-        if(!DBHelper.SUBJECT_LIST.isPopulated()){
-            dbHelper.getSubjects(subjects -> {
-                DBHelper.SUBJECT_LIST.populate(subjects);
-            });
-        }else {
-            dbHelper.getSubjects(subjects -> {
-                for (String subject : subjects){
-                    if(!DBHelper.SUBJECT_LIST.getSubjects().contains(subject)){
-                        DBHelper.SUBJECT_LIST.getSubjects().add(subject);
-                    }
-                }
-            });
-        }
+        String timeString = "" + cal.getTime().getTime();
+        selectedTime.setText(timeString);
     }
 
     @Override
@@ -198,52 +173,44 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         String aux = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
         selectedDate.setText(aux);
     }
-    private void getLocation() {
-        if(ActivityCompat.checkSelfPermission(NewSessionActivity.this
-                , Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
-            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    Location location = task.getResult();
-                    if(location !=null) {
-                        Geocoder geocoder = new Geocoder(NewSessionActivity.this,
-                                Locale.getDefault());
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(
-                                    location.getLatitude(), location.getLongitude(), 1
-                            );
-                            sendBundle.putDouble("curLatitude",location.getLatitude());
-                            System.out.println("macaco2-"+location.getLatitude());
-                            sendBundle.putDouble("curLongitude",location.getLongitude());
-                            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                            intent.putExtras(sendBundle);
-                            startActivity(intent);
-                            //bundle.putString("localidade",addresses.get(0).getLocality());
-                        } catch (IOException e) {
-                            e.printStackTrace();
 
-                        }
-                    }
+    private void populateActivity(){
+        if(!DBHelper.SUBJECT_LIST.isPopulated())
+            dbHelper.getSubjects(DBHelper.SUBJECT_LIST::populate);
+    }
+
+    private void getLocation() {
+        if(ActivityCompat.checkSelfPermission(NewSessionActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
+                Location location = task.getResult();
+
+                if(location != null) {
+                    sendBundle.putDouble("curLatitude", location.getLatitude());
+                    sendBundle.putDouble("curLongitude", location.getLongitude());
+
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    intent.putExtras(sendBundle);
+                    startActivity(intent);
                 }
             });
-        }else{
-            ActivityCompat.requestPermissions(NewSessionActivity.this
-                    , new  String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        } else {
+            ActivityCompat.requestPermissions(NewSessionActivity.this,
+                    new  String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
-
     }
+
     private String getLocationFromLarLong(Double latitude, Double longitude){
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
         try {
             List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if(null!=listAddresses&&listAddresses.size()>0){
-                String _Location;
-                return _Location = listAddresses.get(0).getAddressLine(0);
+            if(null != listAddresses&&listAddresses.size()>0){
+                return listAddresses.get(0).getAddressLine(0);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return "Inválido";
     }
-
 }

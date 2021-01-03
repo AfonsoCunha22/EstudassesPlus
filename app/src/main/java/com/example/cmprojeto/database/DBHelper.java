@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.cmprojeto.HomeActivity;
 import com.example.cmprojeto.LoginActivity;
 import com.example.cmprojeto.R;
+import com.example.cmprojeto.SessionActivity;
 import com.example.cmprojeto.callbacks.AvatarCallback;
 import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.callbacks.PlanCallback;
@@ -122,7 +123,7 @@ public class DBHelper{
         }
     }
 
-    public void createSession(Session session,BooleanCallback complete){
+    public void createSession(Session session){
         Map<String, Object> sessionMap = new HashMap<>();
         sessionMap.put("userID", mAuth.getCurrentUser().getUid());
         sessionMap.put("userName", mAuth.getCurrentUser().getDisplayName());
@@ -133,12 +134,12 @@ public class DBHelper{
         sessionMap.put("latitude", session.getLocation().latitude);
         sessionMap.put("longitude", session.getLocation().longitude);
         sessionMap.put("description", session.getDescription());
+
         fStore.collection("sessions").add(sessionMap).addOnCompleteListener(task -> {
             session.setUserID(userID);
             session.setUserName(USER.getUsername());
-            session.setId(task.getResult().getId());
+            session.setSessionID(task.getResult().getId());
             USER_SESSIONS.getSessions().add(session);
-            complete.exists(true);
         });
     }
 
@@ -157,7 +158,7 @@ public class DBHelper{
         for (Plan plan: USER_PLANS.getPlans()) {
             if(plan.getId().equals(newPlanID)){
                 plan.setActive(true);
-            }else {
+            } else {
                 plan.setActive(false);
             }
         }
@@ -228,7 +229,7 @@ public class DBHelper{
                 for (DocumentSnapshot doc:task.getResult().getDocuments()) {
                     subjects.add(doc.get("name").toString());
                 }
-                //System.out.println("Dentro do getSubjects: "+subjects);
+
                 callback.manageSubjects(subjects);
             }
         });
@@ -240,7 +241,7 @@ public class DBHelper{
                 List<Session> sessions = new ArrayList<>();
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
                     sessions.add(
-                            new Session(
+                            new Session(doc.getString("userID"),
                                     doc.getString("subject"),
                                     doc.getDate("date"),
                                     new Time((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
@@ -347,5 +348,29 @@ public class DBHelper{
             }
             callback.manageUserPlans(USER_PLANS.getPlans());
         });
+    }
+
+    public void getFilteredSessions(String filterField, Object filterValue, SessionCallback callback) {
+        fStore.collection("sessions").whereEqualTo(filterField, filterValue).get().addOnCompleteListener(task -> {
+            if (task.isComplete()) {
+                List<Session> sessions = new ArrayList<>();
+
+                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    sessions.add(
+                            new Session(doc.getString("userID"),
+                                    doc.getString("subject"),
+                                    doc.getDate("date"),
+                                    new Time((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
+                                    new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
+                                    Objects.requireNonNull(doc.get("description")).toString()));
+                }
+
+                callback.manageUserSession(sessions);
+            }
+        });
+    }
+
+    public String getUID() {
+        return mAuth.getCurrentUser().getUid();
     }
 }
