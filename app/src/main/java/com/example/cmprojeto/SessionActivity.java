@@ -1,8 +1,10 @@
 package com.example.cmprojeto;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.Button;
@@ -11,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -63,7 +67,9 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
             if(searchBar.getText().toString().isEmpty())
                 return;
 
-            populateSearchResult();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                populateSearchResult();
+            }
         });
 
         openMenu.setOnClickListener(v -> drawer.openDrawer(Gravity.LEFT));
@@ -90,6 +96,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
                 DBHelper.USER_SESSIONS.populate(sessions);
 
                 for (Session s: sessions) {
+                    System.out.println("Entrei no doc com ID "+ s.getSessionID());
                     dbHelper.getUserUsername(s.getUserID(), username -> {
                         SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
                                 username,
@@ -135,18 +142,31 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
     private void populateSearchResult() {
         dbHelper.getFilteredSessions("subject", searchBar.getText().toString(), sessions -> {
-            for (Session s: sessions){
-                dbHelper.getUserUsername(s.getUserID(), username -> {
-                    SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
-                            username,
-                            s.getSubject(),
-                            getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
-                            s.getSessionID());
+            if(sessions.isEmpty()){
+                AlertDialog.Builder colorError = new AlertDialog.Builder(this);
+                colorError.setMessage(getResources().getString(R.string.no_sessions_found));
+                colorError.setPositiveButton("Ok", (dialog, which) -> {});
+                colorError.create().show();
+            }else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    for(Fragment fragment: getFragmentManager().getFragments()){
+                        getFragmentManager().beginTransaction().remove(fragment).commit();
+                    }
+                }
+                for (Session s: sessions){
+                    dbHelper.getUserUsername(s.getUserID(), username -> {
+                        SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
+                                username,
+                                s.getSubject(),
+                                getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
+                                s.getSessionID());
 
-                    fg.setClickInterface(this);
-                    getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
-                });
+                        fg.setClickInterface(this);
+                        getFragmentManager().beginTransaction().add(sessionsLinear.getId(),fg, s.getSessionID()).commit();
+                    });
+                }
             }
+
         });
     }
 }

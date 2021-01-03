@@ -317,7 +317,6 @@ public class DBHelper{
                                     new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
                                     Objects.requireNonNull(doc.get("description")).toString()));
                 }
-
                 callback.manageUserSession(sessions);
             }
         });
