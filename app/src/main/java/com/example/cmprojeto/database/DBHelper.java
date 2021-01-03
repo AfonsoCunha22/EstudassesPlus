@@ -341,7 +341,14 @@ public class DBHelper{
                 }
 
                 fStore.collection("enrollments").add(enrollment).addOnCompleteListener(t -> {
-                    USER_SESSIONS.getSessions().add(session);
+                    if(USER_SESSIONS.isPopulated())
+                        USER_SESSIONS.getSessions().add(session);
+                    else {
+                        ArrayList<Session> list = new ArrayList<>();
+                        list.add(session);
+                        USER_SESSIONS.populate(list);
+                    }
+
                     callback.exists(false);
                 });
             }
