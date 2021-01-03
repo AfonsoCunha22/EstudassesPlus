@@ -52,11 +52,11 @@ public class ExpandedSessionActivity extends AppCompatActivity {
             dbHelper.getSessionByID(getIntent().getExtras().getString("sessionID"), session -> {
                 dbHelper.createSessionEnrollment(session, "member", result -> {
                     if(result){
-                        Toast.makeText(getApplicationContext(),"You are already enrolled.",Toast.LENGTH_SHORT);
+                        Toast.makeText(getApplicationContext(),"You are already enrolled.",Toast.LENGTH_SHORT).show();
                     }
                 });
             });
-            Intent intent = new Intent(getApplicationContext(), ExpandedSessionActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
             startActivity(intent);
         });
 
