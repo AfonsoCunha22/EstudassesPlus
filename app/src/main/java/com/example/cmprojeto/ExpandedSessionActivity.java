@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ public class ExpandedSessionActivity extends AppCompatActivity {
     DBHelper dbHelper = DBHelper.getInstance();
     TextView subjectLabel, userLabel, locationLabel, dateTimeLabel, descriptionLabel;
     Button enrollButton;
+    ImageView  goBack;
     SimpleDateFormat sdf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class ExpandedSessionActivity extends AppCompatActivity {
         sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         subjectLabel = findViewById(R.id.subjectLabelSession);
         userLabel=findViewById(R.id.userLabel);
+        goBack = (ImageView) findViewById(R.id.goBack);
         locationLabel=findViewById(R.id.locationLabel);
         dateTimeLabel=findViewById(R.id.dateTimeLabel);
         descriptionLabel=findViewById(R.id.descriptionText);
@@ -56,6 +59,10 @@ public class ExpandedSessionActivity extends AppCompatActivity {
                     }
                 });
             });
+            Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
+            startActivity(intent);
+        });
+        goBack.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
             startActivity(intent);
         });

@@ -6,23 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".ExpandedSessionActivity">
 
+    <ImageView
+        android:id="@+id/goBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/dateTimeLabel"
-        android:layout_width="wrap_content"
+        android:id="@+id/descriptionText"
+        android:layout_width="299dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="76dp"
         android:text="TextView"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subjectLabelSession" />
+        app:layout_constraintTop_toBottomOf="@+id/dateTimeLabel" />
 
     <TextView
         android:id="@+id/subjectLabelSession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="36dp"
         android:text="TextView"
 
         android:textSize="20sp"
@@ -30,11 +40,22 @@
         app:layout_constraintTop_toBottomOf="@+id/locationLabel" />
 
     <TextView
+        android:id="@+id/dateTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="36dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subjectLabelSession" />
+
+    <TextView
         android:id="@+id/locationLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="36dp"
         android:text="TextView"
 
         android:textSize="20sp"
@@ -46,23 +67,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="96dp"
         android:text="TextView"
         android:textSize="20sp"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/descriptionText"
-        android:layout_width="299dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="TextView"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTimeLabel" />
 
     <Button
         android:id="@+id/enrollButton"
