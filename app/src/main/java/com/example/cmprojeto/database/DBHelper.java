@@ -334,8 +334,10 @@ public class DBHelper{
         fStore.collection("enrollments").whereEqualTo("sessionID", session.getSessionID()).get().addOnCompleteListener(task -> {
             if(task.isComplete()) {
                 for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                    if (doc.getString("userID").equals(mAuth.getCurrentUser().getUid()))
+                    if (doc.getString("userID").equals(mAuth.getCurrentUser().getUid())) {
                         callback.exists(true);
+                        return;
+                    }
                 }
 
                 fStore.collection("enrollments").add(enrollment).addOnCompleteListener(t -> {
