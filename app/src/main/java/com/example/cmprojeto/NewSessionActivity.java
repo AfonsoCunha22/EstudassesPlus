@@ -35,11 +35,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.type.DateTime;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.io.IOException;
 import java.sql.Time;
 import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -164,8 +166,8 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         String aux = R.string.selected_time_label + hourOfDay + ":" + minute;
-        this.hour=hourOfDay;
-        this.minute=minute;
+        this.hour=hourOfDay/1000;
+        this.minute=minute/(60*1000);
         selectedTime.setText(aux);
     }
     public void populateActivity(){
