@@ -11,12 +11,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.CMProjeto">
-        <activity android:name=".ExpandedSessionActivity"></activity>
+        <activity android:name=".ExpandedSessionActivity"/>
         <activity android:name=".NewPlan" />
         <activity android:name=".HelpSettingsActivity" />
         <activity android:name=".LanguageSettingsActivity" />
