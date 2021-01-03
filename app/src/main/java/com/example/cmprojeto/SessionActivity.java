@@ -39,7 +39,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
-        populateActivity();
+
 
 
         sessionsLinear = (LinearLayout) findViewById(R.id.sessionsLinear);
@@ -49,7 +49,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         MenuFragment fg = MenuFragment.newInstance();
         fg.setClickInterface(this);
         getFragmentManager().beginTransaction().add(drawer.getId(),fg, "menu").commit();
-
+        populateActivity();
         newSession.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), NewSessionActivity.class);
             startActivity(intent);

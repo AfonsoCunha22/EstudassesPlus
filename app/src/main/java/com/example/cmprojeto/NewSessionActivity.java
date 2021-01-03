@@ -163,10 +163,14 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        String aux = R.string.selected_time_label + hourOfDay + ":" + minute;
         this.hour=hourOfDay;
         this.minute=minute;
-        selectedTime.setText(aux);
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
+
+        selectedTime.setText(""+cal.getTime().getTime());
     }
     public void populateActivity(){
         if(!DBHelper.SUBJECT_LIST.isPopulated()){
