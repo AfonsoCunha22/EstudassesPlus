@@ -10,18 +10,22 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.cmprojeto.callbacks.BooleanCallback;
 import com.example.cmprojeto.database.DBHelper;
 import com.example.cmprojeto.fragments.DatePickerFragment;
 import com.example.cmprojeto.fragments.TimePickerFragment;
@@ -29,6 +33,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -38,16 +43,18 @@ import java.util.List;
 import java.util.Locale;
 
 public class NewSessionActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener , DatePickerDialog.OnDateSetListener {
-    Button confirm;
+    Button confirm, addSubjectBtn;
     ImageView timeP, dateP, locationP, goBack;
     TextView selectedTime,selectedDate, selectedLocation;
     Bundle receiveBundle, sendBundle;
     FusedLocationProviderClient fusedLocationProviderClient;
-    EditText subject, description;
+    EditText description;
     DBHelper dbHelper = DBHelper.getInstance();
     int  minute,hour;
     Calendar cal;
     Double latitude, longitude;
+    ArrayAdapter<String> subjectsAdapter;
+    SearchableSpinner subjectSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +63,8 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         receiveBundle = getIntent().getExtras();
         sendBundle = new Bundle();
-        subject = (EditText) findViewById(R.id.editSubject);
+        subjectsAdapter = new ArrayAdapter<>(NewSessionActivity.this, android.R.layout.simple_spinner_dropdown_item, DBHelper.SUBJECT_LIST.getSubjects());
+        addSubjectBtn = (Button) findViewById(R.id.addButton);
         description = (EditText) findViewById(R.id.editDescription);
         confirm = (Button) findViewById(R.id.confirm_button);
         timeP = (ImageView) findViewById(R.id.timeButton);
@@ -69,6 +77,10 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         selectedDate.setText(R.string.pls_date);
         goBack = (ImageView) findViewById(R.id.goBack);
         cal=Calendar.getInstance();
+        subjectSpinner = (SearchableSpinner) findViewById(R.id.editSubject);
+        subjectSpinner.setAdapter(subjectsAdapter);
+
+        populateActivity();
         
         if(receiveBundle != null){
             selectedLocation.setText(getLocationFromLarLong(receiveBundle.getDouble("latitude"), receiveBundle.getDouble("longitude")));
@@ -81,16 +93,20 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.createSession(subject.getText().toString(),
+                dbHelper.createSession(subjectSpinner.getSelectedItem().toString(),
                        cal.getTime(),
                         hour,
                         minute,
                         latitude,
                         longitude,
-                        description.getText().toString()
-                        );
-                Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
-                startActivity(intent);
+                        description.getText().toString(),
+                        result -> {
+                            if(result){
+                                Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+
             }
         });
         timeP.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +133,34 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
             Intent intent = new Intent(getApplicationContext(), SessionActivity.class);
             startActivity(intent);
         });
+        addSubjectBtn.setOnClickListener(v -> {
+            EditText newSubject = new EditText(v.getContext());
+            AlertDialog.Builder addSubjectDialog = new AlertDialog.Builder(v.getContext());
+            addSubjectDialog.setTitle(getResources().getString(R.string.new_subject));
+            addSubjectDialog.setMessage(getResources().getString(R.string.insert_subject_added));
+            addSubjectDialog.setView(newSubject);
+
+            addSubjectDialog.setPositiveButton(getResources().getString(R.string.add), (dialog, which) -> {
+                String subjectName = newSubject.getText().toString();
+                if(subjectName.trim().equals("")){
+                    Toast.makeText(this, getText(R.string.subject_err),
+                            Toast.LENGTH_LONG).show();
+                }else if(subjectName.trim().length() > 15){
+                    Toast.makeText(this, getText(R.string.subject_too_long),
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    dbHelper.createSubject(subjectName, callback -> {
+                        subjectsAdapter.add(subjectName.trim());
+                        subjectsAdapter.setNotifyOnChange(true);
+                    });
+                }
+            });
+
+            addSubjectDialog.setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {});
+
+            addSubjectDialog.create().show();
+        });
 
     }
 
@@ -126,6 +170,21 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
         this.hour=hourOfDay;
         this.minute=minute;
         selectedTime.setText(aux);
+    }
+    public void populateActivity(){
+        if(!DBHelper.SUBJECT_LIST.isPopulated()){
+            dbHelper.getSubjects(subjects -> {
+                DBHelper.SUBJECT_LIST.populate(subjects);
+            });
+        }else {
+            dbHelper.getSubjects(subjects -> {
+                for (String subject : subjects){
+                    if(!DBHelper.SUBJECT_LIST.getSubjects().contains(subject)){
+                        DBHelper.SUBJECT_LIST.getSubjects().add(subject);
+                    }
+                }
+            });
+        }
     }
 
     @Override
