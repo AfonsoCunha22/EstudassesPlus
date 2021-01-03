@@ -19,6 +19,7 @@ import com.example.cmprojeto.database.DBHelper;
 import com.example.cmprojeto.model.Session;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,6 +33,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
     ImageButton searchBtn;
     EditText searchBar;
+    SimpleDateFormat sdf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         searchBtn = (ImageButton) findViewById(R.id.searchBtn);
         searchBar = (EditText) findViewById(R.id.searchBar);
 
+        sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         MenuFragment fg = MenuFragment.newInstance();
         fg.setClickInterface(this);
         getFragmentManager().beginTransaction().add(drawer.getId(),fg, "menu").commit();
@@ -88,7 +91,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
 
                 for (Session s: sessions) {
                     dbHelper.getUserUsername(s.getUserID(), username -> {
-                        SessionFragment fg = SessionFragment.newInstance(s.getDateTime().toString(),
+                        SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
                                 username,
                                 s.getSubject(),
                                 getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
@@ -102,7 +105,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         } else {
             for (Session s: DBHelper.USER_SESSIONS.getSessions()){
                 dbHelper.getUserUsername(s.getUserID(), username -> {
-                    SessionFragment fg = SessionFragment.newInstance(s.getDateTime().toString(),
+                    SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
                             username,
                             s.getSubject(),
                             getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),
@@ -121,7 +124,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         try {
             List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
             if(null!=listAddresses&&listAddresses.size()>0){
-                return listAddresses.get(0).getAddressLine(0);
+                return listAddresses.get(0).getLocality();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,7 +137,7 @@ public class SessionActivity extends AppCompatActivity implements FragmentClick 
         dbHelper.getFilteredSessions("subject", searchBar.getText().toString(), sessions -> {
             for (Session s: sessions){
                 dbHelper.getUserUsername(s.getUserID(), username -> {
-                    SessionFragment fg = SessionFragment.newInstance(s.getDateTime().toString(),
+                    SessionFragment fg = SessionFragment.newInstance(sdf.format(s.getDateTime()),
                             username,
                             s.getSubject(),
                             getLocationFromLarLong(s.getLocation().latitude, s.getLocation().longitude),

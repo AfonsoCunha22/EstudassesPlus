@@ -313,8 +313,7 @@ public class DBHelper{
                     sessions.add(
                             new Session(doc.getString("userID"),
                                     doc.getString("subject"),
-                                    doc.getDate("date"),
-                                    ((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
+                                    Objects.requireNonNull(doc.getDate("dateTime")) ,
                                     new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
                                     Objects.requireNonNull(doc.get("description")).toString()));
                 }
@@ -355,9 +354,8 @@ public class DBHelper{
 
                 callback.provideSession(new Session(doc.getString("userID"),
                         doc.getString("subject"),
-                        doc.getDate("date"),
-                        ((doc.getDouble("hours").intValue()*21600)+(doc.getDouble("minutes").intValue()*360)),
-                        new LatLng(doc.getDouble("latitude"),doc.getDouble("longitude")),
+                        Objects.requireNonNull(doc.getDate("dateTime")),
+                        new LatLng(doc.getDouble("latitude"), doc.getDouble("longitude")),
                         Objects.requireNonNull(doc.get("description")).toString()));
             }
         });
