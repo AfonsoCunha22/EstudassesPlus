@@ -192,6 +192,14 @@ public class NewSessionActivity extends AppCompatActivity implements TimePickerD
                     Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                     intent.putExtras(sendBundle);
                     startActivity(intent);
+                }else{
+                    sendBundle.putDouble("curLatitude", 38.522050);
+                    sendBundle.putDouble("curLongitude", -8.839116);
+
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    System.out.println("Entrei aqui no getLocation dentro do IF antes do intent");
+                    intent.putExtras(sendBundle);
+                    startActivity(intent);
                 }
             });
         } else {
